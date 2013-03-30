@@ -318,7 +318,7 @@ public class Settings extends Properties {
 				return javax.xml.bind.DatatypeConverter.printBase64Binary(baos.toByteArray());
 			} finally {
 				baos.close();
-				oos.close();
+				oos.close();			
 			}
 		} catch (Exception e) {
 			Logger.logError("Failed to write object to string" + o, e);

@@ -274,7 +274,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		add(editModPack);
 
 		packsScroll = new JScrollPane();
-		packsScroll.setBounds(-3, 30, 420, 283);
+		packsScroll.setBounds(-3, 30, 420, 353);
 		packsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		packsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		packsScroll.setWheelScrollingEnabled(true);
@@ -299,7 +299,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 		add(packInfo);
 
 		infoScroll = new JScrollPane();
-		infoScroll.setBounds(410, 25, 430, 290);
+		infoScroll.setBounds(410, 25, 430, 357);
 		infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		infoScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		infoScroll.setWheelScrollingEnabled(true);

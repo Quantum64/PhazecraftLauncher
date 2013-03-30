@@ -49,7 +49,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -73,7 +72,6 @@ import net.phazecraft.gui.dialogs.PasswordDialog;
 import net.phazecraft.gui.dialogs.PlayOfflineDialog;
 import net.phazecraft.gui.panes.MapsPane;
 import net.phazecraft.gui.panes.ModpacksPane;
-import net.phazecraft.gui.panes.NewsPane;
 import net.phazecraft.gui.panes.OptionsPane;
 import net.phazecraft.gui.panes.RoundedBox;
 import net.phazecraft.gui.panes.TexturepackPane;
@@ -114,8 +112,15 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	private JPanel fMap = new JPanel();
 	private JPanel fTp = new JPanel();
 	private JPanel fMod = new JPanel();
+	private JPanel fOpt = new JPanel();
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
+	private JLabel footerLogo1 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
+	private JLabel footerCreeper1 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
+	private JLabel footerLogo2 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
+	private JLabel footerCreeper2 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
+	private JLabel footerLogo3 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
+	private JLabel footerCreeper3 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JLabel logo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel creeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JLabel tpInstallLocLbl = new JLabel();
@@ -324,9 +329,14 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		fMod.setLayout(null);
 		fMod.setBackground(LauncherStyle.getCurrentStyle().footerColor);
 		
-		fMap.setBounds(0, 380, 850, 100);
-		fMap.setLayout(null);
-		fMap.setBackground(LauncherStyle.getCurrentStyle().footerColor);
+		fTp.setBounds(0, 380, 850, 100);
+		fTp.setLayout(null);
+		fTp.setBackground(LauncherStyle.getCurrentStyle().footerColor);
+		
+		fOpt.setBounds(0, 380, 850, 100);
+		fOpt.setLayout(null);
+		fOpt.setBackground(LauncherStyle.getCurrentStyle().footerColor);
+		
 		tabbedPane.setBounds(0, 0, 850, 380);
 		// panel.add(tabbedPane);
 		ImageIcon imgI = new ImageIcon(this.getClass().getResource("/image/back.jpg"));
@@ -343,7 +353,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		footerLogo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
-				OSUtils.browse("http://www.feed-the-beast.com");
+				OSUtils.browse("http://http://www.dtr-world.com//wiki");
 			}
 		});
 
@@ -352,7 +362,64 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		footerCreeper.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
-				OSUtils.browse("http://www.creeperhost.net/aff.php?aff=293");
+				OSUtils.browse("http://www.dtr-world.com/");
+			}
+		});
+		
+		// Footer
+		footerLogo3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		footerLogo3.setBounds(20, 20, 42, 42);
+		footerLogo3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				OSUtils.browse("http://http://www.dtr-world.com//wiki");
+			}
+		});
+
+		footerCreeper3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		footerCreeper3.setBounds(72, 20, 132, 42);
+		footerCreeper3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				OSUtils.browse("http://www.dtr-world.com/");
+			}
+		});
+		
+		// Footer
+		footerLogo1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		footerLogo1.setBounds(20, 20, 42, 42);
+		footerLogo1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				OSUtils.browse("http://http://www.dtr-world.com//wiki");
+			}
+		});
+
+		footerCreeper1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		footerCreeper1.setBounds(72, 20, 132, 42);
+		footerCreeper1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				OSUtils.browse("http://www.dtr-world.com/");
+			}
+		});
+		
+		// Footer
+		footerLogo2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		footerLogo2.setBounds(20, 20, 42, 42);
+		footerLogo2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				OSUtils.browse("http://http://www.dtr-world.com//wiki");
+			}
+		});
+
+		footerCreeper2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		footerCreeper2.setBounds(72, 20, 132, 42);
+		footerCreeper2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				OSUtils.browse("http://www.dtr-world.com/");
 			}
 		});
 		
@@ -362,7 +429,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		logo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
-				OSUtils.browse("http://www.dtr-world.com/wiki");
+				OSUtils.browse("http://http://www.dtr-world.com//wiki/wiki");
 			}
 		});
 
@@ -371,7 +438,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		creeper.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
-				OSUtils.browse("http://www.creeperhost.net/aff.php?aff=293");
+				OSUtils.browse("http://www.dtr-world.com/");
 			}
 		});
 
@@ -560,13 +627,19 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		tpInstallLocLbl.setBounds(480, 20, 80, 30);
 		tpInstallLocLbl.setVisible(false);
 
-		//footer.add(footerLogo);
-		//footer.add(footerCreeper);
+		fMod.add(footerLogo);
+		fMod.add(footerCreeper);
+		fTp.add(footerLogo1);
+		fTp.add(footerCreeper1);
+		fMap.add(footerLogo2);
+		fMap.add(footerCreeper2);
+		fOpt.add(footerLogo3);
+		fOpt.add(footerCreeper3);
 
-		fMod.add(serverbutton);
+		//fMod.add(serverbutton);
 		fMap.add(mapInstall);
 		fMap.add(mapInstallLocation);
-		fMap.add(serverMap);
+		//fMap.add(serverMap);
 		fTp.add(tpInstall);
 		fTp.add(tpInstallLocation);
 
@@ -1324,7 +1397,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		optionsFrame.setResizable(false);
 		optionsFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		optionsFrame.setContentPane(optionsPane);
-		//optionsFrame.add(fMod);
+		optionsFrame.add(fOpt);
 		
 		mapInstallLocation.setVisible(true);
 		serverMap.setVisible(true);
