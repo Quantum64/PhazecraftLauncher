@@ -231,7 +231,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		add(typeLbl);
 
 		mapsScroll = new JScrollPane();
-		mapsScroll.setBounds(-3, 30, 420, 283);
+		mapsScroll.setBounds(-3, 30, 420, 353);
 		mapsScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		mapsScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		mapsScroll.setWheelScrollingEnabled(true);
@@ -256,7 +256,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		add(mapInfo);
 
 		JScrollPane infoScroll = new JScrollPane();
-		infoScroll.setBounds(410, 25, 430, 290);
+		infoScroll.setBounds(410, 25, 430, 357);
 		infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		infoScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		infoScroll.setWheelScrollingEnabled(true);
