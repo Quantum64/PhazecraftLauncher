@@ -1,19 +1,4 @@
-/*
- * This file is part of FTB Launcher.
- *
- * Copyright © 2012-2013, FTB Launcher Contributors <https://github.com/Slowpoke101/FTBLaunch/>
- * FTB Launcher is licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package net.phazecraft.gui;
 
 import java.awt.Color;
@@ -164,7 +149,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	public static LauncherConsole con;
 	public static String tempPass = "";
 	public static Panes currentPane = Panes.MODPACK;
-	public static JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(new AnalyticsConfigData("UA-37330489-2"), GoogleAnalyticsVersion.V_4_7_2);
+	public static JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(new AnalyticsConfigData("UA-39727539-1"), GoogleAnalyticsVersion.V_4_7_2);
 	private static final Color TRANSPARENT = new Color(45, 45, 45, 160);
 	
 	public static JFrame modsFrame;
@@ -377,7 +362,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		logo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
-				OSUtils.browse("http://www.feed-the-beast.com");
+				OSUtils.browse("http://www.dtr-world.com/wiki");
 			}
 		});
 
