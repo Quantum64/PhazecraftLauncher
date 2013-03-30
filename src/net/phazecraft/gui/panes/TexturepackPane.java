@@ -232,7 +232,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		add(typeLbl);
 
 		texturePacksScroll = new JScrollPane();
-		texturePacksScroll.setBounds(-3, 30, 420, 283);
+		texturePacksScroll.setBounds(-3, 30, 420, 353);
 		texturePacksScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		texturePacksScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		texturePacksScroll.setWheelScrollingEnabled(true);
@@ -257,7 +257,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		add(textureInfo);
 
 		JScrollPane infoScroll = new JScrollPane();
-		infoScroll.setBounds(410, 25, 430, 290);
+		infoScroll.setBounds(410, 25, 430, 357);
 		infoScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		infoScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		infoScroll.setWheelScrollingEnabled(true);
