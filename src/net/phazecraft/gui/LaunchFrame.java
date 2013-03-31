@@ -338,7 +338,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		tabbedPane.setBounds(0, 0, 850, 380);
 		ImageIcon imgI;
 		BufferedImage bi;
-		int random = new Random().nextInt(2);
+		int random = new Random().nextInt(4);
 		if (random == 0) {
 			imgI = new ImageIcon(this.getClass().getResource("/image/back.jpg"));
 
@@ -346,6 +346,26 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 			Graphics g = bi.createGraphics();
 			g.drawImage(img, getBounds().x, getBounds().y, (int) Math.round(getBounds().width * 1.35), (int) Math.round(getBounds().height * 1.35), null);
+			g.dispose();
+		}
+		else if (random == 1)
+		{
+			imgI = new ImageIcon(this.getClass().getResource("/image/back2.png"));
+			
+			Image img = imgI.getImage();
+			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+			Graphics g = bi.createGraphics();
+			g.drawImage(img, 0, 0, (int) Math.round(getBounds().width), (int) Math.round(getBounds().height), null);
+			g.dispose();
+		}
+		else if(random == 2)
+		{
+			imgI = new ImageIcon(this.getClass().getResource("/image/back2.png"));
+			
+			Image img = imgI.getImage();
+			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+			Graphics g = bi.createGraphics();
+			g.drawImage(img, 0, 0, (int) Math.round(getBounds().width), (int) Math.round(getBounds().height), null);
 			g.dispose();
 		}
 		else
