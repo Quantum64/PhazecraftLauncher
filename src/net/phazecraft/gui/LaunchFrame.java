@@ -1,4 +1,3 @@
-
 package net.phazecraft.gui;
 
 import java.awt.Color;
@@ -41,6 +40,7 @@ import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -105,9 +105,9 @@ import net.phazecraft.workers.LoginWorker;
 public class LaunchFrame extends JFrame implements ActionListener, KeyListener, MouseWheelListener, MouseListener, MouseMotionListener {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	static LaunchFrame frame;
-	
+
 	private LoginResponse RESPONSE;
 	private JPanel fMap = new JPanel();
 	private JPanel fTp = new JPanel();
@@ -121,8 +121,6 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	private JLabel footerCreeper2 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JLabel footerLogo3 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper3 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
-	private JLabel logo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
-	private JLabel creeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JLabel tpInstallLocLbl = new JLabel();
 	private JButton launch = new LiteButton("Launch");
 	private JButton edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(), tpInstall = new JButton();
@@ -156,7 +154,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	public static Panes currentPane = Panes.MODPACK;
 	public static JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(new AnalyticsConfigData("UA-39727539-1"), GoogleAnalyticsVersion.V_4_7_2);
 	private static final Color TRANSPARENT = new Color(45, 45, 45, 160);
-	
+
 	public static JFrame modsFrame;
 	public static JFrame textureFrame;
 	public static JFrame mapsFrame;
@@ -324,27 +322,42 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		fMap.setBounds(0, 380, 850, 100);
 		fMap.setLayout(null);
 		fMap.setBackground(LauncherStyle.getCurrentStyle().footerColor);
-		
+
 		fMod.setBounds(0, 380, 850, 100);
 		fMod.setLayout(null);
 		fMod.setBackground(LauncherStyle.getCurrentStyle().footerColor);
-		
+
 		fTp.setBounds(0, 380, 850, 100);
 		fTp.setLayout(null);
 		fTp.setBackground(LauncherStyle.getCurrentStyle().footerColor);
-		
+
 		fOpt.setBounds(0, 380, 850, 100);
 		fOpt.setLayout(null);
 		fOpt.setBackground(LauncherStyle.getCurrentStyle().footerColor);
-		
+
 		tabbedPane.setBounds(0, 0, 850, 380);
-		// panel.add(tabbedPane);
-		ImageIcon imgI = new ImageIcon(this.getClass().getResource("/image/back.jpg"));
-		Image img = imgI.getImage();
-		BufferedImage bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-		Graphics g = bi.createGraphics();
-		g.drawImage(img, getBounds().x, getBounds().y, (int) Math.round(getBounds().width * 1.35), (int) Math.round(getBounds().height * 1.35), null);
-		g.dispose();
+		ImageIcon imgI;
+		BufferedImage bi;
+		int random = new Random().nextInt(2);
+		if (random == 0) {
+			imgI = new ImageIcon(this.getClass().getResource("/image/back.jpg"));
+
+			Image img = imgI.getImage();
+			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+			Graphics g = bi.createGraphics();
+			g.drawImage(img, getBounds().x, getBounds().y, (int) Math.round(getBounds().width * 1.35), (int) Math.round(getBounds().height * 1.35), null);
+			g.dispose();
+		}
+		else
+		{
+			imgI = new ImageIcon(this.getClass().getResource("/image/back2.png"));
+			
+			Image img = imgI.getImage();
+			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+			Graphics g = bi.createGraphics();
+			g.drawImage(img, 0, 0, (int) Math.round(getBounds().width), (int) Math.round(getBounds().height), null);
+			g.dispose();
+		}
 		setContentPane(new JLabel(new ImageIcon(bi)));
 
 		// Footer
@@ -365,7 +378,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 				OSUtils.browse("http://www.dtr-world.com/");
 			}
 		});
-		
+
 		// Footer
 		footerLogo3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		footerLogo3.setBounds(20, 20, 42, 42);
@@ -384,7 +397,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 				OSUtils.browse("http://www.dtr-world.com/");
 			}
 		});
-		
+
 		// Footer
 		footerLogo1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		footerLogo1.setBounds(20, 20, 42, 42);
@@ -403,7 +416,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 				OSUtils.browse("http://www.dtr-world.com/");
 			}
 		});
-		
+
 		// Footer
 		footerLogo2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		footerLogo2.setBounds(20, 20, 42, 42);
@@ -417,25 +430,6 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		footerCreeper2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		footerCreeper2.setBounds(72, 20, 132, 42);
 		footerCreeper2.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent event) {
-				OSUtils.browse("http://www.dtr-world.com/");
-			}
-		});
-		
-		// Footer
-		logo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		logo.setBounds(20, 20, 42, 42);
-		logo.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent event) {
-				OSUtils.browse("http://http://www.dtr-world.com//wiki/wiki");
-			}
-		});
-
-		creeper.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		creeper.setBounds(72, 20, 132, 42);
-		creeper.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
 				OSUtils.browse("http://www.dtr-world.com/");
@@ -636,10 +630,10 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		fOpt.add(footerLogo3);
 		fOpt.add(footerCreeper3);
 
-		//fMod.add(serverbutton);
+		// fMod.add(serverbutton);
 		fMap.add(mapInstall);
 		fMap.add(mapInstallLocation);
-		//fMap.add(serverMap);
+		// fMap.add(serverMap);
 		fTp.add(tpInstall);
 		fTp.add(tpInstallLocation);
 
@@ -647,9 +641,9 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		mapsPane = new MapsPane();
 		tpPane = new TexturepackPane();
 		optionsPane = new OptionsPane(Settings.getSettings());
-		
+
 		String[] str = getRemember();
-		if(str!= null){
+		if (str != null) {
 			name.setText(str[0]);
 			pass.requestFocus();
 			pass.setText(str[1]);
@@ -657,7 +651,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		}
 
 		createFrames();
-		
+
 		updateLocale();
 
 		add(loginArea);
@@ -672,8 +666,6 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		add(maps);
 		add(create);
 		add(options);
-		add(logo);
-		//add(creeper);
 
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -717,8 +709,8 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 
 		if (remember.isSelected())
 			setRemember(name.getText(), pass.getText());
-		else{
-			if(new File(OSUtils.getDynamicStorageLocation() + "/login.dat").exists()){
+		else {
+			if (new File(OSUtils.getDynamicStorageLocation() + "/login.dat").exists()) {
 				new File(OSUtils.getDynamicStorageLocation() + "/login.dat").delete();
 			}
 		}
@@ -1108,30 +1100,23 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	 * update the footer to the correct buttons for active tab
 	 */
 	public void updateFooter() {/*
-		boolean result;
-		switch (currentPane) {
-		case MAPS:
-			result = mapsPane.type.equals("Server");
-			mapInstall.setVisible(!result);
-			mapInstallLocation.setVisible(!result);
-			serverMap.setVisible(result);
-			disableMainButtons();
-			disableTextureButtons();
-			break;
-		case TEXTURE:
-			tpInstall.setVisible(true);
-			tpInstallLocation.setVisible(true);
-			disableMainButtons();
-			disableMapButtons();
-			break;
-		default:
-			launch.setVisible(true);
-			edit.setEnabled(users.getSelectedIndex() > 1);
-			edit.setVisible(true);
-			users.setVisible(true);
-			serverbutton.setVisible(false);
-			break;
-		}*/
+								 * boolean result; switch (currentPane) { case
+								 * MAPS: result =
+								 * mapsPane.type.equals("Server");
+								 * mapInstall.setVisible(!result);
+								 * mapInstallLocation.setVisible(!result);
+								 * serverMap.setVisible(result);
+								 * disableMainButtons();
+								 * disableTextureButtons(); break; case TEXTURE:
+								 * tpInstall.setVisible(true);
+								 * tpInstallLocation.setVisible(true);
+								 * disableMainButtons(); disableMapButtons();
+								 * break; default: launch.setVisible(true);
+								 * edit.setEnabled(users.getSelectedIndex() >
+								 * 1); edit.setVisible(true);
+								 * users.setVisible(true);
+								 * serverbutton.setVisible(false); break; }
+								 */
 	}
 
 	/**
@@ -1352,53 +1337,53 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	}
 
 	public String[] getRemember() {
-		if(new File(OSUtils.getDynamicStorageLocation() + "/login.dat").exists()){
+		if (new File(OSUtils.getDynamicStorageLocation() + "/login.dat").exists()) {
 			Path path3 = Paths.get(OSUtils.getDynamicStorageLocation() + "/login.dat");
-				Scanner scanner;
-				try {
-					scanner = new Scanner(path3);
-					String usr = scanner.nextLine();
-					String pass = scanner.nextLine();
-					String[] str = new String[2];
-					str[0] = usr;
-					str[1] = pass;
-					return str;
-				} catch (IOException e) {
-					e.printStackTrace();
+			Scanner scanner;
+			try {
+				scanner = new Scanner(path3);
+				String usr = scanner.nextLine();
+				String pass = scanner.nextLine();
+				String[] str = new String[2];
+				str[0] = usr;
+				str[1] = pass;
+				return str;
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 		return null;
 	}
-	
-	public void createFrames(){
+
+	public void createFrames() {
 		modsFrame = new JFrame("Mod Packs");
 		modsFrame.setBounds(100, 100, 842, 480);
 		modsFrame.setResizable(false);
 		modsFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		modsFrame.setContentPane(modPacksPane);
 		modsFrame.add(fMod);
-		
+
 		textureFrame = new JFrame("Texuure Packs");
 		textureFrame.setBounds(100, 100, 842, 480);
 		textureFrame.setResizable(false);
 		textureFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		textureFrame.setContentPane(tpPane);
 		textureFrame.add(fTp);
-		
+
 		mapsFrame = new JFrame("Maps");
 		mapsFrame.setBounds(100, 100, 842, 480);
 		mapsFrame.setResizable(false);
 		mapsFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		mapsFrame.setContentPane(mapsPane);
 		mapsFrame.add(fMap);
-		
+
 		optionsFrame = new JFrame("Options");
 		optionsFrame.setBounds(100, 100, 842, 480);
 		optionsFrame.setResizable(false);
 		optionsFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		optionsFrame.setContentPane(optionsPane);
 		optionsFrame.add(fOpt);
-		
+
 		mapInstallLocation.setVisible(true);
 		serverMap.setVisible(true);
 		tpInstall.setVisible(true);
@@ -1406,30 +1391,30 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		serverbutton.setVisible(true);
 		mapInstall.setVisible(true);
 	}
-	
-	public static void showFrame(String id){
-		if(id == "mods"){
+
+	public static void showFrame(String id) {
+		if (id == "mods") {
 			modsFrame.setVisible(true);
 			textureFrame.setVisible(false);
 			mapsFrame.setVisible(false);
 			optionsFrame.setVisible(false);
 			currentPane = Panes.MODPACK;
 		}
-		if(id == "textures"){
+		if (id == "textures") {
 			textureFrame.setVisible(true);
 			modsFrame.setVisible(false);
 			mapsFrame.setVisible(false);
 			optionsFrame.setVisible(false);
 			currentPane = Panes.TEXTURE;
 		}
-		if(id == "maps"){
+		if (id == "maps") {
 			mapsFrame.setVisible(true);
 			modsFrame.setVisible(false);
 			textureFrame.setVisible(false);
 			optionsFrame.setVisible(false);
 			currentPane = Panes.MAPS;
 		}
-		if(id == "options"){
+		if (id == "options") {
 			modsFrame.setVisible(false);
 			textureFrame.setVisible(false);
 			mapsFrame.setVisible(false);
