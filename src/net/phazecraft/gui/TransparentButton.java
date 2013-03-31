@@ -1,7 +1,5 @@
 package net.phazecraft.gui;
 
-
-
 import java.awt.Graphics;
 import javax.swing.Icon;
 import javax.swing.JButton;
