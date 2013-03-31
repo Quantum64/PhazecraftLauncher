@@ -564,9 +564,6 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		options.setOpaque(false);
 		options.setTransparency(0.70F);
 		options.setHoverTransparency(1F);
-		
-		exit.setIcon(exitIcon);
-		exit.setTransparency(0);
 
 		serverbutton.setBounds(480, 20, 330, 30);
 		serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
