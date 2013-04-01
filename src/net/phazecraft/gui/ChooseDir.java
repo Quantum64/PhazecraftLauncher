@@ -11,6 +11,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import net.phazecraft.data.Settings;
+import net.phazecraft.gui.dialogs.CreateModPackDialog;
 import net.phazecraft.gui.dialogs.EditModPackDialog;
 import net.phazecraft.gui.dialogs.InstallDirectoryDialog;
 import net.phazecraft.gui.panes.OptionsPane;
@@ -21,6 +22,7 @@ import net.phazecraft.util.FileUtils;
 public class ChooseDir extends JFrame implements ActionListener {
 	private OptionsPane optionsPane;
 	private EditModPackDialog editMPD;
+	private CreateModPackDialog cMPD;
 	private InstallDirectoryDialog installDialog;
 	private String choosertitle = "Please select an install location";
 
@@ -34,6 +36,12 @@ public class ChooseDir extends JFrame implements ActionListener {
 		super();
 		optionsPane = null;
 		this.editMPD = editMPD;
+	}
+	
+	public ChooseDir(CreateModPackDialog cMPD) {
+		super();
+		optionsPane = null;
+		this.cMPD = cMPD;
 	}
 
 	public ChooseDir(InstallDirectoryDialog installDialog) {
