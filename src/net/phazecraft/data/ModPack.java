@@ -1,4 +1,3 @@
-
 package net.phazecraft.data;
 
 import java.awt.Image;
@@ -25,7 +24,7 @@ import net.phazecraft.util.DownloadUtils;
 import net.phazecraft.util.OSUtils;
 import net.phazecraft.workers.ModpackLoader;
 
-public class ModPack {	
+public class ModPack {
 	private String name, author, version, url, dir, mcVersion, serverUrl, logoName, imageName, info, animation, sep = File.separator, xml;
 	private String[] mods, oldVersions;
 	private Image logo, image;
@@ -35,6 +34,7 @@ public class ModPack {
 	private static List<ModPackListener> listeners = new ArrayList<ModPackListener>();
 	private boolean privatePack;
 	private boolean noMods = false;
+	private boolean custom = false;
 
 	/**
 	 * Loads the modpack.xml and adds it to the modpack array in this class
@@ -74,12 +74,12 @@ public class ModPack {
 
 	public static void removePacks(String xml) {
 		ArrayList<ModPack> remove = new ArrayList<ModPack>();
-		for(ModPack pack : packs) {
-			if(pack.getParentXml().equalsIgnoreCase(xml)) {
+		for (ModPack pack : packs) {
+			if (pack.getParentXml().equalsIgnoreCase(xml)) {
 				remove.add(pack);
 			}
 		}
-		for(ModPack pack : remove) {
+		for (ModPack pack : remove) {
 			packs.remove(pack);
 		}
 	}
@@ -109,8 +109,8 @@ public class ModPack {
 	}
 
 	public static ModPack getPack(String dir) {
-		for(ModPack pack : packs) {
-			if(pack.getDir().equalsIgnoreCase(dir)) {
+		for (ModPack pack : packs) {
+			if (pack.getDir().equalsIgnoreCase(dir)) {
 				return pack;
 			}
 		}
@@ -144,14 +144,13 @@ public class ModPack {
 	 * @throws IOException
 	 * @throws NoSuchAlgorithmException
 	 */
-	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, 
-			String oldVersions, String animation, int idx, boolean privatePack, String xml, String noMods) throws IOException, NoSuchAlgorithmException {
-		
- 		index = idx;
+	public ModPack(String name, String author, String version, String logo, String url, String image, String dir, String mcVersion, String serverUrl, String info, String mods, String oldVersions, String animation, int idx, boolean privatePack, String xml, String noMods) throws IOException, NoSuchAlgorithmException {
+
+		index = idx;
 		String s = "true";
-		if(noMods.equalsIgnoreCase(s)){
+		if (noMods.equalsIgnoreCase(s)) {
 			this.noMods = true;
-			}
+		}
 		this.name = name;
 		this.author = author;
 		this.version = version;
@@ -160,8 +159,9 @@ public class ModPack {
 		this.url = url;
 		this.serverUrl = serverUrl;
 		this.privatePack = privatePack;
+		this.custom = custom;
 		this.xml = xml;
-		if(!animation.equalsIgnoreCase("")) {
+		if (!animation.equalsIgnoreCase("")) {
 			this.animation = animation;
 		} else {
 			this.animation = "empty";
@@ -169,12 +169,12 @@ public class ModPack {
 		logoName = logo;
 		imageName = image;
 		this.info = info;
-		if(mods.isEmpty()) {
+		if (mods.isEmpty()) {
 			this.mods = null;
 		} else {
 			this.mods = mods.split("; ");
 		}
-		if(oldVersions.isEmpty()) {
+		if (oldVersions.isEmpty()) {
 			this.oldVersions = null;
 		} else {
 			this.oldVersions = oldVersions.split(";");
@@ -183,19 +183,19 @@ public class ModPack {
 		File tempDir = new File(installPath, "ModPacks" + sep + dir);
 		File verFile = new File(tempDir, "version");
 		URL url_;
-		if(!upToDate(verFile)) {
+		if (!upToDate(verFile)) {
 			url_ = new URL(DownloadUtils.getStaticCreeperhostLink(logo));
 			this.logo = Toolkit.getDefaultToolkit().createImage(url_);
 			BufferedImage tempImg = ImageIO.read(url_);
 			ImageIO.write(tempImg, "png", new File(tempDir, logo));
 			tempImg.flush();
-			url_ =  new URL(DownloadUtils.getStaticCreeperhostLink(image));
+			url_ = new URL(DownloadUtils.getStaticCreeperhostLink(image));
 			this.image = Toolkit.getDefaultToolkit().createImage(url_);
 			tempImg = ImageIO.read(url_);
 			ImageIO.write(tempImg, "png", new File(tempDir, image));
 			tempImg.flush();
 		} else {
-			if(new File(tempDir, logo).exists()) {
+			if (new File(tempDir, logo).exists()) {
 				this.logo = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + logo);
 			} else {
 				url_ = new URL(DownloadUtils.getStaticCreeperhostLink(logo));
@@ -204,7 +204,7 @@ public class ModPack {
 				ImageIO.write(tempImg, "png", new File(tempDir, logo));
 				tempImg.flush();
 			}
-			if(new File(tempDir, image).exists()) {
+			if (new File(tempDir, image).exists()) {
 				this.image = Toolkit.getDefaultToolkit().createImage(tempDir.getPath() + sep + image);
 			} else {
 				url_ = new URL(DownloadUtils.getStaticCreeperhostLink(image));
@@ -224,14 +224,14 @@ public class ModPack {
 	private boolean upToDate(File verFile) {
 		boolean result = true;
 		try {
-			if(!verFile.exists()) {
+			if (!verFile.exists()) {
 				verFile.getParentFile().mkdirs();
 				verFile.createNewFile();
 				result = false;
 			}
 			BufferedReader in = new BufferedReader(new FileReader(verFile));
 			String line;
-			if((line = in.readLine()) == null || Integer.parseInt(version.replace(".", "")) > Integer.parseInt(line.replace(".", ""))) {
+			if ((line = in.readLine()) == null || Integer.parseInt(version.replace(".", "")) > Integer.parseInt(line.replace(".", ""))) {
 				BufferedWriter out = new BufferedWriter(new FileWriter(verFile));
 				out.write(version);
 				out.flush();
@@ -403,9 +403,11 @@ public class ModPack {
 	public String getParentXml() {
 		return xml;
 	}
-	
-	public boolean getNoMods()
-	{
+
+	public boolean getNoMods() {
 		return noMods;
+	}
+	public boolean getCustom(){
+		return custom;
 	}
 }
