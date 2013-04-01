@@ -121,7 +121,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	private JLabel footerCreeper2 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JLabel footerLogo3 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper3 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
-	private ImageIcon exitIcon = new ImageIcon(this.getClass().getResource("/image/btn_play.png"));
+	private URL exitIcon = this.getClass().getResource("/image/btn_play.png");
 	private JLabel tpInstallLocLbl = new JLabel();
 	private JButton launch = new LiteButton("Launch");
 	private JButton edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(), tpInstall = new JButton();
@@ -161,7 +161,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	public static JFrame mapsFrame;
 	public static JFrame optionsFrame;
 	
-	TransparentButton exit = new TransparentButton();
+	TransparentButton exit;
 
 	public static final String FORGENAME = "MinecraftForge.zip";
 
@@ -564,6 +564,18 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		options.setOpaque(false);
 		options.setTransparency(0.70F);
 		options.setHoverTransparency(1F);
+		
+		exit = new TransparentButton();
+		exit.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(exitIcon)));
+		exit.setBounds(828, 28, 30, 30);
+		exit.setTransparency(0.70F);
+		exit.setHoverTransparency(1F);
+		exit.addActionListener(new ActionListener(){
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}});
 
 		serverbutton.setBounds(480, 20, 330, 30);
 		serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
