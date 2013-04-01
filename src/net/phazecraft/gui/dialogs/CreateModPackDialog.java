@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -35,7 +34,10 @@ import net.phazecraft.gui.LaunchFrame;
 import net.phazecraft.locale.I18N;
 import net.phazecraft.util.OSUtils;
 
+@SuppressWarnings("rawtypes")
 public class CreateModPackDialog extends JDialog {
+	private static final long serialVersionUID = 1L;
+
 	private JTabbedPane tabbedPane;
 
 	private JPanel formPnl;
@@ -47,6 +49,7 @@ public class CreateModPackDialog extends JDialog {
 
 	private JLabel enabledModsLbl;
 	private JLabel disabledModsLbl;
+	private JLabel versionLbl;
 
 	private JScrollPane enabledModsScl;
 	private JScrollPane disabledModsScl;
@@ -63,6 +66,8 @@ public class CreateModPackDialog extends JDialog {
 	public File folder = modsFolder;
 
 	private Tab currentTab = Tab.MODS;
+	
+	private static JComboBox version;
 
 	public enum Tab {
 		MODS,
@@ -71,9 +76,20 @@ public class CreateModPackDialog extends JDialog {
 		OLD_VERSIONS
 	}
 
+	@SuppressWarnings("unchecked")
 	public CreateModPackDialog(LaunchFrame instance) {
 		super(instance, true);
-
+		
+		
+		String[] dropdown = new String[4];
+		
+		dropdown[0] = "1.1.0";
+		dropdown[1] = "1.2.5";
+		dropdown[2] = "1.4.7";
+		dropdown[3] = "1.5.1";
+		version = new JComboBox(dropdown);
+		version.setSelectedIndex(2);
+		
 		modsFolder.mkdirs();
 		coreModsFolder.mkdirs();
 		jarModsFolder.mkdirs();
@@ -198,6 +214,7 @@ public class CreateModPackDialog extends JDialog {
 		return enabledList;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void updateLists() {
 		enabledModsLst.setListData(getEnabled());
 		disabledModsLst.setListData(getDisabled());
@@ -216,13 +233,16 @@ public class CreateModPackDialog extends JDialog {
 
 		formPnl = new JPanel();
 
-		enabledModsLbl = new JLabel(I18N.getLocaleString("MODS_EDIT_ENABLED_LABEL"));
-		disabledModsLbl = new JLabel(I18N.getLocaleString("MODS_EDIT_DISABLED_LABEL"));
+		versionLbl = new JLabel("Version: ");
+		versionLbl.setBounds(40, 4, 30, 10);
+		
+		enabledModsLbl = new JLabel("In Your Pack");
+		disabledModsLbl = new JLabel("Avaible Mods");
 
 		openFolder = new JButton(I18N.getLocaleString("MODS_EDIT_OPEN_FOLDER"));
 		addMod = new JButton(I18N.getLocaleString("MODS_EDIT_ADD_MOD"));
-		disableMod = new JButton(I18N.getLocaleString("MODS_EDIT_DISABLE_MOD"));
-		enableMod = new JButton(I18N.getLocaleString("MODS_EDIT_ENABLE_MOD"));
+		disableMod = new JButton("Remove Mod");
+		enableMod = new JButton("Add Mod To Pack");
 
 		enabledModsLst = new JList();
 		disabledModsLst = new JList();
@@ -265,13 +285,15 @@ public class CreateModPackDialog extends JDialog {
 		formPnl.setLayout(layout);
 
 		formPnl.add(enabledModsLbl);
-		formPnl.add(disabledModsLbl);
+		formPnl.add(disabledModsLbl); 
 		formPnl.add(enabledModsScl);
 		formPnl.add(disabledModsScl);
 		formPnl.add(disableMod);
 		formPnl.add(enableMod);
 		formPnl.add(addMod);
 		formPnl.add(openFolder);
+		formPnl.add(versionLbl);
+		formPnl.add(version);
 
 		Spring vSpring;
 		Spring rowHeight;
@@ -304,6 +326,8 @@ public class CreateModPackDialog extends JDialog {
 		layout.putConstraint(SpringLayout.NORTH, disableMod, Spring.sum(vSpring, buttonRowHeight), SpringLayout.NORTH, formPnl);
 
 		vSpring = Spring.sum(vSpring, rowHeight);
+		
+		versionLbl.setHorizontalAlignment(SwingConstants.CENTER);
 
 		layout.putConstraint(SpringLayout.SOUTH, enabledModsScl,  vSpring, SpringLayout.NORTH, formPnl);
 		layout.putConstraint(SpringLayout.SOUTH, disabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
