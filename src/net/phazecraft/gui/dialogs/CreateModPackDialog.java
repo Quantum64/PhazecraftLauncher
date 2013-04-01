@@ -1,4 +1,3 @@
-
 package net.phazecraft.gui.dialogs;
 
 import java.awt.BorderLayout;
@@ -7,7 +6,11 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +19,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -32,6 +36,7 @@ import net.phazecraft.data.Settings;
 import net.phazecraft.gui.ChooseDir;
 import net.phazecraft.gui.LaunchFrame;
 import net.phazecraft.locale.I18N;
+import net.phazecraft.log.Logger;
 import net.phazecraft.util.OSUtils;
 
 @SuppressWarnings("rawtypes")
@@ -41,6 +46,8 @@ public class CreateModPackDialog extends JDialog {
 	private JTabbedPane tabbedPane;
 
 	private JPanel formPnl;
+
+	String versionSelect = null;
 
 	private JButton openFolder;
 	private JButton addMod;
@@ -63,36 +70,52 @@ public class CreateModPackDialog extends JDialog {
 	private final File modsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "mods");
 	private final File coreModsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "coremods");
 	private final File jarModsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "instMods");
+	private File baseDir;
+	private File packDir;
+
 	public File folder = modsFolder;
 
 	private Tab currentTab = Tab.MODS;
-	
+
 	private static JComboBox version;
 
 	public enum Tab {
-		MODS,
-		JARMODS,
-		COREMODS,
-		OLD_VERSIONS
+		MODS, JARMODS, COREMODS, OLD_VERSIONS
 	}
 
 	@SuppressWarnings("unchecked")
 	public CreateModPackDialog(LaunchFrame instance) {
 		super(instance, true);
-		
-		
-		String[] dropdown = new String[4];
-		
-		dropdown[0] = "1.1.0";
-		dropdown[1] = "1.2.5";
-		dropdown[2] = "1.4.7";
-		dropdown[3] = "1.5.1";
-		version = new JComboBox(dropdown);
-		version.setSelectedIndex(2);
-		
+
+		for (int i = 0; i < 100; i++) {
+			if (!(new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt").exists())) {
+				try {
+					new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i).mkdirs();
+					new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt").createNewFile();
+				} catch (IOException e) {
+					Logger.logError("Couldent create custom pack file because of an IO Exception");
+					break;
+				}
+
+				try {
+					PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt", false)));
+					out.println("the text");
+					out.close();
+				} catch (IOException e) {
+					Logger.logError("Couldent write version because of an IO Exception");
+					break;
+				}
+				break;
+			}
+		}
+
 		modsFolder.mkdirs();
 		coreModsFolder.mkdirs();
 		jarModsFolder.mkdirs();
+
+		do {
+			versionSelect = JOptionPane.showInputDialog("Please type the Minecraft version you would like to create your modpack for\nThe supported versions are 1.1.0, 1.2.5, 1.4.7, and 1.5.0");
+		} while (!versionSelect.equals("1.1.0") && !versionSelect.equals("1.2.5") && !versionSelect.equals("1.4.7") && !versionSelect.equals("1.5.0"));
 
 		setupGui();
 
@@ -110,7 +133,7 @@ public class CreateModPackDialog extends JDialog {
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				currentTab = Tab.values()[tabbedPane.getSelectedIndex()];
-				switch(currentTab) {
+				switch (currentTab) {
 				case MODS:
 					folder = modsFolder;
 					break;
@@ -120,10 +143,10 @@ public class CreateModPackDialog extends JDialog {
 				case JARMODS:
 					folder = jarModsFolder;
 					break;
-				default: 
+				default:
 					return;
 				}
-				((JPanel)tabbedPane.getSelectedComponent()).add(formPnl);
+				((JPanel) tabbedPane.getSelectedComponent()).add(formPnl);
 				updateLists();
 			}
 		});
@@ -138,14 +161,14 @@ public class CreateModPackDialog extends JDialog {
 		disableMod.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(enabledModsLst.getSelectedIndices().length > 1) {
-					for(int i = 0; i < enabledModsLst.getSelectedIndices().length; i++) {
+				if (enabledModsLst.getSelectedIndices().length > 1) {
+					for (int i = 0; i < enabledModsLst.getSelectedIndices().length; i++) {
 						String name = enabledMods.get(enabledModsLst.getSelectedIndices()[i]);
 						new File(folder, name).renameTo(new File(folder, name + ".disabled"));
 					}
 					updateLists();
 				} else {
-					if(enabledModsLst.getSelectedIndex() >= 0) {
+					if (enabledModsLst.getSelectedIndex() >= 0) {
 						String name = enabledMods.get(enabledModsLst.getSelectedIndex());
 						new File(folder, name).renameTo(new File(folder, name + ".disabled"));
 					}
@@ -157,14 +180,14 @@ public class CreateModPackDialog extends JDialog {
 		enableMod.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(disabledModsLst.getSelectedIndices().length > 1) {
-					for(int i = 0; i < disabledModsLst.getSelectedIndices().length; i++) {
+				if (disabledModsLst.getSelectedIndices().length > 1) {
+					for (int i = 0; i < disabledModsLst.getSelectedIndices().length; i++) {
 						String name = disabledMods.get(disabledModsLst.getSelectedIndices()[i]);
 						new File(folder, name).renameTo(new File(folder, name.replace(".disabled", "")));
 					}
 					updateLists();
 				} else {
-					if(disabledModsLst.getSelectedIndex() >= 0) {
+					if (disabledModsLst.getSelectedIndex() >= 0) {
 						String name = disabledMods.get(disabledModsLst.getSelectedIndex());
 						new File(folder, name).renameTo(new File(folder, name.replace(".disabled", "")));
 					}
@@ -176,19 +199,19 @@ public class CreateModPackDialog extends JDialog {
 
 	private String[] getEnabled() {
 		enabledMods.clear();
-		if(folder.exists()) {
-			for(String name : folder.list()) {
-				if(name.toLowerCase().endsWith(".zip")) {
+		if (folder.exists()) {
+			for (String name : folder.list()) {
+				if (name.toLowerCase().endsWith(".zip")) {
 					enabledMods.add(name);
-				} else if(name.toLowerCase().endsWith(".jar")) {
+				} else if (name.toLowerCase().endsWith(".jar")) {
 					enabledMods.add(name);
-				} else if(name.toLowerCase().endsWith(".litemod")) {
+				} else if (name.toLowerCase().endsWith(".litemod")) {
 					enabledMods.add(name);
 				}
 			}
 		}
 		String[] enabledList = new String[enabledMods.size()];
-		for(int i = 0; i < enabledMods.size(); i++) {
+		for (int i = 0; i < enabledMods.size(); i++) {
 			enabledList[i] = enabledMods.get(i).replace(".zip", "").replace(".jar", "").replace(".litemod", "");
 		}
 		return enabledList;
@@ -196,19 +219,19 @@ public class CreateModPackDialog extends JDialog {
 
 	private String[] getDisabled() {
 		disabledMods.clear();
-		if(folder.exists()) {
-			for(String name : folder.list()) {
-				if(name.toLowerCase().endsWith(".zip.disabled")) {
+		if (folder.exists()) {
+			for (String name : folder.list()) {
+				if (name.toLowerCase().endsWith(".zip.disabled")) {
 					disabledMods.add(name);
-				} else if(name.toLowerCase().endsWith(".jar.disabled")) {
+				} else if (name.toLowerCase().endsWith(".jar.disabled")) {
 					disabledMods.add(name);
-				} else if(name.toLowerCase().endsWith(".litemod.disabled")) {
+				} else if (name.toLowerCase().endsWith(".litemod.disabled")) {
 					disabledMods.add(name);
 				}
 			}
 		}
 		String[] enabledList = new String[disabledMods.size()];
-		for(int i = 0; i < disabledMods.size(); i++) {
+		for (int i = 0; i < disabledMods.size(); i++) {
 			enabledList[i] = disabledMods.get(i).replace(".zip.disabled", "").replace(".jar.disabled", "").replace(".litemod.disabled", "");
 		}
 		return enabledList;
@@ -235,7 +258,7 @@ public class CreateModPackDialog extends JDialog {
 
 		versionLbl = new JLabel("Version: ");
 		versionLbl.setBounds(40, 4, 30, 10);
-		
+
 		enabledModsLbl = new JLabel("In Your Pack");
 		disabledModsLbl = new JLabel("Avaible Mods");
 
@@ -285,7 +308,7 @@ public class CreateModPackDialog extends JDialog {
 		formPnl.setLayout(layout);
 
 		formPnl.add(enabledModsLbl);
-		formPnl.add(disabledModsLbl); 
+		formPnl.add(disabledModsLbl);
 		formPnl.add(enabledModsScl);
 		formPnl.add(disabledModsScl);
 		formPnl.add(disableMod);
@@ -301,7 +324,7 @@ public class CreateModPackDialog extends JDialog {
 
 		vSpring = Spring.constant(10);
 
-		layout.putConstraint(SpringLayout.NORTH, enabledModsLbl,  vSpring, SpringLayout.NORTH, formPnl);
+		layout.putConstraint(SpringLayout.NORTH, enabledModsLbl, vSpring, SpringLayout.NORTH, formPnl);
 		layout.putConstraint(SpringLayout.NORTH, disabledModsLbl, vSpring, SpringLayout.NORTH, formPnl);
 
 		rowHeight = Spring.height(enabledModsLbl);
@@ -310,7 +333,7 @@ public class CreateModPackDialog extends JDialog {
 		vSpring = Spring.sum(vSpring, rowHeight);
 		vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.NORTH, enabledModsScl,  vSpring, SpringLayout.NORTH, formPnl);
+		layout.putConstraint(SpringLayout.NORTH, enabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
 		layout.putConstraint(SpringLayout.NORTH, disabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
 
 		rowHeight = Spring.constant(320);
@@ -326,15 +349,15 @@ public class CreateModPackDialog extends JDialog {
 		layout.putConstraint(SpringLayout.NORTH, disableMod, Spring.sum(vSpring, buttonRowHeight), SpringLayout.NORTH, formPnl);
 
 		vSpring = Spring.sum(vSpring, rowHeight);
-		
+
 		versionLbl.setHorizontalAlignment(SwingConstants.CENTER);
 
-		layout.putConstraint(SpringLayout.SOUTH, enabledModsScl,  vSpring, SpringLayout.NORTH, formPnl);
+		layout.putConstraint(SpringLayout.SOUTH, enabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
 		layout.putConstraint(SpringLayout.SOUTH, disabledModsScl, vSpring, SpringLayout.NORTH, formPnl);
 
 		vSpring = Spring.sum(vSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.NORTH, addMod,     vSpring, SpringLayout.NORTH, formPnl);
+		layout.putConstraint(SpringLayout.NORTH, addMod, vSpring, SpringLayout.NORTH, formPnl);
 		layout.putConstraint(SpringLayout.NORTH, openFolder, vSpring, SpringLayout.NORTH, formPnl);
 
 		rowHeight = Spring.height(addMod);
@@ -351,8 +374,8 @@ public class CreateModPackDialog extends JDialog {
 
 		hSpring = Spring.constant(10);
 
-		layout.putConstraint(SpringLayout.WEST, enabledModsLbl,     hSpring, SpringLayout.WEST, formPnl);
-		layout.putConstraint(SpringLayout.WEST, enabledModsScl,    hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.WEST, enabledModsLbl, hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.WEST, enabledModsScl, hSpring, SpringLayout.WEST, formPnl);
 		layout.putConstraint(SpringLayout.WEST, openFolder, hSpring, SpringLayout.WEST, formPnl);
 
 		columnWidth = Spring.width(enabledModsLbl);
@@ -361,13 +384,13 @@ public class CreateModPackDialog extends JDialog {
 
 		hSpring = Spring.sum(hSpring, columnWidth);
 
-		layout.putConstraint(SpringLayout.EAST, enabledModsLbl,     hSpring, SpringLayout.WEST, formPnl);
-		layout.putConstraint(SpringLayout.EAST, enabledModsScl,    hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.EAST, enabledModsLbl, hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.EAST, enabledModsScl, hSpring, SpringLayout.WEST, formPnl);
 		layout.putConstraint(SpringLayout.EAST, openFolder, hSpring, SpringLayout.WEST, formPnl);
 
 		hSpring = Spring.sum(hSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.WEST, enableMod,  hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.WEST, enableMod, hSpring, SpringLayout.WEST, formPnl);
 		layout.putConstraint(SpringLayout.WEST, disableMod, hSpring, SpringLayout.WEST, formPnl);
 
 		buttonColumnWidth = Spring.width(enableMod);
@@ -375,26 +398,26 @@ public class CreateModPackDialog extends JDialog {
 
 		hSpring = Spring.sum(hSpring, buttonColumnWidth);
 
-		layout.putConstraint(SpringLayout.EAST, enableMod,  hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.EAST, enableMod, hSpring, SpringLayout.WEST, formPnl);
 		layout.putConstraint(SpringLayout.EAST, disableMod, hSpring, SpringLayout.WEST, formPnl);
 
 		hSpring = Spring.sum(hSpring, Spring.constant(10));
 
-		layout.putConstraint(SpringLayout.WEST, disabledModsLbl,  hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.WEST, disabledModsLbl, hSpring, SpringLayout.WEST, formPnl);
 		layout.putConstraint(SpringLayout.WEST, disabledModsScl, hSpring, SpringLayout.WEST, formPnl);
-		layout.putConstraint(SpringLayout.WEST, addMod,   hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.WEST, addMod, hSpring, SpringLayout.WEST, formPnl);
 
 		hSpring = Spring.sum(hSpring, columnWidth);
 
-		layout.putConstraint(SpringLayout.EAST, disabledModsLbl,  hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.EAST, disabledModsLbl, hSpring, SpringLayout.WEST, formPnl);
 		layout.putConstraint(SpringLayout.EAST, disabledModsScl, hSpring, SpringLayout.WEST, formPnl);
-		layout.putConstraint(SpringLayout.EAST, addMod,   hSpring, SpringLayout.WEST, formPnl);
+		layout.putConstraint(SpringLayout.EAST, addMod, hSpring, SpringLayout.WEST, formPnl);
 
 		hSpring = Spring.sum(hSpring, Spring.constant(10));
 
 		layout.putConstraint(SpringLayout.EAST, formPnl, hSpring, SpringLayout.WEST, formPnl);
 
-		((JPanel)tabbedPane.getComponent(0)).add(formPnl);
+		((JPanel) tabbedPane.getComponent(0)).add(formPnl);
 
 		pack();
 		setLocationRelativeTo(getOwner());
