@@ -55,12 +55,10 @@ public class CreateModManager extends JDialog {
 	private class ModManagerWorker extends SwingWorker<Boolean, Void> {
 		@Override
 		protected Boolean doInBackground() throws IOException, NoSuchAlgorithmException {
-			upToDate = upToDate();
-			if (!upToDate) {
-				String pack = LaunchFrame.getInstance().cmpd.getPackName();
-				curVersion = LaunchFrame.getInstance().cmpd.getPackName();
+			
+				String pack = LaunchFrame.cmpd.getPackName();
+				curVersion = LaunchFrame.cmpd.getPackVersion();
 				erroneous = !downloadModPack(pack);
-			}
 			return true;
 		}
 
@@ -100,7 +98,7 @@ public class CreateModManager extends JDialog {
 			String dynamicLoc = OSUtils.getDynamicStorageLocation();
 			String installPath = Settings.getSettings().getInstallPath();
 			ModPack pack = ModPack.getSelectedPack();
-			String baseLink = (pack.isPrivatePack() ? "privatepacks%5E" + dir + "%5E" + curVersion + "%5E" : curVersion + "-");
+			String baseLink = curVersion + "-";
 			File baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
 			baseDynamic.mkdirs();
 			new File(dynamicLoc + "/mods/" + curVersion + "/mods/").mkdirs();

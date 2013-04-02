@@ -443,7 +443,7 @@ public class CreateModPackDialog extends JDialog {
 	}
 	
 	public String getPackVersion(){
-		return versionSelect;
+		return versionSelect.replace(".", "_");
 		
 	}
 }
