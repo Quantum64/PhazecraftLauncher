@@ -17,6 +17,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -37,6 +38,8 @@ import net.phazecraft.gui.ChooseDir;
 import net.phazecraft.gui.LaunchFrame;
 import net.phazecraft.locale.I18N;
 import net.phazecraft.log.Logger;
+import net.phazecraft.tools.CreateModManager;
+import net.phazecraft.tools.ModManager;
 import net.phazecraft.util.ErrorUtils;
 import net.phazecraft.util.OSUtils;
 
@@ -73,6 +76,8 @@ public class CreateModPackDialog extends JDialog {
 	private File jarModsFolder;
 	private File baseDir;
 	private File packDir;
+	
+	private String packName;
 
 	public File folder = modsFolder;
 
@@ -88,34 +93,34 @@ public class CreateModPackDialog extends JDialog {
 	public CreateModPackDialog(LaunchFrame instance) {
 		super(instance, true);
 
-		modsFolder.mkdirs();
-		coreModsFolder.mkdirs();
-		jarModsFolder.mkdirs();
-
 		do {
 			versionSelect = JOptionPane.showInputDialog("Please type the Minecraft version you would like to create your modpack for\nThe supported versions are 1.1.0, 1.2.5, 1.4.7, and 1.5.0");
 		} while (!versionSelect.equals("1.1.0") && !versionSelect.equals("1.2.5") && !versionSelect.equals("1.4.7") && !versionSelect.equals("1.5.0"));
 
 		for (int i = 0; i < 100; i++) {
 			if (!(new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt").exists())) {
+				new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i).mkdirs();
 				try {
-					new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i).mkdirs();
 					new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt").createNewFile();
-				} catch (IOException e) {
-					setVisible(false);
-					ErrorUtils.tossError("Couldent create custom pack file because of an IO Exception");
-					break;
+					packName = "CustomPack" + i;
+				} catch (IOException e1) {
+					e1.printStackTrace();
 				}
 
 				try {
 					PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt", false)));
 					out.println(versionSelect);
-					out.flush();
 					out.close();
 					
 					modsFolder = new File(Settings.getSettings().getInstallPath(), "CustomPack" + i + File.separator + "minecraft" + File.separator + "mods");
 					coreModsFolder = new File(Settings.getSettings().getInstallPath(),"CustomPack" + i + File.separator + "minecraft" + File.separator + "coremods");
 					jarModsFolder = new File(Settings.getSettings().getInstallPath(), "CustomPack" + i + File.separator + "instMods");
+					
+					modsFolder.mkdirs();
+					coreModsFolder.mkdirs();
+					jarModsFolder.mkdirs();
+					
+					folder = modsFolder;
 					
 				} catch (IOException e) {
 					setVisible(false);
@@ -125,7 +130,10 @@ public class CreateModPackDialog extends JDialog {
 				break;
 			}
 		}
-
+		
+		CreateModManager man = new CreateModManager(new JFrame(), true);
+		man.setVisible(true);
+		
 		setupGui();
 
 		enabledMods = new ArrayList<String>();
@@ -324,8 +332,6 @@ public class CreateModPackDialog extends JDialog {
 		formPnl.add(enableMod);
 		formPnl.add(addMod);
 		formPnl.add(openFolder);
-		formPnl.add(versionLbl);
-		formPnl.add(version);
 
 		Spring vSpring;
 		Spring rowHeight;
@@ -430,5 +436,14 @@ public class CreateModPackDialog extends JDialog {
 
 		pack();
 		setLocationRelativeTo(getOwner());
+	}
+	
+	public String getPackName(){
+		return packName; 
+	}
+	
+	public String getPackVersion(){
+		return versionSelect;
+		
 	}
 }

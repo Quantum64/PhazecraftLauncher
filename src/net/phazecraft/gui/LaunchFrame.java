@@ -174,6 +174,8 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 	public static JFrame textureFrame;
 	public static JFrame mapsFrame;
 	public static JFrame optionsFrame;
+	
+	public static CreateModPackDialog cmpd;
 
 	TransparentButton exit;
 
@@ -1638,7 +1640,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 			currentPane = Panes.OPTIONS;
 		}
 		if (id == "create") {
-			CreateModPackDialog cmpd = new CreateModPackDialog(LaunchFrame.getInstance());
+			cmpd = new CreateModPackDialog(LaunchFrame.getInstance());
 			cmpd.setVisible(true);
 		}
 	}
