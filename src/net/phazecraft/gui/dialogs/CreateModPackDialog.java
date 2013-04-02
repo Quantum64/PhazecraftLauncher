@@ -37,6 +37,7 @@ import net.phazecraft.gui.ChooseDir;
 import net.phazecraft.gui.LaunchFrame;
 import net.phazecraft.locale.I18N;
 import net.phazecraft.log.Logger;
+import net.phazecraft.util.ErrorUtils;
 import net.phazecraft.util.OSUtils;
 
 @SuppressWarnings("rawtypes")
@@ -67,9 +68,9 @@ public class CreateModPackDialog extends JDialog {
 	private List<String> enabledMods;
 	private List<String> disabledMods;
 
-	private final File modsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "mods");
-	private final File coreModsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "minecraft" + File.separator + "coremods");
-	private final File jarModsFolder = new File(Settings.getSettings().getInstallPath(), ModPack.getSelectedPack().getDir() + File.separator + "instMods");
+	private File modsFolder;
+	private File coreModsFolder;
+	private File jarModsFolder;
 	private File baseDir;
 	private File packDir;
 
@@ -87,28 +88,6 @@ public class CreateModPackDialog extends JDialog {
 	public CreateModPackDialog(LaunchFrame instance) {
 		super(instance, true);
 
-		for (int i = 0; i < 100; i++) {
-			if (!(new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt").exists())) {
-				try {
-					new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i).mkdirs();
-					new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt").createNewFile();
-				} catch (IOException e) {
-					Logger.logError("Couldent create custom pack file because of an IO Exception");
-					break;
-				}
-
-				try {
-					PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt", false)));
-					out.println("the text");
-					out.close();
-				} catch (IOException e) {
-					Logger.logError("Couldent write version because of an IO Exception");
-					break;
-				}
-				break;
-			}
-		}
-
 		modsFolder.mkdirs();
 		coreModsFolder.mkdirs();
 		jarModsFolder.mkdirs();
@@ -116,6 +95,36 @@ public class CreateModPackDialog extends JDialog {
 		do {
 			versionSelect = JOptionPane.showInputDialog("Please type the Minecraft version you would like to create your modpack for\nThe supported versions are 1.1.0, 1.2.5, 1.4.7, and 1.5.0");
 		} while (!versionSelect.equals("1.1.0") && !versionSelect.equals("1.2.5") && !versionSelect.equals("1.4.7") && !versionSelect.equals("1.5.0"));
+
+		for (int i = 0; i < 100; i++) {
+			if (!(new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt").exists())) {
+				try {
+					new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i).mkdirs();
+					new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt").createNewFile();
+				} catch (IOException e) {
+					setVisible(false);
+					ErrorUtils.tossError("Couldent create custom pack file because of an IO Exception");
+					break;
+				}
+
+				try {
+					PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt", false)));
+					out.println(versionSelect);
+					out.flush();
+					out.close();
+					
+					modsFolder = new File(Settings.getSettings().getInstallPath(), "CustomPack" + i + File.separator + "minecraft" + File.separator + "mods");
+					coreModsFolder = new File(Settings.getSettings().getInstallPath(),"CustomPack" + i + File.separator + "minecraft" + File.separator + "coremods");
+					jarModsFolder = new File(Settings.getSettings().getInstallPath(), "CustomPack" + i + File.separator + "instMods");
+					
+				} catch (IOException e) {
+					setVisible(false);
+					ErrorUtils.tossError("Couldent write version because of an IO Exception");
+					break;
+				}
+				break;
+			}
+		}
 
 		setupGui();
 
