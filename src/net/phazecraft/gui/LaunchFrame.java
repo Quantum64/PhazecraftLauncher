@@ -126,7 +126,13 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	private URL exitIcon = this.getClass().getResource("/image/x.png");
 	private JLabel tpInstallLocLbl = new JLabel();
 	private JButton launch = new LiteButton("Launch");
-	private JButton edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(), tpInstall = new JButton();
+	private JButton edit = new JButton();
+	private JButton tpInstall = new JButton();
+	private JButton serverMap = new JButton();
+	private JButton mapInstall = new JButton();
+	private JButton serverbutton = new JButton();
+	private JButton donate = new JButton();
+	private JButton close = new JButton();
 	private static String[] dropdown_ = { "Select Profile", "Create Profile" };
 	@SuppressWarnings("rawtypes")
 	private static JComboBox users, tpInstallLocation, mapInstallLocation;
@@ -483,7 +489,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		}
 
 		// Setup the nice looking box around the login stuff
-		RoundedBox loginArea = new RoundedBox(TRANSPARENT); // 340, 294
+		RoundedBox loginArea = new RoundedBox(TRANSPARENT); // 340, 294  (DON'T DELETE THE NUMBERS)
 		loginArea.setBounds((int) (getWidth() / 2.0 - 170), (int) (getHeight() / 2.0), 276, 90);
 
 		RoundedBox bar = new RoundedBox(TRANSPARENT);
@@ -620,7 +626,18 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 					MapManager man = new MapManager(new JFrame(), true);
 					man.setVisible(true);
 					MapManager.cleanUp();
+					closeFrames();
 				}
+			}
+		});
+
+		close.setBounds(650, 20, 160, 30);
+		close.setText("Select and Close");
+		close.setVisible(true);
+		close.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				closeFrames();
 			}
 		});
 
@@ -652,6 +669,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 				if (getSelectedTexturePackIndex() >= 0) {
 					TextureManager man = new TextureManager(new JFrame(), true);
 					man.setVisible(true);
+					closeFrames();
 				}
 			}
 		});
@@ -667,6 +685,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 
 		fMod.add(footerLogo);
 		fMod.add(footerCreeper);
+		fMod.add(close);
 		fTp.add(footerLogo1);
 		fTp.add(footerCreeper1);
 		fMap.add(footerLogo2);
@@ -1472,5 +1491,12 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			cmpd = new CreateModPackDialog(LaunchFrame.getInstance());
 			cmpd.setVisible(true);
 		}
+	}
+
+	public void closeFrames() {
+		modsFrame.setVisible(false);
+		textureFrame.setVisible(false);
+		mapsFrame.setVisible(false);
+		optionsFrame.setVisible(false);
 	}
 }

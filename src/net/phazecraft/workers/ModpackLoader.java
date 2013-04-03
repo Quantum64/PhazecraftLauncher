@@ -26,7 +26,7 @@ import org.w3c.dom.NodeList;
 
 public class ModpackLoader extends Thread {
 	private ArrayList<String> xmlFiles = new ArrayList<String>();
-	private static int counter = 0;
+	public static int counter = 0;
 
 	public ModpackLoader(ArrayList<String> xmlFiles) {
 		this.xmlFiles = xmlFiles;

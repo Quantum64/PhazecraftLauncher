@@ -6,11 +6,14 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,11 +40,10 @@ import net.phazecraft.data.Settings;
 import net.phazecraft.gui.ChooseDir;
 import net.phazecraft.gui.LaunchFrame;
 import net.phazecraft.locale.I18N;
-import net.phazecraft.log.Logger;
 import net.phazecraft.tools.CreateModManager;
-import net.phazecraft.tools.ModManager;
 import net.phazecraft.util.ErrorUtils;
 import net.phazecraft.util.OSUtils;
+import net.phazecraft.workers.ModpackLoader;
 
 @SuppressWarnings("rawtypes")
 public class CreateModPackDialog extends JDialog {
@@ -76,8 +78,9 @@ public class CreateModPackDialog extends JDialog {
 	private File jarModsFolder;
 	private File baseDir;
 	private File packDir;
-	
+
 	private String packName;
+	private String userPackName;
 
 	public File folder = modsFolder;
 
@@ -103,6 +106,7 @@ public class CreateModPackDialog extends JDialog {
 				try {
 					new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt").createNewFile();
 					packName = "CustomPack" + i;
+					userPackName = "Custom Pack #" + i;
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -111,17 +115,17 @@ public class CreateModPackDialog extends JDialog {
 					PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt", false)));
 					out.println(versionSelect);
 					out.close();
-					
+
 					modsFolder = new File(Settings.getSettings().getInstallPath(), "CustomPack" + i + File.separator + "minecraft" + File.separator + "mods");
-					coreModsFolder = new File(Settings.getSettings().getInstallPath(),"CustomPack" + i + File.separator + "minecraft" + File.separator + "coremods");
+					coreModsFolder = new File(Settings.getSettings().getInstallPath(), "CustomPack" + i + File.separator + "minecraft" + File.separator + "coremods");
 					jarModsFolder = new File(Settings.getSettings().getInstallPath(), "CustomPack" + i + File.separator + "instMods");
-					
+
 					modsFolder.mkdirs();
 					coreModsFolder.mkdirs();
 					jarModsFolder.mkdirs();
-					
+
 					folder = modsFolder;
-					
+
 				} catch (IOException e) {
 					setVisible(false);
 					ErrorUtils.tossError("Couldent write version because of an IO Exception");
@@ -130,10 +134,10 @@ public class CreateModPackDialog extends JDialog {
 				break;
 			}
 		}
-		
+
 		CreateModManager man = new CreateModManager(new JFrame(), true);
 		man.setVisible(true);
-		
+
 		setupGui();
 
 		enabledMods = new ArrayList<String>();
@@ -209,6 +213,17 @@ public class CreateModPackDialog extends JDialog {
 						new File(folder, name).renameTo(new File(folder, name.replace(".disabled", "")));
 					}
 					updateLists();
+				}
+			}
+		});
+
+		addWindowListener(new WindowAdapter() {
+			public void windowClosed(WindowEvent e) {
+				try {
+					ModPack.addPack(new ModPack(userPackName, "You", versionSelect, "phazecraft.png", packName, "phazecraftsplash.png", packName, versionSelect, "", "Custom Mod Pack" + ".  Made by you!", "", "", "", ModpackLoader.counter, false, "", "false"));
+				} catch (NoSuchAlgorithmException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
 				}
 			}
 		});
@@ -437,13 +452,14 @@ public class CreateModPackDialog extends JDialog {
 		pack();
 		setLocationRelativeTo(getOwner());
 	}
-	
-	public String getPackName(){
-		return packName; 
+
+	public String getPackName() {
+		return packName;
 	}
-	
-	public String getPackVersion(){
+
+	public String getPackVersion() {
 		return versionSelect.replace(".", "_");
-		
+
 	}
+
 }
