@@ -104,8 +104,7 @@ import net.phazecraft.workers.GameUpdateWorker;
 import net.phazecraft.workers.LoginWorker;
 
 @SuppressWarnings("static-access")
-public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
-		MouseWheelListener, MouseListener, MouseMotionListener {
+public class LaunchFrame extends JFrame implements ActionListener, KeyListener, MouseWheelListener, MouseListener, MouseMotionListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -116,28 +115,18 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 	private JPanel fTp = new JPanel();
 	private JPanel fMod = new JPanel();
 	private JPanel fOpt = new JPanel();
-	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass()
-			.getResource("/image/logo_ftb.png")));
-	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass()
-			.getResource("/image/logo_creeperHost.png")));
-	private JLabel footerLogo1 = new JLabel(new ImageIcon(this.getClass()
-			.getResource("/image/logo_ftb.png")));
-	private JLabel footerCreeper1 = new JLabel(new ImageIcon(this.getClass()
-			.getResource("/image/logo_creeperHost.png")));
-	private JLabel footerLogo2 = new JLabel(new ImageIcon(this.getClass()
-			.getResource("/image/logo_ftb.png")));
-	private JLabel footerCreeper2 = new JLabel(new ImageIcon(this.getClass()
-			.getResource("/image/logo_creeperHost.png")));
-	private JLabel footerLogo3 = new JLabel(new ImageIcon(this.getClass()
-			.getResource("/image/logo_ftb.png")));
-	private JLabel footerCreeper3 = new JLabel(new ImageIcon(this.getClass()
-			.getResource("/image/logo_creeperHost.png")));
+	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
+	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
+	private JLabel footerLogo1 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
+	private JLabel footerCreeper1 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
+	private JLabel footerLogo2 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
+	private JLabel footerCreeper2 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
+	private JLabel footerLogo3 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
+	private JLabel footerCreeper3 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private URL exitIcon = this.getClass().getResource("/image/btn_play.png");
 	private JLabel tpInstallLocLbl = new JLabel();
 	private JButton launch = new LiteButton("Launch");
-	private JButton edit = new JButton(), donate = new JButton(),
-			serverbutton = new JButton(), mapInstall = new JButton(),
-			serverMap = new JButton(), tpInstall = new JButton();
+	private JButton edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(), tpInstall = new JButton();
 	private static String[] dropdown_ = { "Select Profile", "Create Profile" };
 	@SuppressWarnings("rawtypes")
 	private static JComboBox users, tpInstallLocation, mapInstallLocation;
@@ -166,18 +155,16 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 	public static LauncherConsole con;
 	public static String tempPass = "";
 	public static Panes currentPane = Panes.MODPACK;
-	public static JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(
-			new AnalyticsConfigData("UA-39727539-1"),
-			GoogleAnalyticsVersion.V_4_7_2);
+	public static JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(new AnalyticsConfigData("UA-39727539-1"), GoogleAnalyticsVersion.V_4_7_2);
 	private static final Color TRANSPARENT = new Color(45, 45, 45, 160);
 
 	public static JFrame modsFrame;
 	public static JFrame textureFrame;
 	public static JFrame mapsFrame;
 	public static JFrame optionsFrame;
-	
+
 	private static SplashScreen splash;
-	
+
 	public static CreateModPackDialog cmpd;
 
 	TransparentButton exit;
@@ -195,30 +182,25 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 	 *            - CLI arguments
 	 */
 	public static void main(String[] args) {
-		
+
 		ImageIcon splashIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(LaunchFrame.class.getResource("/image/phazecraftLogo.png")));
-		
+
 		splash = new SplashScreen(splashIcon.getImage());
 		splash.setVisible(true);
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e2) {
 		}
-		
-		tracker.setEnabled(true);
-		TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java",
-				"Launcher Start v" + version);
 
-		if (new File(Settings.getSettings().getInstallPath(),
-				"FTBLauncherLog.txt").exists()) {
-			new File(Settings.getSettings().getInstallPath(),
-					"FTBLauncherLog.txt").delete();
+		tracker.setEnabled(true);
+		TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Launcher Start v" + version);
+
+		if (new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").exists()) {
+			new File(Settings.getSettings().getInstallPath(), "FTBLauncherLog.txt").delete();
 		}
 
-		if (new File(Settings.getSettings().getInstallPath(),
-				"MinecraftLog.txt").exists()) {
-			new File(Settings.getSettings().getInstallPath(),
-					"MinecraftLog.txt").delete();
+		if (new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").exists()) {
+			new File(Settings.getSettings().getInstallPath(), "MinecraftLog.txt").delete();
 		}
 
 		DownloadUtils thread = new DownloadUtils();
@@ -228,25 +210,16 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 		Logger.logInfo("Java version: " + System.getProperty("java.version"));
 		Logger.logInfo("Java vendor: " + System.getProperty("java.vendor"));
 		Logger.logInfo("Java home: " + System.getProperty("java.home"));
-		Logger.logInfo("Java specification: "
-				+ System.getProperty("java.vm.specification.name")
-				+ " version: "
-				+ System.getProperty("java.vm.specification.version") + " by "
-				+ System.getProperty("java.vm.specification.vendor"));
-		Logger.logInfo("Java vm: " + System.getProperty("java.vm.name")
-				+ " version: " + System.getProperty("java.vm.version") + " by "
-				+ System.getProperty("java.vm.vendor"));
-		Logger.logInfo("OS: " + System.getProperty("os.arch") + " "
-				+ System.getProperty("os.name") + " "
-				+ System.getProperty("os.version"));
+		Logger.logInfo("Java specification: " + System.getProperty("java.vm.specification.name") + " version: " + System.getProperty("java.vm.specification.version") + " by " + System.getProperty("java.vm.specification.vendor"));
+		Logger.logInfo("Java vm: " + System.getProperty("java.vm.name") + " version: " + System.getProperty("java.vm.version") + " by " + System.getProperty("java.vm.vendor"));
+		Logger.logInfo("OS: " + System.getProperty("os.arch") + " " + System.getProperty("os.name") + " " + System.getProperty("os.version"));
 
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				StyleUtil.loadUiStyles();
 				try {
-					for (LookAndFeelInfo info : UIManager
-							.getInstalledLookAndFeels()) {
+					for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 						if ("Nimbus".equals(info.getName())) {
 							UIManager.setLookAndFeel(info.getClassName());
 							break;
@@ -254,8 +227,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 					}
 				} catch (Exception e) {
 					try {
-						UIManager.setLookAndFeel(UIManager
-								.getCrossPlatformLookAndFeelClassName());
+						UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 					} catch (Exception e1) {
 					}
 				}
@@ -267,8 +239,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 					installDialog.setVisible(true);
 				}
 
-				File installDir = new File(Settings.getSettings()
-						.getInstallPath());
+				File installDir = new File(Settings.getSettings().getInstallPath());
 				if (!installDir.exists()) {
 					installDir.mkdirs();
 				}
@@ -277,61 +248,40 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 					dynamicDir.mkdirs();
 				}
 
-				userManager = new UserManager(new File(OSUtils
-						.getDynamicStorageLocation(), "logindata"));
+				userManager = new UserManager(new File(OSUtils.getDynamicStorageLocation(), "logindata"));
 				con = new LauncherConsole();
 				if (Settings.getSettings().getConsoleActive()) {
 					con.setVisible(true);
 				}
 
-				File credits = new File(OSUtils.getDynamicStorageLocation(),
-						"credits.txt");
+				File credits = new File(OSUtils.getDynamicStorageLocation(), "credits.txt");
 
 				try {
 					if (!credits.exists()) {
 						FileOutputStream fos = new FileOutputStream(credits);
 						OutputStreamWriter osw = new OutputStreamWriter(fos);
 
-						osw.write("FTB Launcher and Modpack Credits "
-								+ System.getProperty("line.separator"));
-						osw.write("-------------------------------"
-								+ System.getProperty("line.separator"));
-						osw.write("Launcher Developers:"
-								+ System.getProperty("line.separator"));
-						osw.write("jjw123"
-								+ System.getProperty("line.separator"));
-						osw.write("unv_annihilator"
-								+ System.getProperty("line.separator"));
-						osw.write("Vbitz"
-								+ System.getProperty("line.separator")
-								+ System.getProperty("line.separator"));
-						osw.write("Web Developers:"
-								+ System.getProperty("line.separator"));
-						osw.write("captainnana"
-								+ System.getProperty("line.separator"));
-						osw.write("Rob" + System.getProperty("line.separator")
-								+ System.getProperty("line.separator"));
-						osw.write("Modpack Team:"
-								+ System.getProperty("line.separator"));
-						osw.write("CWW256"
-								+ System.getProperty("line.separator"));
-						osw.write("Lathanael"
-								+ System.getProperty("line.separator"));
-						osw.write("Watchful11"
-								+ System.getProperty("line.separator"));
+						osw.write("FTB Launcher and Modpack Credits " + System.getProperty("line.separator"));
+						osw.write("-------------------------------" + System.getProperty("line.separator"));
+						osw.write("Launcher Developers:" + System.getProperty("line.separator"));
+						osw.write("jjw123" + System.getProperty("line.separator"));
+						osw.write("unv_annihilator" + System.getProperty("line.separator"));
+						osw.write("Vbitz" + System.getProperty("line.separator") + System.getProperty("line.separator"));
+						osw.write("Web Developers:" + System.getProperty("line.separator"));
+						osw.write("captainnana" + System.getProperty("line.separator"));
+						osw.write("Rob" + System.getProperty("line.separator") + System.getProperty("line.separator"));
+						osw.write("Modpack Team:" + System.getProperty("line.separator"));
+						osw.write("CWW256" + System.getProperty("line.separator"));
+						osw.write("Lathanael" + System.getProperty("line.separator"));
+						osw.write("Watchful11" + System.getProperty("line.separator"));
 
 						osw.flush();
 
-						TrackerUtils.sendPageView(
-								"net/ftb/gui/LaunchFrame.java",
-								"Unique User (Credits)");
+						TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Credits)");
 					}
 
-					if (!Settings.getSettings().getLoaded()
-							&& !Settings.getSettings().getSnooper()) {
-						TrackerUtils.sendPageView(
-								"net/ftb/gui/LaunchFrame.java",
-								"Unique User (Settings)");
+					if (!Settings.getSettings().getLoaded() && !Settings.getSettings().getSnooper()) {
+						TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Settings)");
 						Settings.getSettings().setLoaded(true);
 					}
 
@@ -348,8 +298,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 				Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
 					@Override
 					public void uncaughtException(Thread t, Throwable e) {
-						Logger.logError(
-								"Unhandled exception in " + t.toString(), e);
+						Logger.logError("Unhandled exception in " + t.toString(), e);
 					}
 				});
 
@@ -364,8 +313,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 
 				UpdateChecker updateChecker = new UpdateChecker(buildNumber);
 				if (updateChecker.shouldUpdate()) {
-					LauncherUpdateDialog p = new LauncherUpdateDialog(
-							updateChecker);
+					LauncherUpdateDialog p = new LauncherUpdateDialog(updateChecker);
 					p.setVisible(true);
 				}
 			}
@@ -382,8 +330,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 		setFont(new Font("a_FuturaOrto", Font.PLAIN, 12));
 		setResizable(false);
 		setTitle("Phazecraft Launcher v" + version);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				this.getClass().getResource("/image/logo_ftb.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setUndecorated(true);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		if (OSUtils.getCurrentOS() == OS.WINDOWS) {
@@ -415,45 +362,33 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 			imgI = new ImageIcon(this.getClass().getResource("/image/back.jpg"));
 
 			Image img = imgI.getImage();
-			bi = new BufferedImage(img.getWidth(null), img.getHeight(null),
-					BufferedImage.TYPE_INT_ARGB);
+			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 			Graphics g = bi.createGraphics();
-			g.drawImage(img, getBounds().x, getBounds().y,
-					(int) Math.round(getBounds().width * 1.35),
-					(int) Math.round(getBounds().height * 1.35), null);
+			g.drawImage(img, getBounds().x, getBounds().y, (int) Math.round(getBounds().width * 1.35), (int) Math.round(getBounds().height * 1.35), null);
 			g.dispose();
 		} else if (random == 1) {
-			imgI = new ImageIcon(this.getClass()
-					.getResource("/image/back2.png"));
+			imgI = new ImageIcon(this.getClass().getResource("/image/back2.png"));
 
 			Image img = imgI.getImage();
-			bi = new BufferedImage(img.getWidth(null), img.getHeight(null),
-					BufferedImage.TYPE_INT_ARGB);
+			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 			Graphics g = bi.createGraphics();
-			g.drawImage(img, 0, 0, (int) Math.round(getBounds().width),
-					(int) Math.round(getBounds().height), null);
+			g.drawImage(img, 0, 0, (int) Math.round(getBounds().width), (int) Math.round(getBounds().height), null);
 			g.dispose();
 		} else if (random == 2) {
-			imgI = new ImageIcon(this.getClass()
-					.getResource("/image/back2.png"));
+			imgI = new ImageIcon(this.getClass().getResource("/image/back2.png"));
 
 			Image img = imgI.getImage();
-			bi = new BufferedImage(img.getWidth(null), img.getHeight(null),
-					BufferedImage.TYPE_INT_ARGB);
+			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 			Graphics g = bi.createGraphics();
-			g.drawImage(img, 0, 0, (int) Math.round(getBounds().width),
-					(int) Math.round(getBounds().height), null);
+			g.drawImage(img, 0, 0, (int) Math.round(getBounds().width), (int) Math.round(getBounds().height), null);
 			g.dispose();
 		} else {
-			imgI = new ImageIcon(this.getClass()
-					.getResource("/image/back2.png"));
+			imgI = new ImageIcon(this.getClass().getResource("/image/back2.png"));
 
 			Image img = imgI.getImage();
-			bi = new BufferedImage(img.getWidth(null), img.getHeight(null),
-					BufferedImage.TYPE_INT_ARGB);
+			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 			Graphics g = bi.createGraphics();
-			g.drawImage(img, 0, 0, (int) Math.round(getBounds().width),
-					(int) Math.round(getBounds().height), null);
+			g.drawImage(img, 0, 0, (int) Math.round(getBounds().width), (int) Math.round(getBounds().height), null);
 			g.dispose();
 		}
 		setContentPane(new JLabel(new ImageIcon(bi)));
@@ -487,8 +422,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 			}
 		});
 
-		footerCreeper3
-				.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		footerCreeper3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		footerCreeper3.setBounds(72, 20, 132, 42);
 		footerCreeper3.addMouseListener(new MouseAdapter() {
 			@Override
@@ -507,8 +441,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 			}
 		});
 
-		footerCreeper1
-				.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		footerCreeper1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		footerCreeper1.setBounds(72, 20, 132, 42);
 		footerCreeper1.addMouseListener(new MouseAdapter() {
 			@Override
@@ -527,8 +460,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 			}
 		});
 
-		footerCreeper2
-				.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		footerCreeper2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		footerCreeper2.setBounds(72, 20, 132, 42);
 		footerCreeper2.addMouseListener(new MouseAdapter() {
 			@Override
@@ -540,13 +472,11 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 		dropdown_[0] = I18N.getLocaleString("PROFILE_SELECT");
 		dropdown_[1] = I18N.getLocaleString("PROFILE_CREATE");
 
-		String[] dropdown = concatenateArrays(dropdown_, UserManager.getNames()
-				.toArray(new String[] {}));
+		String[] dropdown = concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[] {}));
 		users = new JComboBox(dropdown);
 		if (Settings.getSettings().getLastUser() != null) {
 			for (int i = 0; i < dropdown.length; i++) {
-				if (dropdown[i].equalsIgnoreCase(Settings.getSettings()
-						.getLastUser())) {
+				if (dropdown[i].equalsIgnoreCase(Settings.getSettings().getLastUser())) {
 					users.setSelectedIndex(i);
 				}
 			}
@@ -554,8 +484,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 
 		// Setup the nice looking box around the login stuff
 		RoundedBox loginArea = new RoundedBox(TRANSPARENT); // 340, 294
-		loginArea.setBounds((int) (getWidth() / 2.0 - 170),
-				(int) (getHeight() / 2.0), 276, 90);
+		loginArea.setBounds((int) (getWidth() / 2.0 - 170), (int) (getHeight() / 2.0), 276, 90);
 
 		RoundedBox bar = new RoundedBox(TRANSPARENT);
 		bar.setBounds(-50, 440, 1000, 1000);
@@ -567,15 +496,13 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 
 		// Setup password box
 		pass = new LitePasswordBox(this, "Password...");
-		pass.setBounds(loginArea.getX() + 15,
-				loginArea.getY() + name.getHeight() + 20, 110, 24);
+		pass.setBounds(loginArea.getX() + 15, loginArea.getY() + name.getHeight() + 20, 110, 24);
 		pass.setFont(minecraft);
 		pass.addKeyListener(this);
 
 		// Setup login button
 		login = new LiteButton("Launch");
-		login.setBounds(loginArea.getX() + name.getWidth() + 30,
-				loginArea.getY() + 15, 110, 24);
+		login.setBounds(loginArea.getX() + name.getWidth() + 30, loginArea.getY() + 15, 110, 24);
 		login.setFont(minecraft);
 		login.addActionListener(this);
 		login.addKeyListener(this);
@@ -588,8 +515,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 
 		// Setup remember checkbox
 		remember = new JCheckBox("Remember");
-		remember.setBounds(loginArea.getX() + name.getWidth() + 30,
-				loginArea.getY() + name.getHeight() + 20, 110, 24);
+		remember.setBounds(loginArea.getX() + name.getWidth() + 30, loginArea.getY() + name.getHeight() + 20, 110, 24);
 		remember.setFont(minecraft);
 		remember.setOpaque(false);
 		remember.setBorderPainted(false);
@@ -650,8 +576,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 		options.setHoverTransparency(1F);
 
 		exit = new TransparentButton();
-		exit.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(
-				exitIcon)));
+		exit.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(exitIcon)));
 		exit.setBounds(800, 5, 30, 30);
 		exit.setTransparency(0.70F);
 		exit.setHoverTransparency(1F);
@@ -671,39 +596,13 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 				if (!ModPack.getSelectedPack().getServerUrl().isEmpty()) {
 					if (getSelectedModIndex() >= 0) {
 						try {
-							String version = (Settings.getSettings()
-									.getPackVer()
-									.equalsIgnoreCase("recommended version") || Settings
-									.getSettings().getPackVer()
-									.equalsIgnoreCase("newest version")) ? ModPack
-									.getSelectedPack().getVersion()
-									.replace(".", "_")
-									: Settings.getSettings().getPackVer()
-											.replace(".", "_");
+							String version = (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") || Settings.getSettings().getPackVer().equalsIgnoreCase("newest version")) ? ModPack.getSelectedPack().getVersion().replace(".", "_") : Settings.getSettings().getPackVer().replace(".", "_");
 							if (ModPack.getSelectedPack().isPrivatePack()) {
-								OSUtils.browse(DownloadUtils
-										.getCreeperhostLink("privatepacks%5E"
-												+ ModPack.getSelectedPack()
-														.getDir()
-												+ "%5E"
-												+ version
-												+ "%5E"
-												+ ModPack.getSelectedPack()
-														.getServerUrl()));
+								OSUtils.browse(DownloadUtils.getCreeperhostLink("privatepacks%5E" + ModPack.getSelectedPack().getDir() + "%5E" + version + "%5E" + ModPack.getSelectedPack().getServerUrl()));
 							} else {
-								OSUtils.browse(DownloadUtils
-										.getCreeperhostLink("modpacks%5E"
-												+ ModPack.getSelectedPack()
-														.getDir()
-												+ "%5E"
-												+ version
-												+ "%5E"
-												+ ModPack.getSelectedPack()
-														.getServerUrl()));
+								OSUtils.browse(DownloadUtils.getCreeperhostLink("modpacks%5E" + ModPack.getSelectedPack().getDir() + "%5E" + version + "%5E" + ModPack.getSelectedPack().getServerUrl()));
 							}
-							TrackerUtils.sendPageView(ModPack.getSelectedPack()
-									.getName() + " Server Download", ModPack
-									.getSelectedPack().getName());
+							TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Server Download", ModPack.getSelectedPack().getName());
 						} catch (NoSuchAlgorithmException e) {
 						}
 					}
@@ -737,22 +636,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 			public void actionPerformed(ActionEvent event) {
 				if (getSelectedMapIndex() >= 0) {
 					try {
-						OSUtils.browse(DownloadUtils
-								.getCreeperhostLink("maps%5E"
-										+ Map.getMap(
-												LaunchFrame
-														.getSelectedMapIndex())
-												.getMapName()
-										+ "%5E"
-										+ Map.getMap(
-												LaunchFrame
-														.getSelectedMapIndex())
-												.getVersion()
-										+ "%5E"
-										+ Map.getMap(
-												LaunchFrame
-														.getSelectedMapIndex())
-												.getUrl()));
+						OSUtils.browse(DownloadUtils.getCreeperhostLink("maps%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getMapName() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getVersion() + "%5E" + Map.getMap(LaunchFrame.getSelectedMapIndex()).getUrl()));
 					} catch (NoSuchAlgorithmException e) {
 					}
 				}
@@ -830,24 +714,16 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 
 		addMouseListener(this);
 		addMouseMotionListener(this);
-		
+
 		splash.setVisible(false);
 	}
 
 	public void setNewsIcon() {
 		int i = getUnreadNews();
 		if (i > 0 && i < 100) {
-			tabbedPane.setIconAt(
-					0,
-					new ImageAndTextIcon(this.getClass().getResource(
-							"/image/tabs/news_unread_"
-									+ Integer.toString(i).length() + ".png"),
-							Integer.toString(i)));
+			tabbedPane.setIconAt(0, new ImageAndTextIcon(this.getClass().getResource("/image/tabs/news_unread_" + Integer.toString(i).length() + ".png"), Integer.toString(i)));
 		} else {
-			tabbedPane.setIconAt(
-					0,
-					new ImageIcon(this.getClass().getResource(
-							"/image/tabs/news.png")));
+			tabbedPane.setIconAt(0, new ImageIcon(this.getClass().getResource("/image/tabs/news.png")));
 		}
 	}
 
@@ -881,10 +757,8 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 		if (remember.isSelected())
 			setRemember(name.getText(), pass.getText());
 		else {
-			if (new File(OSUtils.getDynamicStorageLocation() + "/login.dat")
-					.exists()) {
-				new File(OSUtils.getDynamicStorageLocation() + "/login.dat")
-						.delete();
+			if (new File(OSUtils.getDynamicStorageLocation() + "/login.dat").exists()) {
+				new File(OSUtils.getDynamicStorageLocation() + "/login.dat").delete();
 			}
 		}
 
@@ -899,11 +773,9 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 					enableObjects();
 					return;
 				} catch (ExecutionException err) {
-					if (err.getCause() instanceof IOException
-							|| err.getCause() instanceof MalformedURLException) {
+					if (err.getCause() instanceof IOException || err.getCause() instanceof MalformedURLException) {
 						Logger.logError(err.getMessage(), err);
-						PlayOfflineDialog d = new PlayOfflineDialog("mcDown",
-								username);
+						PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
 						d.setVisible(true);
 					}
 					enableObjects();
@@ -917,15 +789,12 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 						Logger.logError("Received invalid response from server.");
 					} else {
 						if (responseStr.equalsIgnoreCase("bad login")) {
-							ErrorUtils
-									.tossError("Invalid username or password.");
+							ErrorUtils.tossError("Invalid username or password.");
 						} else if (responseStr.equalsIgnoreCase("old version")) {
 							ErrorUtils.tossError("Outdated launcher.");
 						} else {
-							ErrorUtils
-									.tossError("Login failed: " + responseStr);
-							PlayOfflineDialog d = new PlayOfflineDialog(
-									"mcDown", username);
+							ErrorUtils.tossError("Login failed: " + responseStr);
+							PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
 							d.setVisible(true);
 						}
 					}
@@ -949,11 +818,8 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 	private void runGameUpdater(final LoginResponse response) {
 		final String installPath = Settings.getSettings().getInstallPath();
 		final ModPack pack = ModPack.getSelectedPack();
-		if (Settings.getSettings().getForceUpdate()
-				&& new File(installPath, pack.getDir() + File.separator
-						+ "version").exists()) {
-			new File(installPath, pack.getDir() + File.separator + "version")
-					.delete();
+		if (Settings.getSettings().getForceUpdate() && new File(installPath, pack.getDir() + File.separator + "version").exists()) {
+			new File(installPath, pack.getDir() + File.separator + "version").delete();
 		}
 		if (!initializeMods()) {
 			enableObjects();
@@ -964,16 +830,9 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 		} catch (Exception e1) {
 		}
 		MinecraftVersionDetector mvd = new MinecraftVersionDetector();
-		if (!new File(installPath, pack.getDir()
-				+ "/minecraft/bin/minecraft.jar").exists()
-				|| mvd.shouldUpdate(installPath + "/" + pack.getDir()
-						+ "/minecraft")) {
-			final ProgressMonitor progMonitor = new ProgressMonitor(this,
-					"Downloading minecraft...", "", 0, 100);
-			final GameUpdateWorker updater = new GameUpdateWorker(
-					pack.getNoMods(), pack.getMcVersion(),
-					new File(installPath, pack.getDir() + "/minecraft/bin")
-							.getPath()) {
+		if (!new File(installPath, pack.getDir() + "/minecraft/bin/minecraft.jar").exists() || mvd.shouldUpdate(installPath + "/" + pack.getDir() + "/minecraft")) {
+			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
+			final GameUpdateWorker updater = new GameUpdateWorker(pack.getNoMods(), pack.getMcVersion(), new File(installPath, pack.getDir() + "/minecraft/bin").getPath()) {
 				@Override
 				public void done() {
 					progMonitor.close();
@@ -981,12 +840,9 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 						if (get()) {
 							Logger.logInfo("Game update complete");
 							FileUtils.killMetaInf();
-							launchMinecraft(installPath + "/" + pack.getDir()
-									+ "/minecraft", RESPONSE.getUsername(),
-									RESPONSE.getSessionID());
+							launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
 						} else {
-							ErrorUtils
-									.tossError("Error occurred during downloading the game");
+							ErrorUtils.tossError("Error occurred during downloading the game");
 						}
 					} catch (CancellationException e) {
 						ErrorUtils.tossError("Game update canceled.");
@@ -1020,8 +876,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 			});
 			updater.execute();
 		} else {
-			launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft",
-					RESPONSE.getUsername(), RESPONSE.getSessionID());
+			launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
 		}
 	}
 
@@ -1035,16 +890,11 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 	 * @param password
 	 *            - the MC password
 	 */
-	public void launchMinecraft(String workingDir, String username,
-			String password) {
+	public void launchMinecraft(String workingDir, String username, String password) {
 		try {
-			Process minecraftProcess = MinecraftLauncher.launchMinecraft(
-					workingDir, username, password, FORGENAME, Settings
-							.getSettings().getRamMax());
-			StreamLogger.start(minecraftProcess.getInputStream(),
-					new LogEntry().level(LogLevel.UNKNOWN));
-			TrackerUtils.sendPageView(ModPack.getSelectedPack().getName()
-					+ " Launched", ModPack.getSelectedPack().getName());
+			Process minecraftProcess = MinecraftLauncher.launchMinecraft(workingDir, username, password, FORGENAME, Settings.getSettings().getRamMax());
+			StreamLogger.start(minecraftProcess.getInputStream(), new LogEntry().level(LogLevel.UNKNOWN));
+			TrackerUtils.sendPageView(ModPack.getSelectedPack().getName() + " Launched", ModPack.getSelectedPack().getName());
 			try {
 				Thread.sleep(1500);
 			} catch (InterruptedException e) {
@@ -1063,24 +913,13 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 							launchFrame.setVisible(true);
 							launchFrame.enableObjects();
 							try {
-								Settings.getSettings()
-										.load(new FileInputStream(Settings
-												.getSettings().getConfigFile()));
+								Settings.getSettings().load(new FileInputStream(Settings.getSettings().getConfigFile()));
 								tabbedPane.remove(1);
-								optionsPane = new OptionsPane(Settings
-										.getSettings());
+								optionsPane = new OptionsPane(Settings.getSettings());
 								tabbedPane.add(optionsPane, 1);
-								tabbedPane
-										.setIconAt(
-												1,
-												new ImageIcon(
-														this.getClass()
-																.getResource(
-																		"/image/tabs/options.png")));
+								tabbedPane.setIconAt(1, new ImageIcon(this.getClass().getResource("/image/tabs/options.png")));
 							} catch (Exception e1) {
-								Logger.logError(
-										"Failed to reload settings after launcher closed",
-										e1);
+								Logger.logError("Failed to reload settings after launcher closed", e1);
 							}
 						}
 					}
@@ -1100,25 +939,19 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 		String temppath = OSUtils.getDynamicStorageLocation();
 		ModPack pack = ModPack.getPack(modPacksPane.getSelectedModIndex());
 		Logger.logInfo("dirs mk'd");
-		File source = new File(temppath, "ModPacks/" + pack.getDir()
-				+ "/.minecraft");
+		File source = new File(temppath, "ModPacks/" + pack.getDir() + "/.minecraft");
 		if (!source.exists()) {
-			source = new File(temppath, "ModPacks/" + pack.getDir()
-					+ "/minecraft");
+			source = new File(temppath, "ModPacks/" + pack.getDir() + "/minecraft");
 		}
-		FileUtils.copyFolder(source, new File(installpath, pack.getDir()
-				+ "/minecraft/"));
-		FileUtils.copyFolder(new File(temppath, "ModPacks/" + pack.getDir()
-				+ "/instMods/"), new File(installpath, pack.getDir()
-				+ "/instMods/"));
+		FileUtils.copyFolder(source, new File(installpath, pack.getDir() + "/minecraft/"));
+		FileUtils.copyFolder(new File(temppath, "ModPacks/" + pack.getDir() + "/instMods/"), new File(installpath, pack.getDir() + "/instMods/"));
 	}
 
 	/**
 	 * "Saves" the settings from the GUI controls into the settings class.
 	 */
 	public void saveSettings() {
-		Settings.getSettings().setLastUser(
-				String.valueOf(users.getSelectedItem()));
+		Settings.getSettings().setLastUser(String.valueOf(users.getSelectedItem()));
 		instance.optionsPane.saveSettingsInto(Settings.getSettings());
 	}
 
@@ -1132,8 +965,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 			userManager.write();
 		} catch (IOException e) {
 		}
-		String[] usernames = concatenateArrays(dropdown_, UserManager
-				.getNames().toArray(new String[] {}));
+		String[] usernames = concatenateArrays(dropdown_, UserManager.getNames().toArray(new String[] {}));
 		users.removeAllItems();
 		for (int i = 0; i < usernames.length; i++) {
 			users.addItem(usernames[i]);
@@ -1154,8 +986,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 		tpInstallLocation.removeAllItems();
 		for (String location : locations) {
 			if (!location.isEmpty()) {
-				tpInstallLocation.addItem(ModPack.getPack(location.trim())
-						.getName());
+				tpInstallLocation.addItem(ModPack.getPack(location.trim()).getName());
 			}
 		}
 		tpInstallLocation.setSelectedItem(ModPack.getSelectedPack().getName());
@@ -1172,8 +1003,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 		mapInstallLocation.removeAllItems();
 		for (String location : locations) {
 			if (!location.isEmpty()) {
-				mapInstallLocation.addItem(ModPack.getPack(location.trim())
-						.getName());
+				mapInstallLocation.addItem(ModPack.getPack(location.trim()).getName());
 			}
 		}
 	}
@@ -1398,11 +1228,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 		int i = 0;
 		BufferedReader reader = null;
 		try {
-			reader = new BufferedReader(
-					new InputStreamReader(
-							new URL(
-									"http://launcher.feed-the-beast.com/newsupdate.php")
-									.openStream()));
+			reader = new BufferedReader(new InputStreamReader(new URL("http://launcher.feed-the-beast.com/newsupdate.php").openStream()));
 			ArrayList<Long> timeStamps = new ArrayList<Long>();
 			String s = reader.readLine();
 			s = s.trim();
@@ -1416,8 +1242,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 			if (Long.parseLong(Settings.getSettings().getNewsDate()) == 0) {
 				l = Long.parseLong(Settings.getSettings().getNewsDate());
 			} else {
-				l = Long.parseLong(Settings.getSettings().getNewsDate()
-						.substring(0, 10));
+				l = Long.parseLong(Settings.getSettings().getNewsDate().substring(0, 10));
 			}
 			for (Long timeStamp : timeStamps) {
 				long time = timeStamp;
@@ -1435,11 +1260,9 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 
 	public void doLaunch() {
 		if (users.getSelectedIndex() > 1 && ModPack.getSelectedPack() != null) {
-			Settings.getSettings().setLastPack(
-					ModPack.getSelectedPack().getDir());
+			Settings.getSettings().setLastPack(ModPack.getSelectedPack().getDir());
 			saveSettings();
-			doLogin(UserManager.getUsername(users.getSelectedItem().toString()),
-					UserManager.getPassword(users.getSelectedItem().toString()));
+			doLogin(UserManager.getUsername(users.getSelectedItem().toString()), UserManager.getPassword(users.getSelectedItem().toString()));
 		} else if (users.getSelectedIndex() <= 1) {
 			ErrorUtils.tossError("Please select a profile!");
 		}
@@ -1450,11 +1273,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 		try {
 			// minecraft = Font.createFont(Font.TRUETYPE_FONT,
 			// getResourceAsStream("/font/minecraft.ttf")).deriveFont((float)size);
-			minecraft = Font.createFont(
-					Font.TRUETYPE_FONT,
-					new FileInputStream(this.getClass()
-							.getResource("/font/minecraft.ttf").getPath()))
-					.deriveFont((float) size);
+			minecraft = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(this.getClass().getResource("/font/minecraft.ttf").getPath())).deriveFont((float) size);
 		} catch (Exception e) {
 			e.printStackTrace();
 			// Fallback
@@ -1489,8 +1308,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			// Allows the user to press enter and log in from the login box
 			// focus, username box focus, or password box focus
-			if (e.getComponent() == login || e.getComponent() == name
-					|| e.getComponent() == pass) {
+			if (e.getComponent() == login || e.getComponent() == name || e.getComponent() == pass) {
 				doLogin(name.getText(), pass.getText());
 			} else if (e.getComponent() == remember) {
 				remember.setSelected(!remember.isSelected());
@@ -1556,9 +1374,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 
 	public void setRemember(String usr, String pass) {
 		try {
-			PrintWriter out = new PrintWriter(new BufferedWriter(
-					new FileWriter(OSUtils.getDynamicStorageLocation()
-							+ "/login.dat", false)));
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(OSUtils.getDynamicStorageLocation() + "/login.dat", false)));
 			out.println(usr);
 			out.println(pass);
 			out.close();
@@ -1568,10 +1384,8 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 	}
 
 	public String[] getRemember() {
-		if (new File(OSUtils.getDynamicStorageLocation() + "/login.dat")
-				.exists()) {
-			Path path3 = Paths.get(OSUtils.getDynamicStorageLocation()
-					+ "/login.dat");
+		if (new File(OSUtils.getDynamicStorageLocation() + "/login.dat").exists()) {
+			Path path3 = Paths.get(OSUtils.getDynamicStorageLocation() + "/login.dat");
 			Scanner scanner;
 			try {
 				scanner = new Scanner(path3);
