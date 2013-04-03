@@ -71,6 +71,7 @@ import net.phazecraft.gui.dialogs.InstallDirectoryDialog;
 import net.phazecraft.gui.dialogs.LauncherUpdateDialog;
 import net.phazecraft.gui.dialogs.PasswordDialog;
 import net.phazecraft.gui.dialogs.PlayOfflineDialog;
+import net.phazecraft.gui.dialogs.SplashScreen;
 import net.phazecraft.gui.panes.MapsPane;
 import net.phazecraft.gui.panes.ModpacksPane;
 import net.phazecraft.gui.panes.OptionsPane;
@@ -96,9 +97,9 @@ import net.phazecraft.util.DownloadUtils;
 import net.phazecraft.util.ErrorUtils;
 import net.phazecraft.util.FileUtils;
 import net.phazecraft.util.OSUtils;
+import net.phazecraft.util.OSUtils.OS;
 import net.phazecraft.util.StyleUtil;
 import net.phazecraft.util.TrackerUtils;
-import net.phazecraft.util.OSUtils.OS;
 import net.phazecraft.workers.GameUpdateWorker;
 import net.phazecraft.workers.LoginWorker;
 
@@ -175,6 +176,8 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 	public static JFrame mapsFrame;
 	public static JFrame optionsFrame;
 	
+	private static SplashScreen splash;
+	
 	public static CreateModPackDialog cmpd;
 
 	TransparentButton exit;
@@ -192,6 +195,16 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 	 *            - CLI arguments
 	 */
 	public static void main(String[] args) {
+		
+		ImageIcon splashIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(LaunchFrame.class.getResource("/image/phazecraftLogo.png")));
+		
+		splash = new SplashScreen(splashIcon.getImage());
+		splash.setVisible(true);
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e2) {
+		}
+		
 		tracker.setEnabled(true);
 		TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java",
 				"Launcher Start v" + version);
@@ -817,6 +830,8 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener,
 
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		
+		splash.setVisible(false);
 	}
 
 	public void setNewsIcon() {
