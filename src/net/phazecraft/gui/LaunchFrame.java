@@ -123,7 +123,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	private JLabel footerCreeper2 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JLabel footerLogo3 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper3 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
-	private URL exitIcon = this.getClass().getResource("/image/btn_play.png");
+	private URL exitIcon = this.getClass().getResource("/image/x.png");
 	private JLabel tpInstallLocLbl = new JLabel();
 	private JButton launch = new LiteButton("Launch");
 	private JButton edit = new JButton(), donate = new JButton(), serverbutton = new JButton(), mapInstall = new JButton(), serverMap = new JButton(), tpInstall = new JButton();
