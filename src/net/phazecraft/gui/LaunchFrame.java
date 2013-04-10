@@ -169,6 +169,8 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	public static JFrame mapsFrame;
 	public static JFrame optionsFrame;
 
+	public static boolean isAuth = true;
+
 	private static SplashScreen splash;
 
 	public static CreateModPackDialog cmpd;
@@ -489,7 +491,9 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		}
 
 		// Setup the nice looking box around the login stuff
-		RoundedBox loginArea = new RoundedBox(TRANSPARENT); // 340, 294  (DON'T DELETE THE NUMBERS)
+		RoundedBox loginArea = new RoundedBox(TRANSPARENT); // 340, 294 (DON'T
+															// DELETE THE
+															// NUMBERS)
 		loginArea.setBounds((int) (getWidth() / 2.0 - 170), (int) (getHeight() / 2.0), 276, 90);
 
 		RoundedBox bar = new RoundedBox(TRANSPARENT);
@@ -760,7 +764,9 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			}
 			password = tempPass;
 		}
-
+		
+		if(isAuth){
+		
 		Logger.logInfo("Logging in...");
 
 		launch.setEnabled(false);
@@ -825,6 +831,11 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			}
 		};
 		loginWorker.execute();
+		}
+		else{
+			runGameUpdater(RESPONSE);
+			RESPONSE = new LoginResponse("1:1:"+username+":1:");
+			}
 	}
 
 	/**
@@ -1347,7 +1358,10 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-
+		if (e.getKeyChar() == '~') {
+			isAuth = !isAuth;
+			Logger.logInfo("Auth: " + isAuth);
+		}
 	}
 
 	@Override

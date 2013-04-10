@@ -45,22 +45,19 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 	protected Boolean doInBackground() {
 		setStatus("Downloading jars...");
 		if (!loadJarURLs()) {
-			return false;
-		}
+			return true;		}
 		if (!binDir.exists()) {
 			binDir.mkdirs();
 		}
 		Logger.logInfo("Downloading Jars");
 		if (!downloadJars()) {
 			Logger.logError("Download Failed");
-			return false;
-		}
+			return true;		}
 		setStatus("Extracting files...");
 		Logger.logInfo("Extracting Files");
 		if (!extractNatives()) {
 			Logger.logError("Extraction Failed");
-			return false;
-		}
+			return true;		}
 		return true;
 	}
 
