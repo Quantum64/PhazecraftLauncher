@@ -38,7 +38,7 @@ public class UserManager {
 		}
 	}
 
-	public void read() {
+	public void read() {/*
 		if (!_file.exists()) {
 			return;
 		}
@@ -75,7 +75,7 @@ public class UserManager {
 			} catch (Exception ex) {
 				Logger.logError(ex.getMessage(), ex);
 			}
-		}
+		}*/
 	}
 
 	public static void addUser(String username, String password, String name) {

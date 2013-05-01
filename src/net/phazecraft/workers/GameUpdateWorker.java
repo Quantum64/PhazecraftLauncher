@@ -1,4 +1,3 @@
-
 package net.phazecraft.workers;
 
 import java.io.File;
@@ -17,6 +16,7 @@ import java.util.zip.ZipInputStream;
 
 import javax.swing.SwingWorker;
 
+import net.phazecraft.gui.LaunchFrame;
 import net.phazecraft.log.Logger;
 import net.phazecraft.util.DownloadUtils;
 import net.phazecraft.util.OSUtils;
@@ -43,21 +43,26 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 
 	@Override
 	protected Boolean doInBackground() {
-		setStatus("Downloading jars...");
-		if (!loadJarURLs()) {
-			return true;		}
-		if (!binDir.exists()) {
-			binDir.mkdirs();
+		if (LaunchFrame.isUpdate) {
+			setStatus("Downloading jars...");
+			if (!loadJarURLs()) {
+				return true;
+			}
+			if (!binDir.exists()) {
+				binDir.mkdirs();
+			}
+			Logger.logInfo("Downloading Jars");
+			if (!downloadJars()) {
+				Logger.logError("Download Failed");
+				return true;
+			}
+			setStatus("Extracting files...");
+			Logger.logInfo("Extracting Files");
+			if (!extractNatives()) {
+				Logger.logError("Extraction Failed");
+				return true;
+			}
 		}
-		Logger.logInfo("Downloading Jars");
-		if (!downloadJars()) {
-			Logger.logError("Download Failed");
-			return true;		}
-		setStatus("Extracting files...");
-		Logger.logInfo("Extracting Files");
-		if (!extractNatives()) {
-			Logger.logError("Extraction Failed");
-			return true;		}
 		return true;
 	}
 
@@ -65,20 +70,18 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 		Logger.logInfo("Loading Jar URLs");
 		String[] jarList = { "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 		jarURLs = new URL[jarList.length + 2];
-		try	{
-			if(noMods)
-			{
+		try {
+			if (noMods) {
 				org.apache.commons.io.FileUtils.copyURLToFile(new URL(DownloadUtils.getCreeperhostLink("Minecraft.txt")), new File(OSUtils.getDynamicStorageLocation() + "/Minecraft.txt"));
 				Path path = Paths.get(OSUtils.getDynamicStorageLocation() + "/Minecraft.txt");
 				Scanner scanner = new Scanner(path);
 				jarURLs[0] = new URL("http://assets.minecraft.net/" + scanner.nextLine().replace(".", "_") + "/minecraft.jar");
-			}
-			else
-			jarURLs[0] = new URL("http://dtr-world.com/phazecraftlauncher/" + reqVersion.replace(".", "_") + "/minecraft.jar");
-			for(int i = 0; i < jarList.length; i++) {
+			} else
+				jarURLs[0] = new URL("http://dtr-world.com/phazecraftlauncher/" + reqVersion.replace(".", "_") + "/minecraft.jar");
+			for (int i = 0; i < jarList.length; i++) {
 				jarURLs[i + 1] = new URL("http://s3.amazonaws.com/MinecraftDownload/" + jarList[i]);
 			}
-			switch(OSUtils.getCurrentOS()) {
+			switch (OSUtils.getCurrentOS()) {
 			case WINDOWS:
 				jarURLs[jarURLs.length - 1] = new URL("http://s3.amazonaws.com/MinecraftDownload/windows_natives.jar");
 				break;
@@ -98,8 +101,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			if(noMods)
-			{
+			if (noMods) {
 				try {
 					jarURLs[0] = new URL("http://assets.minecraft.net/" + reqVersion.replace(".", "_") + "/minecraft.jar");
 				} catch (MalformedURLException e1) {
@@ -113,7 +115,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-			for(int i = 0; i < jarList.length; i++) {
+			for (int i = 0; i < jarList.length; i++) {
 				try {
 					jarURLs[i + 1] = new URL("http://s3.amazonaws.com/MinecraftDownload/" + jarList[i]);
 				} catch (MalformedURLException e1) {
@@ -121,7 +123,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 					e1.printStackTrace();
 				}
 			}
-			switch(OSUtils.getCurrentOS()) {
+			switch (OSUtils.getCurrentOS()) {
 			case WINDOWS:
 				try {
 					jarURLs[jarURLs.length - 1] = new URL("http://s3.amazonaws.com/MinecraftDownload/windows_natives.jar");
@@ -163,17 +165,17 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 				totalDownloadSize += fileSizes[i];
 			} catch (IOException e) {
 				Logger.logError(e.getMessage(), e);
-				return false; 
+				return false;
 			}
 		}
-		for(int i = 0; i < jarURLs.length; i++) {
+		for (int i = 0; i < jarURLs.length; i++) {
 			int triesLeft = 0;
 			int lastfile = -1;
 			boolean downloadSuccess = false;
-			while(!downloadSuccess && (triesLeft < 5)) {
+			while (!downloadSuccess && (triesLeft < 5)) {
 				try {
 					triesLeft++;
-					if(triesLeft == 0 || lastfile == i) {
+					if (triesLeft == 0 || lastfile == i) {
 						Logger.logInfo("Connecting.. Try " + triesLeft + " of 5");
 					}
 					lastfile = i;
@@ -183,7 +185,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 						dlConnection.connect();
 					}
 					String jarFileName = getFilename(jarURLs[i]);
-					if(new File(binDir, jarFileName).exists()) {
+					if (new File(binDir, jarFileName).exists()) {
 						new File(binDir, jarFileName).delete();
 					}
 					InputStream dlStream = dlConnection.getInputStream();
@@ -192,21 +194,21 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 					byte[] buffer = new byte[24000];
 					int readLen;
 					int currentDLSize = 0;
-					while((readLen = dlStream.read(buffer, 0, buffer.length)) != -1) {						
+					while ((readLen = dlStream.read(buffer, 0, buffer.length)) != -1) {
 						outStream.write(buffer, 0, readLen);
 						currentDLSize += readLen;
 						totalDownloadedSize += readLen;
-						int prog = (int)((totalDownloadedSize / totalDownloadSize) * 100);
-						if(prog > 100) {
+						int prog = (int) ((totalDownloadedSize / totalDownloadSize) * 100);
+						if (prog > 100) {
 							prog = 100;
-						} else if(prog < 0){
+						} else if (prog < 0) {
 							prog = 0;
 						}
 						setProgress(prog);
 					}
 					dlStream.close();
 					outStream.close();
-					if(dlConnection instanceof HttpURLConnection && (currentDLSize == fileSizes[i] || fileSizes[i] <= 0)) {
+					if (dlConnection instanceof HttpURLConnection && (currentDLSize == fileSizes[i] || fileSizes[i] <= 0)) {
 						downloadSuccess = true;
 					}
 				} catch (Exception e) {
@@ -214,7 +216,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 					Logger.logWarn("Connection failed, trying again");
 				}
 			}
-			if(!downloadSuccess) {
+			if (!downloadSuccess) {
 				return false;
 			}
 		}
@@ -225,17 +227,17 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 		setStatus("Extracting natives...");
 		File nativesJar = new File(binDir, getFilename(jarURLs[jarURLs.length - 1]));
 		File nativesDir = new File(binDir, "natives");
-		if(!nativesDir.isDirectory()) {
+		if (!nativesDir.isDirectory()) {
 			nativesDir.mkdirs();
 		}
 		FileInputStream input = null;
 		ZipInputStream zipIn = null;
-		try	{
+		try {
 			input = new FileInputStream(nativesJar);
-			zipIn = new ZipInputStream(input); 
+			zipIn = new ZipInputStream(input);
 			ZipEntry currentEntry = zipIn.getNextEntry();
-			while(currentEntry != null) {
-				if(currentEntry.getName().contains("META-INF")) {
+			while (currentEntry != null) {
+				if (currentEntry.getName().contains("META-INF")) {
 					currentEntry = zipIn.getNextEntry();
 					continue;
 				}
@@ -243,7 +245,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 				FileOutputStream outStream = new FileOutputStream(new File(nativesDir, currentEntry.getName()));
 				int readLen;
 				byte[] buffer = new byte[1024];
-				while((readLen = zipIn.read(buffer, 0, buffer.length)) > 0) {
+				while ((readLen = zipIn.read(buffer, 0, buffer.length)) > 0) {
 					outStream.write(buffer, 0, readLen);
 				}
 				outStream.close();
@@ -256,7 +258,7 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 			try {
 				zipIn.close();
 				input.close();
-			} catch (IOException e) { 
+			} catch (IOException e) {
 				Logger.logError(e.getMessage(), e);
 			}
 		}

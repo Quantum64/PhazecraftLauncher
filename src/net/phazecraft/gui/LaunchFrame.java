@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -170,6 +171,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	public static JFrame optionsFrame;
 
 	public static boolean isAuth = true;
+	public static boolean isUpdate = true;
 
 	private static SplashScreen splash;
 
@@ -269,20 +271,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 						FileOutputStream fos = new FileOutputStream(credits);
 						OutputStreamWriter osw = new OutputStreamWriter(fos);
 
-						osw.write("FTB Launcher and Modpack Credits " + System.getProperty("line.separator"));
-						osw.write("-------------------------------" + System.getProperty("line.separator"));
-						osw.write("Launcher Developers:" + System.getProperty("line.separator"));
-						osw.write("jjw123" + System.getProperty("line.separator"));
-						osw.write("unv_annihilator" + System.getProperty("line.separator"));
-						osw.write("Vbitz" + System.getProperty("line.separator") + System.getProperty("line.separator"));
-						osw.write("Web Developers:" + System.getProperty("line.separator"));
-						osw.write("captainnana" + System.getProperty("line.separator"));
-						osw.write("Rob" + System.getProperty("line.separator") + System.getProperty("line.separator"));
-						osw.write("Modpack Team:" + System.getProperty("line.separator"));
-						osw.write("CWW256" + System.getProperty("line.separator"));
-						osw.write("Lathanael" + System.getProperty("line.separator"));
-						osw.write("Watchful11" + System.getProperty("line.separator"));
-
+						osw.write("Phazecraft " + System.getProperty("line.separator"));
 						osw.flush();
 
 						TrackerUtils.sendPageView("net/ftb/gui/LaunchFrame.java", "Unique User (Credits)");
@@ -764,78 +753,77 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			}
 			password = tempPass;
 		}
-		
-		if(isAuth){
-		
-		Logger.logInfo("Logging in...");
 
-		launch.setEnabled(false);
-		users.setEnabled(false);
-		edit.setEnabled(false);
-		serverbutton.setEnabled(false);
-		mapInstall.setEnabled(false);
-		mapInstallLocation.setEnabled(false);
-		serverMap.setEnabled(false);
-		tpInstall.setEnabled(false);
-		tpInstallLocation.setEnabled(false);
+		if (isAuth) {
 
-		if (remember.isSelected())
-			setRemember(name.getText(), pass.getText());
-		else {
-			if (new File(OSUtils.getDynamicStorageLocation() + "/login.dat").exists()) {
-				new File(OSUtils.getDynamicStorageLocation() + "/login.dat").delete();
-			}
-		}
+			Logger.logInfo("Logging in...");
 
-		LoginWorker loginWorker = new LoginWorker(username, password) {
-			@Override
-			public void done() {
-				String responseStr;
-				try {
-					responseStr = get();
-				} catch (InterruptedException err) {
-					Logger.logError(err.getMessage(), err);
-					enableObjects();
-					return;
-				} catch (ExecutionException err) {
-					if (err.getCause() instanceof IOException || err.getCause() instanceof MalformedURLException) {
-						Logger.logError(err.getMessage(), err);
-						PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
-						d.setVisible(true);
-					}
-					enableObjects();
-					return;
+			launch.setEnabled(false);
+			users.setEnabled(false);
+			edit.setEnabled(false);
+			serverbutton.setEnabled(false);
+			mapInstall.setEnabled(false);
+			mapInstallLocation.setEnabled(false);
+			serverMap.setEnabled(false);
+			tpInstall.setEnabled(false);
+			tpInstallLocation.setEnabled(false);
+
+			if (remember.isSelected())
+				setRemember(name.getText(), pass.getText());
+			else {
+				if (new File(OSUtils.getDynamicStorageLocation() + "/login.dat").exists()) {
+					new File(OSUtils.getDynamicStorageLocation() + "/login.dat").delete();
 				}
+			}
 
-				try {
-					RESPONSE = new LoginResponse(responseStr);
-				} catch (IllegalArgumentException e) {
-					if (responseStr.contains(":")) {
-						Logger.logError("Received invalid response from server.");
-					} else {
-						if (responseStr.equalsIgnoreCase("bad login")) {
-							ErrorUtils.tossError("Invalid username or password.");
-						} else if (responseStr.equalsIgnoreCase("old version")) {
-							ErrorUtils.tossError("Outdated launcher.");
-						} else {
-							ErrorUtils.tossError("Login failed: " + responseStr);
+			LoginWorker loginWorker = new LoginWorker(username, password) {
+				@Override
+				public void done() {
+					String responseStr;
+					try {
+						responseStr = get();
+					} catch (InterruptedException err) {
+						Logger.logError(err.getMessage(), err);
+						enableObjects();
+						return;
+					} catch (ExecutionException err) {
+						if (err.getCause() instanceof IOException || err.getCause() instanceof MalformedURLException) {
+							Logger.logError(err.getMessage(), err);
 							PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
 							d.setVisible(true);
 						}
+						enableObjects();
+						return;
 					}
-					enableObjects();
-					return;
+
+					try {
+						RESPONSE = new LoginResponse(responseStr);
+					} catch (IllegalArgumentException e) {
+						if (responseStr.contains(":")) {
+							Logger.logError("Received invalid response from server.");
+						} else {
+							if (responseStr.equalsIgnoreCase("bad login")) {
+								ErrorUtils.tossError("Invalid username or password.");
+							} else if (responseStr.equalsIgnoreCase("old version")) {
+								ErrorUtils.tossError("Outdated launcher.");
+							} else {
+								ErrorUtils.tossError("Login failed: " + responseStr);
+								PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
+								d.setVisible(true);
+							}
+						}
+						enableObjects();
+						return;
+					}
+					Logger.logInfo("Login complete.");
+					runGameUpdater(RESPONSE);
 				}
-				Logger.logInfo("Login complete.");
-				runGameUpdater(RESPONSE);
-			}
-		};
-		loginWorker.execute();
-		}
-		else{
+			};
+			loginWorker.execute();
+		} else {
 			runGameUpdater(RESPONSE);
-			RESPONSE = new LoginResponse("1:1:"+username+":1:");
-			}
+			RESPONSE = new LoginResponse("1:1:" + username + ":1:");
+		}
 	}
 
 	/**
@@ -862,7 +850,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		MinecraftVersionDetector mvd = new MinecraftVersionDetector();
 		if (!new File(installPath, pack.getDir() + "/minecraft/bin/minecraft.jar").exists() || mvd.shouldUpdate(installPath + "/" + pack.getDir() + "/minecraft")) {
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
-			final GameUpdateWorker updater = new GameUpdateWorker(pack.getNoMods(), pack.getMcVersion(), new File(installPath, pack.getDir() + "/minecraft/bin").getPath()) {
+			final GameUpdateWorker updater = new GameUpdateWorker(pack.getNoMods(), (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_"), new File(installPath, pack.getDir() + "/minecraft/bin").getPath()) {
 				@Override
 				public void done() {
 					progMonitor.close();
@@ -1307,7 +1295,26 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		} catch (Exception e) {
 			e.printStackTrace();
 			// Fallback
-			minecraft = new Font("Arial", Font.PLAIN, 12);
+			//minecraft = new Font("Arial", Font.PLAIN, 12);
+			//New Fallback!
+			String baseDynamic = OSUtils.getDynamicStorageLocation();
+			String baseLink = DownloadUtils.getStaticCreeperhostLink("minectaft.ttf");
+			try {
+				org.apache.commons.io.FileUtils.copyURLToFile(new URL(baseLink), new File(baseDynamic + "/minecraft.ttf"));
+				minecraft = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(baseDynamic + "/minecraft.ttf")).deriveFont((float) size);
+			} catch (MalformedURLException e1) {
+				//this is just stupid
+				minecraft = new Font("Arial", Font.PLAIN, 12);
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				//fallback on the fallback  (Server DOwn)
+				minecraft = new Font("Arial", Font.PLAIN, 12);
+				e1.printStackTrace();
+			} catch (FontFormatException e1) {
+				//WTF
+				minecraft = new Font("Arial", Font.PLAIN, 12);
+				e1.printStackTrace();
+			}
 		}
 		return minecraft;
 	}
@@ -1361,6 +1368,10 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		if (e.getKeyChar() == '~') {
 			isAuth = !isAuth;
 			Logger.logInfo("Auth: " + isAuth);
+		}
+		if (e.getKeyChar() == '`') {
+			isUpdate = !isUpdate;
+			Logger.logInfo("Will Update Jar: " + isUpdate);
 		}
 	}
 
