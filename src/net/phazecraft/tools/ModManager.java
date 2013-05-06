@@ -125,11 +125,7 @@ public class ModManager extends JDialog {
 			new File(installPath + "/" + dir + "/minecraft/").mkdirs();
 			new File(installPath + "/" + dir + "/minecraft/mods/").mkdirs();
 			new File(installPath + "/" + dir + "/minecraft/config/").mkdirs();
-			try {
-				clearModsFolder(dir);
-			} catch (IOException e) {
-				Logger.logError("Could not clean mods folder");
-			}
+
 			Logger.logInfo("Dirs created");
 			try {
 				org.apache.commons.io.FileUtils.copyURLToFile(new URL(DownloadUtils.getCreeperhostLink(curVersion + "/mods/mods.txt")), new File(dynamicLoc + "/mods/" + curVersion + "/mods/mods.txt"));
@@ -400,10 +396,16 @@ public class ModManager extends JDialog {
 	}
 
 	public static void clearModsFolder(String pack) throws IOException {
-		File modsFolder = new File(Settings.getSettings().getInstallPath(), pack + "/minecraft/mods");
+		File modsFolder = new File(Settings.getSettings().getInstallPath(), pack + "/minecraft/coremods");
 		for (String file : modsFolder.list()) {
 			if (file.toLowerCase().endsWith(".zip") || file.toLowerCase().endsWith(".jar") || file.toLowerCase().endsWith(".disabled") || file.toLowerCase().endsWith(".litemod")) {
 				FileUtils.delete(new File(modsFolder, file));
+			}
+		}
+		File coremodsFolder = new File(Settings.getSettings().getInstallPath(), pack + "/minecraft/mods");
+		for (String file : coremodsFolder.list()) {
+			if (file.toLowerCase().endsWith(".zip") || file.toLowerCase().endsWith(".jar") || file.toLowerCase().endsWith(".disabled") || file.toLowerCase().endsWith(".litemod")) {
+				FileUtils.delete(new File(coremodsFolder, file));
 			}
 		}
 	}
