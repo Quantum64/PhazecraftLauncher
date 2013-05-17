@@ -70,14 +70,14 @@ public class ModManager extends JDialog {
 		public void downloadUrl(String filename, String urlString) throws IOException, NoSuchAlgorithmException {
 			BufferedInputStream in = null;
 			FileOutputStream fout = null;
-			progressBar.setValue(0);
+			// progressBar.setValue(0);
 			try {
 				URL url_ = new URL(urlString);
 				in = new BufferedInputStream(url_.openStream());
 				fout = new FileOutputStream(filename);
 				byte data[] = new byte[1024];
 				int count, amount = 0, modPackSize = url_.openConnection().getContentLength(), steps = 0;
-				progressBar.setMaximum(10000);
+				// progressBar.setMaximum(10000);
 				while ((count = in.read(data, 0, 1024)) != -1) {
 					fout.write(data, 0, count);
 					downloadedPerc += (count * 1.0 / modPackSize) * 100;
@@ -85,7 +85,7 @@ public class ModManager extends JDialog {
 					steps++;
 					if (steps > 100) {
 						steps = 0;
-						progressBar.setValue((int) downloadedPerc * 100);
+						// progressBar.setValue((int) downloadedPerc * 100);
 						label.setText((amount / 1024) + "Kb / " + (modPackSize / 1024) + "Kb");
 					}
 				}
@@ -118,10 +118,10 @@ public class ModManager extends JDialog {
 			new File(dynamicLoc + "/mods/" + curVersion + "/mods/mod3/").mkdirs();
 			new File(dynamicLoc + "/mods/" + curVersion + "/coremods/").mkdirs();
 			new File(dynamicLoc + "/mods/" + curVersion + "/config/").mkdirs();
-			if(new File(dynamicLoc + "/mods/" + curVersion + "/mods/mods.txt").exists())
-			new File(dynamicLoc + "/mods/" + curVersion + "/mods/mods.txt").delete();
-			if(new File(dynamicLoc + "/mods/" + curVersion + "/config/config.txt").exists())
-			new File(dynamicLoc + "/mods/" + curVersion + "/config/config.txt").delete();
+			if (new File(dynamicLoc + "/mods/" + curVersion + "/mods/mods.txt").exists())
+				new File(dynamicLoc + "/mods/" + curVersion + "/mods/mods.txt").delete();
+			if (new File(dynamicLoc + "/mods/" + curVersion + "/config/config.txt").exists())
+				new File(dynamicLoc + "/mods/" + curVersion + "/config/config.txt").delete();
 			new File(installPath + "/" + dir + "/minecraft/").mkdirs();
 			new File(installPath + "/" + dir + "/minecraft/mods/").mkdirs();
 			new File(installPath + "/" + dir + "/minecraft/config/").mkdirs();
@@ -137,13 +137,43 @@ public class ModManager extends JDialog {
 			} catch (NoSuchAlgorithmException | IOException e) {
 				Logger.logError("Could not download config file");
 			}
-			Path path = Paths.get(dynamicLoc + "/mods/" + curVersion + "/mods/mods.txt");
-			try (Scanner scanner = new Scanner(path)) {
+
+			progressBar.setEnabled(true);
+
+			Logger.logInfo("Installing Mods");
+			file.setText("Installing Mods");
+
+			try {
+				org.apache.commons.io.FileUtils.copyURLToFile(new URL(DownloadUtils.getCreeperhostLink("/" + curVersion + "/" + dir + ".txt")), new File(baseDynamic + dir + ".txt"));
+			} catch (NoSuchAlgorithmException | IOException e) {
+			}
+
+			int lines = 0;
+
+			Path path5 = Paths.get(baseDynamic + dir + ".txt");
+			try (Scanner scanner = new Scanner(path5)) {
 				while (scanner.hasNextLine()) {
 					String cLine = scanner.nextLine();
-					if (cLine.equalsIgnoreCase("mod3")) {
-						mod3 = true;
-					} else if (!new File(dynamicLoc + "/mods/" + curVersion + "/mods/" + cLine).exists()) {
+					Logger.logInfo("Mod Registered: " + cLine);
+					file.setText("Mod Registered: " + cLine);
+					lines++;
+
+				}
+			} catch (IOException e) {
+			}
+
+			progressBar.setMaximum(lines);
+			Logger.logInfo("Mods: " + lines);
+			lines = 0;
+
+			Path path3 = Paths.get(baseDynamic + dir + ".txt");
+			try (Scanner scanner = new Scanner(path3)) {
+				while (scanner.hasNextLine()) {
+					lines++;
+					progressBar.setValue(lines);
+
+					String cLine = scanner.nextLine();
+					if (!new File(dynamicLoc + "/mods/" + curVersion + "/mods/" + cLine).exists()) {
 						Logger.logInfo("Downloading Mod: " + cLine + "  Version: " + curVersion);
 						file.setText("Downloading Mod: " + cLine);
 						version.setText("Version: " + curVersion);
@@ -152,8 +182,18 @@ public class ModManager extends JDialog {
 						} catch (NoSuchAlgorithmException e) {
 						}
 					}
+					Logger.logInfo("Installing Mod: " + cLine);
+					file.setText("Installing Mod: " + cLine);
+					org.apache.commons.io.FileUtils.copyFile(new File(dynamicLoc + "/mods/" + curVersion + "/mods/" + cLine), new File(installPath + "/" + dir + "/minecraft/mods/" + cLine));
 				}
 			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			try {
+				org.apache.commons.io.FileUtils.copyURLToFile(new URL(DownloadUtils.getCreeperhostLink(curVersion + "/coremods/coremods.txt")), new File(dynamicLoc + "/mods/" + curVersion + "/coremods/coremods.txt"));
+			} catch (NoSuchAlgorithmException | IOException e) {
+				e.printStackTrace();
 			}
 			progressBar.setEnabled(false);
 			boolean config = false;// JOptionPane.showMessageDialog(null,
@@ -208,50 +248,34 @@ public class ModManager extends JDialog {
 					e.printStackTrace();
 				}
 			}
+			
+			lines = 0;
+			
 			Logger.logInfo("Finished Copy");
 			file.setText("Finished Copy");
-			Logger.logInfo("Installing Mods");
-			file.setText("Installing Mods");
-			// Logger.logInfo(DownloadUtils.getCreeperhostLink("/"
-										// + curVersion.replace(".", "_") +
-											// "/" + modPackName.split(".")[0] +
-											// ".txt"));
 
-			try {
-				org.apache.commons.io.FileUtils.copyURLToFile(new URL(DownloadUtils.getCreeperhostLink("/" + curVersion + "/" + dir + ".txt")), new File(baseDynamic + dir + ".txt"));
-			} catch (NoSuchAlgorithmException | IOException e) {
-			}
-			Path path3 = Paths.get(baseDynamic + dir + ".txt");
-			try (Scanner scanner = new Scanner(path3)) {
+			Path path6 = Paths.get(dynamicLoc + "/mods/" + curVersion + "/coremods/coremods.txt");
+			progressBar.setEnabled(true);
+			try (Scanner scanner = new Scanner(path6)) {
 				while (scanner.hasNextLine()) {
 					String cLine = scanner.nextLine();
-					if (!new File(dynamicLoc + "/mods/" + curVersion + "/mods/" + cLine).exists()) {
-						Logger.logInfo("Downloading Mod: " + cLine + "  Version: " + curVersion);
-						file.setText("Downloading Mod: " + cLine);
-						version.setText("Version: " + curVersion);
-						try {
-							downloadUrl(dynamicLoc + "/mods/" + curVersion + "/mods/" + cLine, DownloadUtils.getCreeperhostLink(curVersion + "/mods/" + cLine));
-						} catch (NoSuchAlgorithmException e) {
-						}
-					}
-					Logger.logInfo("Installing Mod: " + cLine);
-					file.setText("Installing Mod: " + cLine);
-					org.apache.commons.io.FileUtils.copyFile(new File(dynamicLoc + "/mods/" + curVersion + "/mods/" + cLine), new File(installPath + "/" + dir + "/minecraft/mods/" + cLine));
+					file.setText("Registered Coremod: " + cLine);
+					Logger.logInfo("Registered Coremod: " + cLine + "  Version: " + curVersion);
+					lines++;
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
-			}
 
-			try {
-				org.apache.commons.io.FileUtils.copyURLToFile(new URL(DownloadUtils.getCreeperhostLink(curVersion + "/coremods/coremods.txt")), new File(dynamicLoc + "/mods/" + curVersion + "/coremods/coremods.txt"));
-			} catch (NoSuchAlgorithmException | IOException e) {
-				e.printStackTrace();
 			}
+			
 			Path path4 = Paths.get(dynamicLoc + "/mods/" + curVersion + "/coremods/coremods.txt");
 			progressBar.setEnabled(true);
+			progressBar.setMaximum(lines);
+			lines = 0;
 			try (Scanner scanner = new Scanner(path4)) {
 				while (scanner.hasNextLine()) {
 					String cLine = scanner.nextLine();
+					progressBar.setValue(lines);
+					lines++;
 					if (!new File(dynamicLoc + "/mods/" + curVersion + "/coremods/" + cLine).exists()) {
 						Logger.logInfo("Downloading Coremod: " + cLine + "  Version: " + curVersion);
 						file.setText("Downloading Coremod: " + cLine);
@@ -405,7 +429,7 @@ public class ModManager extends JDialog {
 		File coremodsFolder = new File(Settings.getSettings().getInstallPath(), pack + "/minecraft/mods");
 		for (String file : coremodsFolder.list()) {
 			if (file.toLowerCase().endsWith(".zip") || file.toLowerCase().endsWith(".jar") || file.toLowerCase().endsWith(".disabled") || file.toLowerCase().endsWith(".litemod")) {
-				FileUtils.delete(new File(coremodsFolder, file));
+
 			}
 		}
 	}

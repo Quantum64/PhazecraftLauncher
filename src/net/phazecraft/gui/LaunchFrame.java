@@ -851,7 +851,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		if (!new File(installPath, pack.getDir() + "/minecraft/bin/minecraft.jar").exists() || mvd.shouldUpdate(installPath + "/" + pack.getDir() + "/minecraft")) {
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
 			final GameUpdateWorker updater = new GameUpdateWorker(pack.getNoMods(), (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_"), new File(installPath, pack.getDir() + "/minecraft/bin").getPath()) {
-				@Override
+				@Override		
 				public void done() {
 					progMonitor.close();
 					try {
@@ -1094,14 +1094,6 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	 * Enables all items that are disabled upon launching
 	 */
 	private void enableObjects() {
-		tabbedPane.setEnabledAt(0, true);
-		setNewsIcon();
-		tabbedPane.setEnabledAt(1, true);
-		tabbedPane.setEnabledAt(2, true);
-		tabbedPane.setEnabledAt(3, true);
-		tabbedPane.setEnabledAt(4, true);
-		tabbedPane.getSelectedComponent().setEnabled(true);
-		updateFooter();
 		mapInstall.setEnabled(true);
 		mapInstallLocation.setEnabled(true);
 		serverMap.setEnabled(true);
