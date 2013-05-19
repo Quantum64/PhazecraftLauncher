@@ -99,16 +99,27 @@ public class ModManager extends JDialog {
 		protected boolean downloadModPack(String modPackName, String dir) {
 			Logger.logInfo("Downloading Mod Pack");
 			Logger.logInfo("Modpack: " + dir + "  Version: " + curVersion);
-			// TrackerUtils.sendPageView("net/ftb/tools/ModManager.java",
-			// "Downloaded: " + modPackName + " v." + curVersion.replace('_',
-			// '.'));Toolkit.getDefaultToolkit().beep();
 			String dynamicLoc = OSUtils.getDynamicStorageLocation();
 			String installPath = Settings.getSettings().getInstallPath();
 			ModPack pack = ModPack.getSelectedPack();
 
-			if (new File(installPath, dir).exists()) {
+			if (new File(installPath, dir + "/minecraft/mods").exists()) {
 				try {
-					org.apache.commons.io.FileUtils.deleteDirectory(new File(installPath, dir));
+					org.apache.commons.io.FileUtils.deleteDirectory(new File(installPath, dir + "/minecraft/mods"));
+				} catch (IOException e2) {
+					e2.printStackTrace();
+				}
+			}
+			if (new File(installPath, dir + "/minecraft/config").exists()) {
+				try {
+					org.apache.commons.io.FileUtils.deleteDirectory(new File(installPath, dir + "/minecraft/config"));
+				} catch (IOException e2) {
+					e2.printStackTrace();
+				}
+			}
+			if (new File(installPath, dir + "/minecraft/coremods").exists()) {
+				try {
+					org.apache.commons.io.FileUtils.deleteDirectory(new File(installPath, dir + "/minecraft/coremods"));
 				} catch (IOException e2) {
 					e2.printStackTrace();
 				}
