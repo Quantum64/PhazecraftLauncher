@@ -37,7 +37,7 @@ public class ModManager extends JDialog {
 	public static boolean update = false, backup = false, erroneous = false, upToDate = false;
 	private static String curVersion = "";
 	private JPanel contentPane;
-	private double downloadedPerc;
+	// private double downloadedPerc;
 	private final JProgressBar progressBar;
 	private final JLabel label;
 	private final JLabel version = new JLabel();
@@ -80,7 +80,7 @@ public class ModManager extends JDialog {
 				// progressBar.setMaximum(10000);
 				while ((count = in.read(data, 0, 1024)) != -1) {
 					fout.write(data, 0, count);
-					downloadedPerc += (count * 1.0 / modPackSize) * 100;
+					// downloadedPerc += (count * 1.0 / modPackSize) * 100;
 					amount += count;
 					steps++;
 					if (steps > 100) {
@@ -105,6 +105,15 @@ public class ModManager extends JDialog {
 			String dynamicLoc = OSUtils.getDynamicStorageLocation();
 			String installPath = Settings.getSettings().getInstallPath();
 			ModPack pack = ModPack.getSelectedPack();
+
+			if (new File(installPath, dir).exists()) {
+				try {
+					org.apache.commons.io.FileUtils.deleteDirectory(new File(installPath, dir));
+				} catch (IOException e2) {
+					e2.printStackTrace();
+				}
+			}
+
 			String baseLink = (pack.isPrivatePack() ? "privatepacks%5E" + dir + "%5E" + curVersion + "%5E" : curVersion + "-");
 			File baseDynamic = new File(dynamicLoc, "ModPacks" + sep + dir + sep);
 			baseDynamic.mkdirs();
@@ -248,9 +257,9 @@ public class ModManager extends JDialog {
 					e.printStackTrace();
 				}
 			}
-			
+
 			lines = 0;
-			
+
 			Logger.logInfo("Finished Copy");
 			file.setText("Finished Copy");
 
@@ -266,7 +275,7 @@ public class ModManager extends JDialog {
 			} catch (IOException e) {
 
 			}
-			
+
 			Path path4 = Paths.get(dynamicLoc + "/mods/" + curVersion + "/coremods/coremods.txt");
 			progressBar.setEnabled(true);
 			progressBar.setMaximum(lines);
