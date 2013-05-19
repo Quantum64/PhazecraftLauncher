@@ -1,4 +1,3 @@
-
 package net.phazecraft.tools;
 
 import java.io.BufferedReader;
@@ -14,11 +13,14 @@ import net.phazecraft.data.Settings;
 import net.phazecraft.log.Logger;
 
 public class MinecraftVersionDetector {
-	public MinecraftVersionDetector() { }
+	public MinecraftVersionDetector() {
+	}
 
 	/**
 	 * Finds out using some clever tricks the current minecraft version version
-	 * @param jarFilePath The .minecraft directory
+	 * 
+	 * @param jarFilePath
+	 *            The .minecraft directory
 	 * @return The version of the jar file
 	 */
 	public String getMinecraftVersion(String jarFilePath) {
@@ -26,11 +28,11 @@ public class MinecraftVersionDetector {
 			ZipInputStream file = new ZipInputStream(new FileInputStream(new File(jarFilePath, "bin/" + "minecraft.jar")));
 			ZipEntry ent;
 			ent = file.getNextEntry();
-			while(ent != null) {
-				if(ent.getName().contains("Minecraft.class")) {
+			while (ent != null) {
+				if (ent.getName().contains("Minecraft.class")) {
 					StringBuilder sb = new StringBuilder();
 					for (int c = file.read(); c != -1; c = file.read()) {
-						sb.append((char)c);
+						sb.append((char) c);
 					}
 					String data = sb.toString();
 					String search = "Minecraft 1";
@@ -44,28 +46,31 @@ public class MinecraftVersionDetector {
 			file.close();
 		} catch (IOException e1) {
 			Logger.logError(e1.getMessage(), e1);
-			return "unknown";
+			return "error";
 		}
 		return "unknown";
 	}
 
 	public boolean shouldUpdate(String jarFilePath) {
 		String requiredVersion = ModPack.getSelectedPack().getMcVersion();
-		if(Settings.getSettings().getForceUpdate()) {
+		if (Settings.getSettings().getForceUpdate()) {
 			return true;
 		}
 		String version = getMinecraftVersion(jarFilePath);
-		if(version.equals("unknown")) {
+		if (version.equals("unknown")) {
 			return false;
+		} else if (version.equals("error")) {
+			return true;
 		}
 		File mcVersion = new File(jarFilePath, "bin/version");
-		if(mcVersion.exists()) {
+		if (mcVersion.exists()) {
 			BufferedReader in;
 			try {
 				in = new BufferedReader(new FileReader(mcVersion));
 				requiredVersion = in.readLine();
 				in.close();
-			} catch (IOException e) { }
+			} catch (IOException e) {
+			}
 		}
 		Logger.logInfo("Current: " + version);
 		Logger.logInfo("Required: " + requiredVersion);
