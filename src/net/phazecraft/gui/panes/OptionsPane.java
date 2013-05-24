@@ -43,7 +43,7 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 	private JLabel lblInstallFolder, lblRamMaximum, lblLocale, currentRam, minecraftSize, lblX;
 	private JSlider ramMaximum;
 	private JComboBox locale;
-	private JButton forceClear;
+	private JButton forceClear, clearInstall;
 	private JTextField installFolderTextField;
 	private JCheckBox chckbxShowConsole, keepLauncherOpen;
 	private final Settings settings;
@@ -100,11 +100,40 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 						org.apache.commons.io.FileUtils.deleteDirectory(new File(OSUtils.getDynamicStorageLocation(), "mods"));
 					} catch (IOException e1) {
 						Logger.logError("Could not clean Mods Folder", e1);
+						JOptionPane.showMessageDialog(null, "The clear mods operation finished with some warnings\nNothing to serious", "Error", JOptionPane.WARNING_MESSAGE);
+					} catch (Exception e2) {
+						Logger.logError("Could not clean Mods Folder", e2);
+						JOptionPane.showMessageDialog(null, "The clear mods operation failed epicley", "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
 		});
 		add(forceClear);
+
+		clearInstall = new JButton("Forec Clear All Mods");
+		clearInstall.setBounds(147, 365, 629, 29);
+		clearInstall.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int input = JOptionPane.showConfirmDialog(null, "Clear the install?  This will save disk space, but delete all saves\nThis is the point of no return", "Confirm Action", JOptionPane.YES_NO_OPTION);
+				if (input == JOptionPane.YES_OPTION) {
+					try {
+						String[] files = new String[new File(OSUtils.getDefInstallPath()).list().length];
+						for (int i1 = 0; i1 < files.length; i1++)
+							files[i1] = new File(OSUtils.getDefInstallPath()).list()[i1];
+						for (int i = 0; i < new File(OSUtils.getDefInstallPath()).list().length; i++)
+							org.apache.commons.io.FileUtils.deleteDirectory(new File(OSUtils.getDefInstallPath() + "/" + files[i]));
+					} catch (IOException e1) {
+						Logger.logError("Could not clean Mods Folder", e1);
+						JOptionPane.showMessageDialog(null, "The clear install operation finished with some warnings\nNothing to serious", "Error", JOptionPane.WARNING_MESSAGE);
+					} catch (Exception e2) {
+						Logger.logError("Could not clean Mods Folder", e2);
+						JOptionPane.showMessageDialog(null, "The clear install operation failed epicley", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		add(clearInstall);
 
 		tglbtnForceUpdate.getModel().setPressed(settings.getForceUpdate());
 		add(tglbtnForceUpdate);
