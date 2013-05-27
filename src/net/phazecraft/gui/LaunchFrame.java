@@ -677,14 +677,14 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		tpInstallLocLbl.setVisible(false);
 
 		fMod.add(footerLogo);
-		fMod.add(footerCreeper);
+		//fMod.add(footerCreeper);
 		fMod.add(close);
 		fTp.add(footerLogo1);
-		fTp.add(footerCreeper1);
+		//fTp.add(footerCreeper1);
 		fMap.add(footerLogo2);
-		fMap.add(footerCreeper2);
+		//fMap.add(footerCreeper2);
 		fOpt.add(footerLogo3);
-		fOpt.add(footerCreeper3);
+		//fOpt.add(footerCreeper3);
 
 		// fMod.add(serverbutton);
 		fMap.add(mapInstall);

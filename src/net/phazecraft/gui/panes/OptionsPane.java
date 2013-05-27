@@ -110,8 +110,8 @@ public class OptionsPane extends JPanel implements ILauncherPane {
 		});
 		add(forceClear);
 
-		clearInstall = new JButton("Forec Clear All Mods");
-		clearInstall.setBounds(147, 365, 629, 29);
+		clearInstall = new JButton("Force Clear The Install");
+		clearInstall.setBounds(147, 355, 629, 29);
 		clearInstall.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
