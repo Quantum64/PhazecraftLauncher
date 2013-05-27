@@ -677,14 +677,14 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		tpInstallLocLbl.setVisible(false);
 
 		fMod.add(footerLogo);
-		//fMod.add(footerCreeper);
+		// fMod.add(footerCreeper);
 		fMod.add(close);
 		fTp.add(footerLogo1);
-		//fTp.add(footerCreeper1);
+		// fTp.add(footerCreeper1);
 		fMap.add(footerLogo2);
-		//fMap.add(footerCreeper2);
+		// fMap.add(footerCreeper2);
 		fOpt.add(footerLogo3);
-		//fOpt.add(footerCreeper3);
+		// fOpt.add(footerCreeper3);
 
 		// fMod.add(serverbutton);
 		fMap.add(mapInstall);
@@ -851,7 +851,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		if (!new File(installPath, pack.getDir() + "/minecraft/bin/minecraft.jar").exists() || mvd.shouldUpdate(installPath + "/" + pack.getDir() + "/minecraft")) {
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
 			final GameUpdateWorker updater = new GameUpdateWorker(pack.getNoMods(), (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_"), new File(installPath, pack.getDir() + "/minecraft/bin").getPath()) {
-				@Override		
+				@Override
 				public void done() {
 					progMonitor.close();
 					try {
@@ -894,8 +894,66 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			});
 			updater.execute();
 		} else {
-			launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
+			try {
+				launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
+			} catch (Exception e) {
+				Logger.logError("Something happened to the jar.  Let's try redownloading it.");
+				backupRunGameUpdater(response);
+			}
 		}
+	}
+	
+	private void backupRunGameUpdater(final LoginResponse response) {
+		final String installPath = Settings.getSettings().getInstallPath();
+		final ModPack pack = ModPack.getSelectedPack();
+
+
+		if (true) {
+			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
+			final GameUpdateWorker updater = new GameUpdateWorker(pack.getNoMods(), (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? pack.getVersion() : Settings.getSettings().getPackVer()).replace(".", "_"), new File(installPath, pack.getDir() + "/minecraft/bin").getPath()) {
+				@Override
+				public void done() {
+					progMonitor.close();
+					try {
+						if (get()) {
+							Logger.logInfo("Game update complete");
+							FileUtils.killMetaInf();
+							launchMinecraft(installPath + "/" + pack.getDir() + "/minecraft", RESPONSE.getUsername(), RESPONSE.getSessionID());
+						} else {
+							ErrorUtils.tossError("Error occurred during downloading the game");
+						}
+					} catch (CancellationException e) {
+						ErrorUtils.tossError("Game update canceled.");
+					} catch (InterruptedException e) {
+						ErrorUtils.tossError("Game update interrupted.");
+					} catch (ExecutionException e) {
+						ErrorUtils.tossError("Failed to download game.");
+					} finally {
+						enableObjects();
+					}
+				}
+			};
+
+			updater.addPropertyChangeListener(new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					if (progMonitor.isCanceled()) {
+						updater.cancel(false);
+					}
+					if (!updater.isDone()) {
+						int prog = updater.getProgress();
+						if (prog < 0) {
+							prog = 0;
+						} else if (prog > 100) {
+							prog = 100;
+						}
+						progMonitor.setProgress(prog);
+						progMonitor.setNote(updater.getStatus());
+					}
+				}
+			});
+			updater.execute();
+		} 
 	}
 
 	/**
@@ -944,6 +1002,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 				});
 			}
 		} catch (Exception e) {
+
 		}
 	}
 
@@ -1156,24 +1215,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	/**
 	 * update the footer to the correct buttons for active tab
 	 */
-	public void updateFooter() {/*
-								 * boolean result; switch (currentPane) { case
-								 * MAPS: result =
-								 * mapsPane.type.equals("Server");
-								 * mapInstall.setVisible(!result);
-								 * mapInstallLocation.setVisible(!result);
-								 * serverMap.setVisible(result);
-								 * disableMainButtons();
-								 * disableTextureButtons(); break; case TEXTURE:
-								 * tpInstall.setVisible(true);
-								 * tpInstallLocation.setVisible(true);
-								 * disableMainButtons(); disableMapButtons();
-								 * break; default: launch.setVisible(true);
-								 * edit.setEnabled(users.getSelectedIndex() >
-								 * 1); edit.setVisible(true);
-								 * users.setVisible(true);
-								 * serverbutton.setVisible(false); break; }
-								 */
+	public void updateFooter() {
 	}
 
 	/**
@@ -1287,23 +1329,23 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		} catch (Exception e) {
 			e.printStackTrace();
 			// Fallback
-			//minecraft = new Font("Arial", Font.PLAIN, 12);
-			//New Fallback!
+			// minecraft = new Font("Arial", Font.PLAIN, 12);
+			// New Fallback!
 			String baseDynamic = OSUtils.getDynamicStorageLocation();
 			String baseLink = DownloadUtils.getStaticCreeperhostLink("minectaft.ttf");
 			try {
 				org.apache.commons.io.FileUtils.copyURLToFile(new URL(baseLink), new File(baseDynamic + "/minecraft.ttf"));
 				minecraft = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(baseDynamic + "/minecraft.ttf")).deriveFont((float) size);
 			} catch (MalformedURLException e1) {
-				//this is just stupid
+				// this is just stupid
 				minecraft = new Font("Arial", Font.PLAIN, 12);
 				e1.printStackTrace();
 			} catch (IOException e1) {
-				//fallback on the fallback  (Server DOwn)
+				// fallback on the fallback (Server DOwn)
 				minecraft = new Font("Arial", Font.PLAIN, 12);
 				e1.printStackTrace();
 			} catch (FontFormatException e1) {
-				//WTF
+				// WTF
 				minecraft = new Font("Arial", Font.PLAIN, 12);
 				e1.printStackTrace();
 			}

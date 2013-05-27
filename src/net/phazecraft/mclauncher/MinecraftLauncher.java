@@ -26,32 +26,8 @@ public class MinecraftLauncher {
 	public static Process launchMinecraft(String workingDir, String username, String password, String forgename, String rmax) throws IOException {
 		String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 		StringBuilder cpb = new StringBuilder("");
-		File instModsDir = new File(new File(workingDir).getParentFile(), "instMods/");
-		if(instModsDir.isDirectory()) {
-			String[] files = instModsDir.list();
-			Arrays.sort(files);
-			for(String name : files) {
-				if(!name.equals(forgename)) {
-					if(name.toLowerCase().contains("forge") && name.toLowerCase().contains("minecraft") && name.toLowerCase().endsWith(".zip")) {
-						if(new File(instModsDir, forgename).exists()) {
-							if (!new File(instModsDir, forgename).equals(new File(instModsDir, name))) {
-								new File(instModsDir, name).delete();
-							}
-						} else {
-							new File(instModsDir, name).renameTo(new File(instModsDir, forgename));
-						}
-					} else if(!name.equalsIgnoreCase(forgename) && (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar"))) {
-						cpb.append(OSUtils.getJavaDelimiter());
-						cpb.append(new File(instModsDir, name).getAbsolutePath());
-					}
-				}
-			}
-		} else {
-			Logger.logInfo("Not loading any instMods (minecraft jar mods), as the directory does not exist.");
-		}
 
 		cpb.append(OSUtils.getJavaDelimiter());
-		cpb.append(new File(instModsDir, forgename).getAbsolutePath());
 
 		for(String jarFile : jarFiles) {
 			cpb.append(OSUtils.getJavaDelimiter());
@@ -124,18 +100,7 @@ public class MinecraftLauncher {
 			System.out.println("Loading jars...");
 			String[] jarFiles = new String[] {"minecraft.jar", "lwjgl.jar", "lwjgl_util.jar", "jinput.jar" };
 			ArrayList<File> classPathFiles = new ArrayList<File>();
-			File tempDir = new File(new File(basepath).getParentFile(), "instMods/");
-			if(tempDir.isDirectory()) {
-				for(String name : tempDir.list()) {
-					if(!name.equalsIgnoreCase(forgename)) {
-						if(name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".jar")) {
-							classPathFiles.add(new File(tempDir, name));
-						}
-					}
-				}
-			}
 
-			classPathFiles.add(new File(tempDir, forgename));
 			for(String jarFile : jarFiles) {
 				classPathFiles.add(new File(new File(basepath, "bin"), jarFile));
 			}	
