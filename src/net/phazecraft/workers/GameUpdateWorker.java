@@ -16,6 +16,7 @@ import java.util.zip.ZipInputStream;
 
 import javax.swing.SwingWorker;
 
+import net.phazecraft.data.Settings;
 import net.phazecraft.gui.LaunchFrame;
 import net.phazecraft.log.Logger;
 import net.phazecraft.util.DownloadUtils;
@@ -73,9 +74,8 @@ public class GameUpdateWorker extends SwingWorker<Boolean, Void> {
 		try {
 			if (noMods) {
 				org.apache.commons.io.FileUtils.copyURLToFile(new URL(DownloadUtils.getCreeperhostLink("Minecraft.txt")), new File(OSUtils.getDynamicStorageLocation() + "/Minecraft.txt"));
-				Path path = Paths.get(OSUtils.getDynamicStorageLocation() + "/Minecraft.txt");
-				Scanner scanner = new Scanner(path);
-				jarURLs[0] = new URL("http://assets.minecraft.net/" + scanner.nextLine().replace(".", "_") + "/minecraft.jar");
+
+				jarURLs[0] = new URL("http://assets.minecraft.net/" + (Settings.getSettings().getPackVer().equalsIgnoreCase("recommended version") ? reqVersion.replace('.', '_') : Settings.getSettings().getPackVer()).replace(".", "_") + "/minecraft.jar");
 			} else
 				jarURLs[0] = new URL("http://dtr-world.com/phazecraftlauncher/" + reqVersion.replace(".", "_") + "/minecraft.jar");
 			for (int i = 0; i < jarList.length; i++) {

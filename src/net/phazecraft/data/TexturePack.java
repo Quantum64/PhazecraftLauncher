@@ -72,6 +72,7 @@ public class TexturePack {
 	}
 
 	public TexturePack(String name, String author, String version, String url, String logo, String image, String mcversion, String compatible, String info, String resolution, int idx) throws NoSuchAlgorithmException, IOException {
+		
 		index = idx;
 		this.name = name;
 		this.author = author;
@@ -87,6 +88,7 @@ public class TexturePack {
 		File tempDir = new File(installPath, "TexturePacks" + sep + name);
 		File verFile = new File(tempDir, "version");
 		URL url_;
+		this.mcversion = mcversion;
 		if(!upToDate(verFile)) {
 			url_ = new URL(DownloadUtils.getStaticCreeperhostLink(logo));
 			this.logo = Toolkit.getDefaultToolkit().createImage(url_);
@@ -194,6 +196,15 @@ public class TexturePack {
 	
 	public String getResolution() {
 		return resolution;
+	}
+	
+	public ArrayList<String> getVersionList() {
+		ArrayList<String> versions = new ArrayList<String>();
+		String[] temp = getMcVersion().split(";");
+			for (int i = 0; i < temp.length; i++){
+				versions.add(temp[i]);
+			}
+		return versions;
 	}
 
 	/**
