@@ -1,4 +1,3 @@
-
 package net.phazecraft.gui.panes;
 
 import java.awt.Color;
@@ -55,26 +54,25 @@ class MapListModelAdapter extends AbstractListModel implements MapListener {
 	public void filter(String origin, String compatible, String query) {
 		filteredMaps.clear();
 		int counter = 0;
-		for(int i = 0; i < Map.size(); ++i) {
+		for (int i = 0; i < Map.size(); ++i) {
 			Map map = Map.getMap(i);
-			if(map.isCompatible(ModPack.getSelectedPack().getName()) && originCheck(map, origin) && compatibilityCheck(map, compatible) && textSearch(map, query)) {
+			if (map.isCompatible(ModPack.getSelectedPack().getName()) && originCheck(map, origin) && compatibilityCheck(map, compatible) && textSearch(map, query)) {
 				filteredMaps.put(counter, i);
 				counter++;
 			}
 		}
-		for(int i = 0; i < Map.size(); ++i) {
+		for (int i = 0; i < Map.size(); ++i) {
 			Map map = Map.getMap(i);
-			if((!map.isCompatible(ModPack.getSelectedPack().getName())) && originCheck(map, origin) && compatibilityCheck(map, compatible) && textSearch(map, query)) {
+			if ((!map.isCompatible(ModPack.getSelectedPack().getName())) && originCheck(map, origin) && compatibilityCheck(map, compatible) && textSearch(map, query)) {
 				filteredMaps.put(counter, i);
 				counter++;
 			}
 		}
-		if(counter + 1 == Map.size()) {
+		if (counter + 1 == Map.size()) {
 			filteredMaps.clear();
 			fireIntervalRemoved(this, 0, Map.size());
 			fireIntervalAdded(this, 0, Map.size());
-		}
-		else {
+		} else {
 			fireIntervalRemoved(this, 0, Map.size());
 			fireIntervalAdded(this, 0, filteredMaps.size());
 		}
@@ -134,12 +132,10 @@ class MapCellRenderer extends JPanel implements ListCellRenderer {
 		setPreferredSize(new Dimension(420, 55));
 	}
 
-	public Component getListCellRendererComponent(
-		JList list, Object value, int index, boolean isSelected, boolean cellHasFocus
-	) {
-		Map map = (Map)value;
+	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		Map map = (Map) value;
 
-		if(cellHasFocus || isSelected) {
+		if (cellHasFocus || isSelected) {
 			setBackground(UIManager.getColor("control").darker().darker());
 			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		} else {
@@ -182,8 +178,8 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 
 		maps.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				Map map = (Map)maps.getSelectedValue();
-				if(map != null) {
+				Map map = (Map) maps.getSelectedValue();
+				if (map != null) {
 					String packs = "";
 					if (map.getCompatible() != null) {
 						packs += "<p>This map works with the following packs:</p><ul>";
@@ -205,7 +201,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		filter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(loaded) {
+				if (loaded) {
 					MapFilterDialog filterDia = new MapFilterDialog(instance);
 					filterDia.setVisible(true);
 				}
@@ -246,7 +242,7 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		mapInfo.addHyperlinkListener(new HyperlinkListener() {
 			@Override
 			public void hyperlinkUpdate(HyperlinkEvent event) {
-				if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+				if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 					OSUtils.browse(event.getURL().toString());
 				}
 			}
@@ -265,7 +261,8 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 		add(infoScroll);
 	}
 
-	@Override public void onVisible() {
+	@Override
+	public void onVisible() {
 		sortMaps();
 		updateFilter();
 	}
@@ -273,11 +270,14 @@ public class MapsPane extends JPanel implements ILauncherPane, MapListener {
 	@Override
 	public void onMapAdded(Map map) {
 		model.onMapAdded(map);
+		if (map.getUrl().equalsIgnoreCase("CakeDefense2.zip")) {
+			maps.setSelectedValue(map, true);
+		}
 	}
 
 	public void sortMaps() {
 		model.filter(origin, compatible, SearchDialog.lastMapSearch.toLowerCase());
-		LaunchFrame.updateMapInstallLocs(new String[]{""});
+		LaunchFrame.updateMapInstallLocs(new String[] { "" });
 	}
 
 	public static int getSelectedMapIndex() {
