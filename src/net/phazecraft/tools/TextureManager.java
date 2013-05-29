@@ -126,7 +126,7 @@ public class TextureManager extends JDialog {
 			Logger.logInfo(version);
 
 			if (version.equalsIgnoreCase("false")) {
-				JOptionPane.showMessageDialog(null, "Cannot install pack\n  THere is no version for your selected modpack version");
+				JOptionPane.showMessageDialog(null, "Cannot install pack\n  There is no version Texture Pack for your selected Modpack version");
 				return false;
 			}
 

@@ -264,6 +264,15 @@ public class Map {
 	public String getMcVersion() {
 		return mcversion;
 	}
+	
+	public ArrayList<String> getVersionList() {
+		ArrayList<String> versions = new ArrayList<String>();
+		String[] temp = getMcVersion().split(";");
+			for (int i = 0; i < temp.length; i++){
+				versions.add(temp[i]);
+			}
+		return versions;
+	}
 
 	/**
 	 * Used to get the name of the map

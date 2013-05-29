@@ -10,10 +10,12 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
@@ -22,6 +24,7 @@ import javax.swing.border.EmptyBorder;
 
 import net.phazecraft.data.Map;
 import net.phazecraft.data.Settings;
+import net.phazecraft.data.TexturePack;
 import net.phazecraft.gui.LaunchFrame;
 import net.phazecraft.gui.dialogs.MapOverwriteDialog;
 import net.phazecraft.log.Logger;
@@ -90,9 +93,28 @@ public class MapManager extends JDialog {
 			Logger.logInfo("Downloading Map");
 			String installPath = OSUtils.getDynamicStorageLocation();
 			Map map = Map.getSelectedMap();
+			/*
+			ArrayList<String> versionList = map.getVersionList();
+			String version = "false";
+			
+			for (int i = 0; i < versionList.toArray().length; i++) {
+				if (packVer.replace('.', '_').equalsIgnoreCase(versionList.toArray()[i].toString().replace('.', '_'))) {
+					version = versionList.toArray()[i].toString();
+				}
+			}
+			
+			Logger.logInfo(version);
+
+			if (version.equalsIgnoreCase("false")) {
+				JOptionPane.showMessageDialog(null, "Cannot install map\n  There is no version Map Version for your selected Modpack version");
+				return;
+			}
+			
+			*/
+			
 			new File(installPath + "/Maps/" + dir + "/").mkdirs();
 			new File(installPath + "/Maps/" + dir + "/" + mapName).createNewFile();
-			downloadUrl(installPath + "/Maps/" + dir + "/" + mapName, DownloadUtils.getCreeperhostLink(map.getVersion() + "/" + mapName));
+			downloadUrl(installPath + "/Maps/" + dir + "/" + mapName, DownloadUtils.getCreeperhostLink("Maps" + "/" + mapName));
 			FileUtils.extractZipTo(installPath + "/Maps/" + dir + "/" + mapName, installPath + "/Maps/" + dir);
 			installMap(mapName, dir);
 		}
@@ -157,7 +179,7 @@ public class MapManager extends JDialog {
 				try {
 					FileUtils.delete(new File(tempFolder, file));
 				} catch (IOException e) {
-					Logger.logError(e.getMessage(), e);
+				Logger.logError(e.getMessage(), e);
 				}
 			}
 		}
