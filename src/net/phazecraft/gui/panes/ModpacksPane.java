@@ -363,9 +363,9 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	public void onModPackAdded(ModPack pack) {
 		model.onModPackAdded(pack);
 
-		//if(pack.getNoMods()) {
-		//	packs.setSelectedValue(pack, true);
-		//}
+		if(pack.getNoMods()) {
+			packs.setSelectedValue(pack, true);
+		}
 	}
 
 	public void sortPacks() {
