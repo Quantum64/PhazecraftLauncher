@@ -1,4 +1,3 @@
-
 package net.phazecraft.gui.panes;
 
 import java.awt.Color;
@@ -7,12 +6,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.swing.AbstractListModel;
 import javax.swing.ImageIcon;
@@ -26,14 +21,12 @@ import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import net.phazecraft.data.LauncherStyle;
-import net.phazecraft.data.Map;
 import net.phazecraft.data.ModPack;
 import net.phazecraft.data.TexturePack;
 import net.phazecraft.data.events.TexturePackListener;
@@ -55,26 +48,25 @@ class TexturePackListModelAdapter extends AbstractListModel implements TexturePa
 	public void filter(String compatible, String resolution, String query) {
 		filteredPacks.clear();
 		int counter = 0;
-		for(int i = 0; i < TexturePack.size(); ++i) {
+		for (int i = 0; i < TexturePack.size(); ++i) {
 			TexturePack texturePack = TexturePack.getTexturePack(i);
-			if(texturePack.isCompatible(ModPack.getSelectedPack().getDir()) && compatibilityCheck(texturePack, compatible) && resolutionCheck(texturePack, resolution) && textSearch(texturePack, query)) {
+			if (texturePack.isCompatible(ModPack.getSelectedPack().getDir()) && compatibilityCheck(texturePack, compatible) && resolutionCheck(texturePack, resolution) && textSearch(texturePack, query)) {
 				filteredPacks.put(counter, i);
 				counter++;
 			}
 		}
-		for(int i = 0; i < TexturePack.size(); ++i) {
+		for (int i = 0; i < TexturePack.size(); ++i) {
 			TexturePack texturePack = TexturePack.getTexturePack(i);
-			if(!texturePack.isCompatible(ModPack.getSelectedPack().getDir()) && compatibilityCheck(texturePack, compatible) && resolutionCheck(texturePack, resolution) && textSearch(texturePack, query)) {
+			if (!texturePack.isCompatible(ModPack.getSelectedPack().getDir()) && compatibilityCheck(texturePack, compatible) && resolutionCheck(texturePack, resolution) && textSearch(texturePack, query)) {
 				filteredPacks.put(counter, i);
 				counter++;
 			}
 		}
-		if(counter + 1 == TexturePack.size()) {
+		if (counter + 1 == TexturePack.size()) {
 			filteredPacks.clear();
 			fireIntervalRemoved(this, 0, TexturePack.size());
 			fireIntervalAdded(this, 0, TexturePack.size());
-		}
-		else {
+		} else {
 			fireIntervalRemoved(this, 0, TexturePack.size());
 			fireIntervalAdded(this, 0, filteredPacks.size());
 		}
@@ -134,12 +126,10 @@ class TexturePackCellRenderer extends JPanel implements ListCellRenderer {
 		setPreferredSize(new Dimension(420, 55));
 	}
 
-	public Component getListCellRendererComponent(
-		JList list, Object value, int index, boolean isSelected, boolean cellHasFocus
-	) {
-		TexturePack pack = (TexturePack)value;
+	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		TexturePack pack = (TexturePack) value;
 
-		if(cellHasFocus || isSelected) {
+		if (cellHasFocus || isSelected) {
 			setBackground(UIManager.getColor("control").darker().darker());
 			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		} else {
@@ -148,7 +138,7 @@ class TexturePackCellRenderer extends JPanel implements ListCellRenderer {
 		}
 
 		String info = "";
-		if(pack.getInfo().length() > 60) {
+		if (pack.getInfo().length() > 60) {
 			info = pack.getInfo().substring(0, 59) + "...";
 		} else {
 			info = pack.getInfo();
@@ -187,8 +177,8 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 
 		texturePacks.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				TexturePack pack = (TexturePack)texturePacks.getSelectedValue();
-				if(pack != null) {
+				TexturePack pack = (TexturePack) texturePacks.getSelectedValue();
+				if (pack != null) {
 					String packs = "";
 					if (pack.getCompatible() != null) {
 						packs += "<p>This texture pack works with the following packs:</p><ul>";
@@ -199,7 +189,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 					}
 					LaunchFrame.updateTpInstallLocs(pack.getCompatible());
 					File tempDir = new File(OSUtils.getDynamicStorageLocation(), "TexturePacks" + File.separator + pack.getName());
-					textureInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + pack.getImageName() +"' width=400 height=200></img> <br>" + pack.getInfo() + packs);
+					textureInfo.setText("<html><img src='file:///" + tempDir.getPath() + File.separator + pack.getImageName() + "' width=400 height=200></img> <br>" + pack.getInfo() + packs);
 					textureInfo.setCaretPosition(0);
 				}
 			}
@@ -247,7 +237,7 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		textureInfo.addHyperlinkListener(new HyperlinkListener() {
 			@Override
 			public void hyperlinkUpdate(HyperlinkEvent event) {
-				if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+				if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 					OSUtils.browse(event.getURL().toString());
 				}
 			}
@@ -266,13 +256,17 @@ public class TexturepackPane extends JPanel implements ILauncherPane, TexturePac
 		add(infoScroll);
 	}
 
-	@Override public void onVisible() {
+	@Override
+	public void onVisible() {
 		updateFilter();
 	}
 
 	@Override
 	public void onTexturePackAdded(TexturePack texturePack) {
 		model.onTexturePackAdded(texturePack);
+		if (texturePack.getUrl().equalsIgnoreCase("OCD.zip")) {
+			texturePacks.setSelectedValue(texturePack, true);
+		}
 	}
 
 	public void sortTexturePacks() {
