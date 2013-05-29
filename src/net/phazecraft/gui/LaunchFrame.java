@@ -158,6 +158,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	public int mouseY = 0;
 
 	public static int buildNumber = 123;
+	
 	public static boolean noConfig = false;
 	public static LauncherConsole con;
 	public static String tempPass = "";
