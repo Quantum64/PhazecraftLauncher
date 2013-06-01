@@ -106,6 +106,12 @@ import net.phazecraft.workers.LoginWorker;
 
 @SuppressWarnings("static-access")
 public class LaunchFrame extends JFrame implements ActionListener, KeyListener, MouseWheelListener, MouseListener, MouseMotionListener {
+	
+	
+	
+	public static int buildNumber = 124;
+	private static String version = "1.2.4";
+	
 
 	private static final long serialVersionUID = 1L;
 
@@ -138,7 +144,6 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	@SuppressWarnings("rawtypes")
 	private static JComboBox users, tpInstallLocation, mapInstallLocation;
 	private static LaunchFrame instance = null;
-	private static String version = "1.2.3";
 
 	public final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
@@ -156,8 +161,6 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 
 	public int mouseX = 0;
 	public int mouseY = 0;
-
-	public static int buildNumber = 123;
 	
 	public static boolean noConfig = false;
 	public static LauncherConsole con;
