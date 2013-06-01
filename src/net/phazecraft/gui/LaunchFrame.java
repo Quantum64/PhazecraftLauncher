@@ -109,8 +109,8 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	
 	
 	
-	public static int buildNumber = 124;
-	private static String version = "1.2.4";
+	private static String version = "1.2.5";
+	
 	
 
 	private static final long serialVersionUID = 1L;
@@ -168,6 +168,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	public static Panes currentPane = Panes.MODPACK;
 	public static JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(new AnalyticsConfigData("UA-39727539-1"), GoogleAnalyticsVersion.V_4_7_2);
 	private static final Color TRANSPARENT = new Color(45, 45, 45, 160);
+	public static int buildNumber = Integer.parseInt(version.replace(".", ""));
 
 	public static JFrame modsFrame;
 	public static JFrame textureFrame;
