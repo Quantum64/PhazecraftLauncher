@@ -68,7 +68,15 @@ public class TextureManager extends JDialog {
 			if (oldFile.exists()) {
 				oldFile.delete();
 			}
-			return downloadTexturePack(texturePack.getUrl(), texturePack.getName(), compDir, packVer);
+			if (!texturePack.getIsPack())
+				return downloadTexturePack(texturePack.getUrl(), texturePack.getName(), compDir, packVer, false);
+			else {
+				for (int i = 0; i < texturePack.getURLList().toArray().length; i++) {
+					downloadTexturePack(texturePack.getURLList().toArray()[i].toString(), texturePack.getPackList().toArray()[i].toString(), compDir, packVer, true);
+				}
+				return true;
+			}
+
 		}
 
 		public boolean downloadUrl(String filename, String urlString) {
@@ -110,19 +118,18 @@ public class TextureManager extends JDialog {
 			return true;
 		}
 
-		protected boolean downloadTexturePack(String texturePackName, String dir, String compDir, String packVer) throws IOException, NoSuchAlgorithmException {
+		protected boolean downloadTexturePack(String texturePackName, String dir, String compDir, String packVer, boolean isPack) throws IOException, NoSuchAlgorithmException {
 			Logger.logInfo("Downloading Texture Pack");
 
 			ArrayList<String> versionList = TexturePack.getSelectedTexturePack().getVersionList();
 			String version = "false";
-			
 
 			for (int i = 0; i < versionList.toArray().length; i++) {
 				if (packVer.replace('.', '_').equalsIgnoreCase(versionList.toArray()[i].toString().replace('.', '_'))) {
 					version = versionList.toArray()[i].toString();
 				}
 			}
-			
+
 			Logger.logInfo(version);
 
 			if (version.equalsIgnoreCase("false")) {
@@ -132,19 +139,36 @@ public class TextureManager extends JDialog {
 
 			String installPath = Settings.getSettings().getInstallPath();
 			new File(installPath, compDir + sep + "minecraft" + sep + "texturepacks" + sep).mkdirs();
-			new File(installPath, compDir + sep + "minecraft" + sep + "texturepacks" + sep + texturePackName).createNewFile();
-			if (downloadUrl(installPath + sep + compDir + sep + "minecraft" + sep + "texturepacks" + sep + texturePackName, DownloadUtils.getCreeperhostLink("TexturePacks/" + texturePackName))) {
-				File versionFile = new File(installPath, compDir + sep + "minecraft" + sep + "texturepacks" + sep + "textureVersions");
-				installedTextures.put(dir.toLowerCase(), packVer);
-				BufferedWriter out = new BufferedWriter(new FileWriter(versionFile));
-				for (int i = 0; i < installedTextures.size(); i++) {
-					out.write(installedTextures.keySet().toArray()[i] + ":" + installedTextures.values().toArray()[i]);
-					out.newLine();
+			if (isPack) {
+				new File(installPath, compDir + sep + "minecraft" + sep + "texturepacks" + sep + dir + ".zip").createNewFile();
+				if (downloadUrl(installPath + sep + compDir + sep + "minecraft" + sep + "texturepacks" + sep + dir + ".zip", DownloadUtils.getCreeperhostLink("TexturePacks/" + packVer + "/" + texturePackName))) {
+					File versionFile = new File(installPath, compDir + sep + "minecraft" + sep + "texturepacks" + sep + "textureVersions");
+					installedTextures.put(dir.toLowerCase(), packVer);
+					BufferedWriter out = new BufferedWriter(new FileWriter(versionFile));
+					for (int i = 0; i < installedTextures.size(); i++) {
+						out.write(installedTextures.keySet().toArray()[i] + ":" + installedTextures.values().toArray()[i]);
+						out.newLine();
+					}
+					out.flush();
+					out.close();
+					TrackerUtils.sendPageView(dir + " Install", dir + " / " + compDir + " / " + packVer);
+					return true;
 				}
-				out.flush();
-				out.close();
-				TrackerUtils.sendPageView(dir + " Install", dir + " / " + compDir + " / " + packVer);
-				return true;
+			} else {
+				new File(installPath, compDir + sep + "minecraft" + sep + "texturepacks" + sep + dir + ".zip").createNewFile();
+				if (downloadUrl(installPath + sep + compDir + sep + "minecraft" + sep + "texturepacks" + sep + texturePackName, DownloadUtils.getCreeperhostLink("TexturePacks/" + packVer + "/" + texturePackName))) {
+					File versionFile = new File(installPath, compDir + sep + "minecraft" + sep + "texturepacks" + sep + "textureVersions");
+					installedTextures.put(dir.toLowerCase(), packVer);
+					BufferedWriter out = new BufferedWriter(new FileWriter(versionFile));
+					for (int i = 0; i < installedTextures.size(); i++) {
+						out.write(installedTextures.keySet().toArray()[i] + ":" + installedTextures.values().toArray()[i]);
+						out.newLine();
+					}
+					out.flush();
+					out.close();
+					TrackerUtils.sendPageView(dir + " Install", dir + " / " + compDir + " / " + packVer);
+					return true;
+				}
 			}
 			return false;
 		}

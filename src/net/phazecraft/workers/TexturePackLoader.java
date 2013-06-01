@@ -32,11 +32,14 @@ public class TexturePackLoader extends Thread {
 			for(int i = 0; i < texturePacks.getLength(); i++) {
 				Node texturePack = texturePacks.item(i);
 				NamedNodeMap textureAttr = texturePack.getAttributes();
-				TexturePack.addTexturePack(new TexturePack(textureAttr.getNamedItem("name").getTextContent(), textureAttr.getNamedItem("author").getTextContent(),
+				TexturePack.addTexturePack(new TexturePack(textureAttr.getNamedItem("name").getTextContent(),
+						textureAttr.getNamedItem("nameList") != null ? textureAttr.getNamedItem("nameList").getTextContent() : textureAttr.getNamedItem("name").getTextContent(), 
+						textureAttr.getNamedItem("author").getTextContent(),
 						textureAttr.getNamedItem("version").getTextContent(), textureAttr.getNamedItem("url").getTextContent(),
 						textureAttr.getNamedItem("logo").getTextContent(), textureAttr.getNamedItem("image").getTextContent(),
 						textureAttr.getNamedItem("mcversion").getTextContent(), textureAttr.getNamedItem("compatible").getTextContent(), 
-						textureAttr.getNamedItem("description").getTextContent(),textureAttr.getNamedItem("resolution").getTextContent(), i));
+						textureAttr.getNamedItem("description").getTextContent(),textureAttr.getNamedItem("resolution").getTextContent(),
+						textureAttr.getNamedItem("isPack") != null ? textureAttr.getNamedItem("isPack").getTextContent() : "false", i));
 			}
 			TexturepackPane.loaded = true;
 		} catch (Exception e) { 

@@ -27,6 +27,7 @@ import net.phazecraft.workers.MapLoader;
 
 public class Map {
 	private String name, author, version, url, mapname, mcversion, logoName, imageName, info, sep = File.separator;
+	private boolean isPack = false;
 	private String[] compatible;
 	private Image logo, image;
 	private int index;
@@ -107,7 +108,7 @@ public class Map {
 	 * @throws IOException
 	 * @throws NoSuchAlgorithmException
 	 */
-	public Map(String name, String author, String version, String url, String logo, String image, String compatible, String mcversion, String mapname, String info, int idx) throws NoSuchAlgorithmException, IOException {
+	public Map(String name, String author, String version, String url, String logo, String image, String compatible, String mcversion, String mapname, String info, String isPack, int idx) throws NoSuchAlgorithmException, IOException {
 		index = idx;
 		this.name = name;
 		this.author = author;
@@ -123,6 +124,9 @@ public class Map {
 		File tempDir = new File(installPath, "Maps" + sep + mapname);
 		File verFile = new File(tempDir, "version");
 		URL url_;
+		if(isPack.equalsIgnoreCase("true")){
+			this.isPack = true;
+		}
 		if(!upToDate(verFile)) {
 			url_ = new URL(DownloadUtils.getStaticCreeperhostLink(logo));
 			this.logo = Toolkit.getDefaultToolkit().createImage(url_);
@@ -304,6 +308,19 @@ public class Map {
 	 */
 	public String getImageName() {
 		return imageName;
+	}
+	
+	public boolean getIsPack() {
+		return isPack;
+	}
+	
+	public ArrayList<String> getPackList() {
+		ArrayList<String> maps = new ArrayList<String>();
+		String[] temp = getUrl().split(";");
+			for (int i = 0; i < temp.length; i++){
+				maps.add(temp[i]);
+			}
+		return maps;
 	}
 
 	/**

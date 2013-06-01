@@ -36,7 +36,8 @@ public class MapLoader extends Thread {
 						mapAttr.getNamedItem("version").getTextContent(), mapAttr.getNamedItem("url").getTextContent(),
 						mapAttr.getNamedItem("logo").getTextContent(), mapAttr.getNamedItem("image").getTextContent(),
 						mapAttr.getNamedItem("compatible").getTextContent(), mapAttr.getNamedItem("mcversion").getTextContent(), 
-						mapAttr.getNamedItem("mapname").getTextContent(), mapAttr.getNamedItem("description").getTextContent(), i));
+						mapAttr.getNamedItem("mapname").getTextContent(), mapAttr.getNamedItem("description").getTextContent(),
+						mapAttr.getNamedItem("isPack") != null ? mapAttr.getNamedItem("isPack").getTextContent() : "false", i));
 			}
 			MapsPane.loaded = true;
 		} catch (Exception e) { 

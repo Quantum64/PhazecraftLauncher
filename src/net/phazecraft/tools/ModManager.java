@@ -216,16 +216,7 @@ public class ModManager extends JDialog {
 				e.printStackTrace();
 			}
 			progressBar.setEnabled(false);
-			boolean config = false;// JOptionPane.showMessageDialog(null,
-									// DownloadUtils.getCreeperhostLink("/" +
-									// curVersion.replace(".", "_") + "/" +
-									// modPackName.split(".")[0] + ".txt"));
-			// org.apache.commons.io.FileUtils.copyURLToFile(new
-			// URL(DownloadUtils.getCreeperhostLink("/" +
-			// curVersion.replace(".", "_") + "/" + modPackName.split(".")[0] +
-			// ".txt")), new File(dynamicLoc + "/mods/" +
-			// curVersion.replace(".", "_") + "/" + modPackName.split(".")[0] +
-			// ".txt"));
+			boolean config = false;
 			Path path2 = Paths.get(dynamicLoc + "/mods/" + curVersion + "/config/config.txt");
 			try (Scanner scanner = new Scanner(path2)) {
 				while (scanner.hasNextLine()) {

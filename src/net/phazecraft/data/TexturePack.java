@@ -26,12 +26,13 @@ import net.phazecraft.util.OSUtils;
 import net.phazecraft.workers.TexturePackLoader;
 
 public class TexturePack {
-	private String name, author, version, url, mcversion, logoName, imageName, info, resolution, sep = File.separator;
+	private String name, author, version, url, mcversion, logoName, imageName, info, resolution, nameList, sep = File.separator;
 	private Image logo, image;
 	private String[] compatible;
 	private int index;
 	private final static ArrayList<TexturePack> texturePacks = new ArrayList<TexturePack>();
 	private static List<TexturePackListener> listeners = new ArrayList<TexturePackListener>();
+	private boolean isPack = false;
 
 	public static void addListener(TexturePackListener listener) {
 		listeners.add(listener);
@@ -71,7 +72,7 @@ public class TexturePack {
 		return getTexturePack(TexturepackPane.getSelectedTexturePackIndex());
 	}
 
-	public TexturePack(String name, String author, String version, String url, String logo, String image, String mcversion, String compatible, String info, String resolution, int idx) throws NoSuchAlgorithmException, IOException {
+	public TexturePack(String name, String nameList, String author, String version, String url, String logo, String image, String mcversion, String compatible, String info, String resolution, String isPack, int idx) throws NoSuchAlgorithmException, IOException {
 		
 		index = idx;
 		this.name = name;
@@ -88,7 +89,11 @@ public class TexturePack {
 		File tempDir = new File(installPath, "TexturePacks" + sep + name);
 		File verFile = new File(tempDir, "version");
 		URL url_;
+		this.nameList = nameList;
 		this.mcversion = mcversion;
+		if(isPack.equalsIgnoreCase("true")) {
+			this.isPack = true;
+		}
 		if(!upToDate(verFile)) {
 			url_ = new URL(DownloadUtils.getStaticCreeperhostLink(logo));
 			this.logo = Toolkit.getDefaultToolkit().createImage(url_);
@@ -189,6 +194,10 @@ public class TexturePack {
 	public String getImageName() {
 		return imageName;
 	}
+	
+	public String getNameList() {
+		return nameList;
+	}
 
 	public String[] getCompatible() {
 		return compatible;
@@ -205,6 +214,28 @@ public class TexturePack {
 				versions.add(temp[i]);
 			}
 		return versions;
+	}
+	
+	public ArrayList<String> getPackList() {
+		ArrayList<String> packs = new ArrayList<String>();
+		String[] temp = getNameList().split(";");
+			for (int i = 0; i < temp.length; i++){
+				packs.add(temp[i]);
+			}
+		return packs;
+	}
+	
+	public ArrayList<String> getURLList() {
+		ArrayList<String> packs = new ArrayList<String>();
+		String[] temp = getUrl().split(";");
+			for (int i = 0; i < temp.length; i++){
+				packs.add(temp[i]);
+			}
+		return packs;
+	}
+	
+	public boolean getIsPack() {
+		return isPack;
 	}
 
 	/**
