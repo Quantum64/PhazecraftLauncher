@@ -105,6 +105,7 @@ public class ModManager extends JDialog {
 
 			if (new File(installPath, dir + "/minecraft/mods").exists()) {
 				try {
+					Logger.logInfo("Killing mods folder");
 					org.apache.commons.io.FileUtils.deleteDirectory(new File(installPath, dir + "/minecraft/mods"));
 				} catch (IOException e2) {
 					e2.printStackTrace();
@@ -112,6 +113,7 @@ public class ModManager extends JDialog {
 			}
 			if (new File(installPath, dir + "/minecraft/config").exists()) {
 				try {
+					Logger.logInfo("Killing config folder");
 					org.apache.commons.io.FileUtils.deleteDirectory(new File(installPath, dir + "/minecraft/config"));
 				} catch (IOException e2) {
 					e2.printStackTrace();
@@ -119,6 +121,7 @@ public class ModManager extends JDialog {
 			}
 			if (new File(installPath, dir + "/minecraft/coremods").exists()) {
 				try {
+					Logger.logInfo("Killing coremods folder");
 					org.apache.commons.io.FileUtils.deleteDirectory(new File(installPath, dir + "/minecraft/coremods"));
 				} catch (IOException e2) {
 					e2.printStackTrace();
@@ -303,10 +306,15 @@ public class ModManager extends JDialog {
 			file.setText("Installing Coremods");
 			progressBar.setEnabled(false);
 
-			try {
-				org.apache.commons.io.FileUtils.copyDirectory(new File(dynamicLoc + "/mods/" + curVersion + "/coremods/"), new File(installPath + "/" + dir + "/minecraft/coremods"));
+			try (Scanner scanner = new Scanner(path4)) {
+				while (scanner.hasNextLine()) {
+					String cLine = scanner.nextLine();
+						Logger.logInfo("Installing Coremod: " + cLine + "  Version: " + curVersion);
+						file.setText("Installing Coremod: " + cLine);
+						version.setText("Version: " + curVersion);
+						org.apache.commons.io.FileUtils.copyFile(new File(dynamicLoc + "/mods/" + curVersion + "/coremods/" + cLine), new File(installPath + "/" + dir + "/minecraft/coremods/" + cLine));
+				}
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
 
 			String animation = pack.getAnimation();

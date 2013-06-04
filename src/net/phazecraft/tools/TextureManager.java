@@ -120,6 +120,8 @@ public class TextureManager extends JDialog {
 
 		protected boolean downloadTexturePack(String texturePackName, String dir, String compDir, String packVer, boolean isPack) throws IOException, NoSuchAlgorithmException {
 			Logger.logInfo("Downloading Texture Pack");
+			
+			progressBar.setValue(0);
 
 			ArrayList<String> versionList = TexturePack.getSelectedTexturePack().getVersionList();
 			String version = "false";
