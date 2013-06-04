@@ -211,7 +211,7 @@ public class ModManager extends JDialog {
 			}
 
 			try {
-				org.apache.commons.io.FileUtils.copyURLToFile(new URL(DownloadUtils.getCreeperhostLink(curVersion + "/coremods/coremods.txt")), new File(dynamicLoc + "/mods/" + curVersion + "/coremods/coremods.txt"));
+				org.apache.commons.io.FileUtils.copyURLToFile(new URL(DownloadUtils.getCreeperhostLink(curVersion + "/coremods/coremods_" + dir + ".txt")), new File(dynamicLoc + "/mods/" + curVersion + "/coremods/coremods_" + dir + ".txt"));
 			} catch (NoSuchAlgorithmException | IOException e) {
 				e.printStackTrace();
 			}
@@ -265,7 +265,7 @@ public class ModManager extends JDialog {
 			Logger.logInfo("Finished Copy");
 			file.setText("Finished Copy");
 
-			Path path6 = Paths.get(dynamicLoc + "/mods/" + curVersion + "/coremods/coremods.txt");
+			Path path6 = Paths.get(dynamicLoc + "/mods/" + curVersion + "/coremods/coremods_" + dir + ".txt");
 			progressBar.setEnabled(true);
 			try (Scanner scanner = new Scanner(path6)) {
 				while (scanner.hasNextLine()) {
@@ -278,7 +278,7 @@ public class ModManager extends JDialog {
 
 			}
 
-			Path path4 = Paths.get(dynamicLoc + "/mods/" + curVersion + "/coremods/coremods.txt");
+			Path path4 = Paths.get(dynamicLoc + "/mods/" + curVersion + "/coremods/coremods_" + dir + ".txt");
 			progressBar.setEnabled(true);
 			progressBar.setMaximum(lines);
 			lines = 0;

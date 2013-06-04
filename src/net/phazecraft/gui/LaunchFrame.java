@@ -109,7 +109,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	
 	
 	
-	private static String version = "1.2.5";
+	private static String version = "1.2.6";
 	
 	
 
