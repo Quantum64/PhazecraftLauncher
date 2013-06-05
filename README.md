@@ -1,12 +1,12 @@
 Phazecraft-Launcher
 
-ITS ALMOST HERE!!  The release date is coming up!
+ITS ALMOST HERE!!  The release date is coming up! (Never mind, now we're adding HD Skins and Capes)
 
 A slick new Minecraft launcher with the Metro looks of Spoutcraft and a revolutionary new Mod loading system, complete with a Map and Texture Pack loader.  Adds the ability to create custom Modpacks, or play on any version of Minecraft (Alpha and Beta included)
 
 The license:
 
-Copyright 2013 Phazecraft Team
+Copyright 2013 The Phazecraft Team
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
