@@ -109,7 +109,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	
 	
 	
-	private static String version = "1.2.6";
+	private static String version = "1.2.8";
 	
 	
 
@@ -335,11 +335,9 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/image/logo_ftb.png")));
 		setUndecorated(true);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		if (OSUtils.getCurrentOS() == OS.WINDOWS) {
-			setBounds(100, 100, 842, 480);
-		} else {
-			setBounds(100, 100, 850, 480);
-		}
+
+		setBounds(100, 100, 890, 510);
+
 		fMap.setBounds(0, 380, 850, 100);
 		fMap.setLayout(null);
 		fMap.setBackground(LauncherStyle.getCurrentStyle().footerColor);
@@ -360,15 +358,15 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		ImageIcon imgI;
 		BufferedImage bi;
 		int random = new Random().nextInt(4);
-		if (random == 0) {
+		//if (random == 0) {
 			imgI = new ImageIcon(this.getClass().getResource("/image/back.jpg"));
 
 			Image img = imgI.getImage();
 			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 			Graphics g = bi.createGraphics();
-			g.drawImage(img, getBounds().x, getBounds().y, (int) Math.round(getBounds().width * 1.35), (int) Math.round(getBounds().height * 1.35), null);
+			g.drawImage(img, 355, 190, 895, 520, null);
 			g.dispose();
-		} else if (random == 1) {
+		/*} else if (random == 1) {
 			imgI = new ImageIcon(this.getClass().getResource("/image/back2.png"));
 
 			Image img = imgI.getImage();
@@ -377,7 +375,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			g.drawImage(img, 0, 0, (int) Math.round(getBounds().width), (int) Math.round(getBounds().height), null);
 			g.dispose();
 		} else if (random == 2) {
-			imgI = new ImageIcon(this.getClass().getResource("/image/back2.png"));
+			imgI = new ImageIcon(this.getClass().getResource("/image/back3.jpg"));
 
 			Image img = imgI.getImage();
 			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
@@ -392,7 +390,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			Graphics g = bi.createGraphics();
 			g.drawImage(img, 0, 0, (int) Math.round(getBounds().width), (int) Math.round(getBounds().height), null);
 			g.dispose();
-		}
+		}*/
 		setContentPane(new JLabel(new ImageIcon(bi)));
 
 		// Footer
@@ -488,10 +486,10 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		RoundedBox loginArea = new RoundedBox(TRANSPARENT); // 340, 294 (DON'T
 															// DELETE THE
 															// NUMBERS)
-		loginArea.setBounds((int) (getWidth() / 2.0 - 170), (int) (getHeight() / 2.0), 276, 90);
+		loginArea.setBounds((int) (getWidth() / 2.0 - 170), (int) (getHeight() / 2.0), 260, 85);
 
 		RoundedBox bar = new RoundedBox(TRANSPARENT);
-		bar.setBounds(-50, 440, 1000, 1000);
+		bar.setBounds(-50, 477, 1000, 1000);
 
 		name = new LiteTextBox(this, "Username...");
 		name.setBounds(loginArea.getX() + 15, loginArea.getY() + 15, 110, 24);
@@ -537,7 +535,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		// Mods button
 		LiteJLabel mods = new LiteJLabel("Mod Packs", "mods");
 		mods.setFont(largerMinecraft);
-		mods.setBounds(10, 450, 100, 20);
+		mods.setBounds(10, 484, 100, 20);
 		mods.setForeground(Color.WHITE);
 		mods.setOpaque(false);
 		mods.setTransparency(0.70F);
@@ -546,7 +544,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		// Texture packs button
 		LiteJLabel textures = new LiteJLabel("Texture Packs", "textures");
 		textures.setFont(largerMinecraft);
-		textures.setBounds(126, 450, 150, 20);
+		textures.setBounds(126, 484, 150, 20);
 		textures.setForeground(Color.WHITE);
 		textures.setOpaque(false);
 		textures.setTransparency(0.70F);
@@ -555,7 +553,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		// Maps button
 		LiteJLabel maps = new LiteJLabel("Maps", "maps");
 		maps.setFont(largerMinecraft);
-		maps.setBounds(290, 450, 50, 20);
+		maps.setBounds(290, 484, 50, 20);
 		maps.setForeground(Color.WHITE);
 		maps.setOpaque(false);
 		maps.setTransparency(0.70F);
@@ -564,7 +562,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		// Create button
 		LiteJLabel create = new LiteJLabel("Create", "create");
 		create.setFont(largerMinecraft);
-		create.setBounds(360, 450, 75, 20);
+		create.setBounds(360, 484, 75, 20);
 		create.setForeground(Color.WHITE);
 		create.setOpaque(false);
 		create.setTransparency(0.70F);
@@ -573,7 +571,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		// Create button
 		LiteJLabel options = new LiteJLabel("Options", "options");
 		options.setFont(largerMinecraft);
-		options.setBounds(450, 450, 100, 20);
+		options.setBounds(450, 484, 100, 20);
 		options.setForeground(Color.WHITE);
 		options.setOpaque(false);
 		options.setTransparency(0.70F);
@@ -591,7 +589,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			}
 		});
 
-		serverbutton.setBounds(480, 20, 330, 30);
+		serverbutton.setBounds(460, 20, 330, 30);
 		serverbutton.setText(I18N.getLocaleString("DOWNLOAD_SERVER_PACK"));
 		serverbutton.setVisible(false);
 		serverbutton.addActionListener(new ActionListener() {
@@ -715,8 +713,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 
 		updateLocale();
 
-		add(loginArea);
-		add(bar);
+
 
 		add(name);
 		add(pass);
@@ -728,6 +725,9 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		add(create);
 		add(options);
 		add(exit);
+		
+		add(loginArea);
+		add(bar);
 
 		addMouseListener(this);
 		addMouseMotionListener(this);
