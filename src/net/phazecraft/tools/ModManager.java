@@ -320,7 +320,7 @@ public class ModManager extends JDialog {
 			String animation = pack.getAnimation();
 			if (!animation.equalsIgnoreCase("empty")) {
 				try {
-					downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink(baseLink + animation));
+					downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink("Intros/" + animation));
 				} catch (NoSuchAlgorithmException | IOException e) {
 					e.printStackTrace();
 				}

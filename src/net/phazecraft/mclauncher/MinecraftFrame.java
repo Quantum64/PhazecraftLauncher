@@ -109,7 +109,7 @@ public class MinecraftFrame extends JFrame {
 				fixSize(size);
 				getContentPane().setBackground(Color.black);
 				add(label);
-				animation.sleep(3000);
+				animation.sleep(15000);
 				animation.stop();
 			} catch (Exception e) {
 				label.add(label);

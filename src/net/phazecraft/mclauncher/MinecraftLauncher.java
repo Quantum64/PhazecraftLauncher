@@ -127,6 +127,10 @@ public class MinecraftLauncher {
 			URLClassLoader cl = new URLClassLoader(urls, MinecraftLauncher.class.getClassLoader());
 
 			System.out.println("Loading minecraft class");
+			
+			Logger.logInfo("Phazecraft Launcher is getting ready to give up control of the application");
+			Logger.logInfo("MINECRAFT FORGE now has control of the application");
+			
 			Class<?> mc = cl.loadClass("net.minecraft.client.Minecraft");
 			System.out.println("mc = " + mc);
 			Field[] fields = mc.getDeclaredFields();

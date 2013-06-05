@@ -372,7 +372,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			Image img = imgI.getImage();
 			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 			Graphics g = bi.createGraphics();
-			g.drawImage(img, 0, 0, (int) Math.round(getBounds().width), (int) Math.round(getBounds().height), null);
+			g.drawImage(img, 0, 0, 995, 620, null);
 			g.dispose();
 		} else if (random == 2) {
 			imgI = new ImageIcon(this.getClass().getResource("/image/back3.jpg"));
@@ -380,7 +380,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			Image img = imgI.getImage();
 			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 			Graphics g = bi.createGraphics();
-			g.drawImage(img, 0, 0, (int) Math.round(getBounds().width), (int) Math.round(getBounds().height), null);
+			g.drawImage(img, 155, 90, 915, 530, null);
 			g.dispose();
 		} else {
 			imgI = new ImageIcon(this.getClass().getResource("/image/back2.png"));
@@ -388,7 +388,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			Image img = imgI.getImage();
 			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 			Graphics g = bi.createGraphics();
-			g.drawImage(img, 0, 0, (int) Math.round(getBounds().width), (int) Math.round(getBounds().height), null);
+			g.drawImage(img, 0, 0, 995, 620, null);
 			g.dispose();
 		}
 		setContentPane(new JLabel(new ImageIcon(bi)));
