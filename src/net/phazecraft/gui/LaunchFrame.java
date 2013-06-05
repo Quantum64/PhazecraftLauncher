@@ -109,7 +109,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	
 	
 	
-	private static String version = "1.2.8";
+	private static String version = "1.2.9";
 	
 	
 
@@ -358,7 +358,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		ImageIcon imgI;
 		BufferedImage bi;
 		int random = new Random().nextInt(4);
-		//if (random == 0) {
+		if (random == 0) {
 			imgI = new ImageIcon(this.getClass().getResource("/image/back.jpg"));
 
 			Image img = imgI.getImage();
@@ -366,7 +366,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			Graphics g = bi.createGraphics();
 			g.drawImage(img, 355, 190, 895, 520, null);
 			g.dispose();
-		/*} else if (random == 1) {
+		} else if (random == 1) {
 			imgI = new ImageIcon(this.getClass().getResource("/image/back2.png"));
 
 			Image img = imgI.getImage();
@@ -390,7 +390,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			Graphics g = bi.createGraphics();
 			g.drawImage(img, 0, 0, (int) Math.round(getBounds().width), (int) Math.round(getBounds().height), null);
 			g.dispose();
-		}*/
+		}
 		setContentPane(new JLabel(new ImageIcon(bi)));
 
 		// Footer
