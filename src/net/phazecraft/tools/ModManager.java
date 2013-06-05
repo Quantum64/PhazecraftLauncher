@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,6 +46,7 @@ public class ModManager extends JDialog {
 	private boolean mod3 = false;
 	JLabel file = new JLabel();
 	JFrame frame = new JFrame("Configureing..");
+	private double downloadedPerc;
 
 	private class ModManagerWorker extends SwingWorker<Boolean, Void> {
 		@Override
@@ -70,23 +72,47 @@ public class ModManager extends JDialog {
 		public void downloadUrl(String filename, String urlString) throws IOException, NoSuchAlgorithmException {
 			BufferedInputStream in = null;
 			FileOutputStream fout = null;
-			// progressBar.setValue(0);
 			try {
 				URL url_ = new URL(urlString);
 				in = new BufferedInputStream(url_.openStream());
 				fout = new FileOutputStream(filename);
 				byte data[] = new byte[1024];
 				int count, amount = 0, modPackSize = url_.openConnection().getContentLength(), steps = 0;
-				// progressBar.setMaximum(10000);
 				while ((count = in.read(data, 0, 1024)) != -1) {
 					fout.write(data, 0, count);
-					// downloadedPerc += (count * 1.0 / modPackSize) * 100;
 					amount += count;
 					steps++;
 					if (steps > 100) {
 						steps = 0;
-						// progressBar.setValue((int) downloadedPerc * 100);
 						label.setText((amount / 1024) + "Kb / " + (modPackSize / 1024) + "Kb");
+					}
+				}
+			} finally {
+				in.close();
+				fout.flush();
+				fout.close();
+			}
+		}
+		
+		public void downloadProgressUrl(String filename, String urlString) throws MalformedURLException, IOException, NoSuchAlgorithmException {
+			BufferedInputStream in = null;
+			FileOutputStream fout = null;
+			try {
+				URL url_ = new URL(urlString);
+				in = new BufferedInputStream(url_.openStream());
+				fout = new FileOutputStream(filename);
+				byte data[] = new byte[1024];
+				int count, amount = 0, steps = 0, mapSize = url_.openConnection().getContentLength();
+				progressBar.setMaximum(10000);
+				while((count = in.read(data, 0, 1024)) != -1) {
+					fout.write(data, 0, count);
+					downloadedPerc += (count * 1.0 / mapSize) * 100;
+					amount += count;
+					steps++;
+					if(steps > 100) {
+						steps = 0;
+						progressBar.setValue((int)downloadedPerc * 100);
+						label.setText((amount / 1024) + "Kb / " + (mapSize / 1024) + "Kb");
 					}
 				}
 			} finally {
@@ -316,11 +342,16 @@ public class ModManager extends JDialog {
 				}
 			} catch (IOException e) {
 			}
+			
+			progressBar.setEnabled(true);
+			version.setText("");
+			file.setText("Injecting Files");
+			version.setText("This will take a while");
 
 			String animation = pack.getAnimation();
 			if (!animation.equalsIgnoreCase("empty")) {
 				try {
-					downloadUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink("Intros/" + animation));
+					downloadProgressUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink("Intros/" + animation));
 				} catch (NoSuchAlgorithmException | IOException e) {
 					e.printStackTrace();
 				}
@@ -421,20 +452,6 @@ public class ModManager extends JDialog {
 		} else {
 			Logger.logInfo("Modpack is up to date.");
 			return true;
-		}
-	}
-
-	public static void cleanUp() {
-		ModPack pack = ModPack.getSelectedPack();
-		File tempFolder = new File(OSUtils.getDynamicStorageLocation(), "ModPacks" + sep + pack.getDir() + sep);
-		for (String file : tempFolder.list()) {
-			if (!file.equals(pack.getLogoName()) && !file.equals(pack.getImageName()) && !file.equals("version") && !file.equals(pack.getAnimation())) {
-				try {
-					FileUtils.delete(new File(tempFolder, file));
-				} catch (IOException e) {
-					Logger.logError(e.getMessage(), e);
-				}
-			}
 		}
 	}
 

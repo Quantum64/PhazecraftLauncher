@@ -380,7 +380,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			Image img = imgI.getImage();
 			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 			Graphics g = bi.createGraphics();
-			g.drawImage(img, 155, 90, 915, 530, null);
+			g.drawImage(img, 155, 90, 915, 550, null);
 			g.dispose();
 		} else {
 			imgI = new ImageIcon(this.getClass().getResource("/image/back2.png"));
@@ -579,7 +579,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 
 		exit = new TransparentButton();
 		exit.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(exitIcon)));
-		exit.setBounds(800, 5, 30, 30);
+		exit.setBounds(850, 5, 30, 30);
 		exit.setTransparency(0.70F);
 		exit.setHoverTransparency(1F);
 		exit.addActionListener(new ActionListener() {
@@ -1184,7 +1184,6 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		}
 		try {
 			installMods(ModPack.getSelectedPack().getDir());
-			man.cleanUp();
 		} catch (IOException e) {
 		}
 		return true;
