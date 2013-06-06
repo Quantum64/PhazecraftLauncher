@@ -100,7 +100,6 @@ public class MinecraftFrame extends JFrame {
 	@SuppressWarnings({ "deprecation", "static-access" })
 	public void start(Applet mcApplet, String user, String session) {
 		JLabel label = new JLabel();
-		JLabel loading = new JLabel();
 		Thread animation = new Thread();
 		Dimension size = Settings.getSettings().getLastDimension();
 		toFront();
@@ -109,13 +108,9 @@ public class MinecraftFrame extends JFrame {
 				animation.start();
 				label = new JLabel(new ImageIcon(animationname));
 				label.setBounds(0, 0, size.width, size.height);
-				loading.setAlignmentX(JLabel.CENTER_ALIGNMENT);
-				loading.setBounds((int) (size.width / 2.0), (int) (size.height / 2.0), 500, 500);
-				loading.setText("Loading...");
 				fixSize(size);
 				getContentPane().setBackground(Color.black);
 				add(label);
-				add(loading);
 				animation.sleep(15000);
 				animation.stop();
 			} catch (Exception e) {
