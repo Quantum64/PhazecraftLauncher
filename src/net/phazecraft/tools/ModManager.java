@@ -349,7 +349,7 @@ public class ModManager extends JDialog {
 			version.setText("This will take a while");
 
 			String animation = pack.getAnimation();
-			if (!animation.equalsIgnoreCase("empty")) {
+			if (!animation.equalsIgnoreCase("empty") && !new File(baseDynamic.getPath() + sep + animation).exists()) {
 				try {
 					downloadProgressUrl(baseDynamic.getPath() + sep + animation, DownloadUtils.getCreeperhostLink("Intros/" + animation));
 				} catch (NoSuchAlgorithmException | IOException e) {
