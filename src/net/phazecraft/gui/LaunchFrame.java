@@ -73,10 +73,12 @@ import net.phazecraft.gui.dialogs.LauncherUpdateDialog;
 import net.phazecraft.gui.dialogs.PasswordDialog;
 import net.phazecraft.gui.dialogs.PlayOfflineDialog;
 import net.phazecraft.gui.dialogs.SplashScreen;
+import net.phazecraft.gui.dialogs.UsernameDialog;
 import net.phazecraft.gui.panes.MapsPane;
 import net.phazecraft.gui.panes.ModpacksPane;
 import net.phazecraft.gui.panes.OptionsPane;
 import net.phazecraft.gui.panes.RoundedBox;
+import net.phazecraft.gui.panes.SkinPane;
 import net.phazecraft.gui.panes.TexturepackPane;
 import net.phazecraft.locale.I18N;
 import net.phazecraft.locale.I18N.Locale;
@@ -98,7 +100,6 @@ import net.phazecraft.util.DownloadUtils;
 import net.phazecraft.util.ErrorUtils;
 import net.phazecraft.util.FileUtils;
 import net.phazecraft.util.OSUtils;
-import net.phazecraft.util.OSUtils.OS;
 import net.phazecraft.util.StyleUtil;
 import net.phazecraft.util.TrackerUtils;
 import net.phazecraft.workers.GameUpdateWorker;
@@ -106,22 +107,19 @@ import net.phazecraft.workers.LoginWorker;
 
 @SuppressWarnings("static-access")
 public class LaunchFrame extends JFrame implements ActionListener, KeyListener, MouseWheelListener, MouseListener, MouseMotionListener {
-	
-	
-	
+
 	private static String version = "1.2.9";
-	
-	
 
 	private static final long serialVersionUID = 1L;
 
-	static LaunchFrame frame;
+	public static LaunchFrame frame;
 
 	private LoginResponse RESPONSE;
 	private JPanel fMap = new JPanel();
 	private JPanel fTp = new JPanel();
 	private JPanel fMod = new JPanel();
 	private JPanel fOpt = new JPanel();
+	private JPanel fSkin = new JPanel();
 	private JLabel footerLogo = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
 	private JLabel footerCreeper = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_creeperHost.png")));
 	private JLabel footerLogo1 = new JLabel(new ImageIcon(this.getClass().getResource("/image/logo_ftb.png")));
@@ -153,6 +151,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	public MapsPane mapsPane;
 	public TexturepackPane tpPane;
 	public OptionsPane optionsPane;
+	public static SkinPane skinPane;
 
 	private LiteTextBox name;
 	private LitePasswordBox pass;
@@ -161,7 +160,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 
 	public int mouseX = 0;
 	public int mouseY = 0;
-	
+
 	public static boolean noConfig = false;
 	public static LauncherConsole con;
 	public static String tempPass = "";
@@ -169,11 +168,13 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	public static JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(new AnalyticsConfigData("UA-39727539-1"), GoogleAnalyticsVersion.V_4_7_2);
 	private static final Color TRANSPARENT = new Color(45, 45, 45, 160);
 	public static int buildNumber = Integer.parseInt(version.replace(".", ""));
+	public static String tmpUsername = "";
 
 	public static JFrame modsFrame;
 	public static JFrame textureFrame;
 	public static JFrame mapsFrame;
 	public static JFrame optionsFrame;
+	public static JFrame skinFrame;
 
 	public static boolean isAuth = true;
 	public static boolean isUpdate = true;
@@ -353,11 +354,15 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		fOpt.setBounds(0, 380, 850, 100);
 		fOpt.setLayout(null);
 		fOpt.setBackground(LauncherStyle.getCurrentStyle().footerColor);
+		
+		fSkin.setBounds(0, 380, 850, 100);
+		fSkin.setLayout(null);
+		fSkin.setBackground(LauncherStyle.getCurrentStyle().footerColor);
 
 		tabbedPane.setBounds(0, 0, 850, 380);
 		ImageIcon imgI;
 		BufferedImage bi;
-		int random = new Random().nextInt(4);
+		int random = new Random().nextInt(5);
 		if (random == 0) {
 			imgI = new ImageIcon(this.getClass().getResource("/image/back.jpg"));
 
@@ -367,12 +372,12 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			g.drawImage(img, 355, 190, 895, 520, null);
 			g.dispose();
 		} else if (random == 1) {
-			imgI = new ImageIcon(this.getClass().getResource("/image/back2.png"));
+			imgI = new ImageIcon(this.getClass().getResource("/image/back2.jpg"));
 
 			Image img = imgI.getImage();
 			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 			Graphics g = bi.createGraphics();
-			g.drawImage(img, 0, 0, 995, 620, null);
+			g.drawImage(img, 50, 0, 1025, 620, null);
 			g.dispose();
 		} else if (random == 2) {
 			imgI = new ImageIcon(this.getClass().getResource("/image/back3.jpg"));
@@ -380,15 +385,23 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			Image img = imgI.getImage();
 			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 			Graphics g = bi.createGraphics();
-			g.drawImage(img, 155, 90, 915, 550, null);
+			g.drawImage(img, 310, 170, 940, 540, null);
 			g.dispose();
-		} else {
-			imgI = new ImageIcon(this.getClass().getResource("/image/back2.png"));
+		} else if (random == 3) {
+			imgI = new ImageIcon(this.getClass().getResource("/image/back4.png"));
 
 			Image img = imgI.getImage();
 			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 			Graphics g = bi.createGraphics();
-			g.drawImage(img, 0, 0, 995, 620, null);
+			g.drawImage(img, 135, 0, 995, 620, null);
+			g.dispose();
+		} else {
+			imgI = new ImageIcon(this.getClass().getResource("/image/back5.jpg"));
+
+			Image img = imgI.getImage();
+			bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+			Graphics g = bi.createGraphics();
+			g.drawImage(img, 420, 200, 995, 620, null);
 			g.dispose();
 		}
 		setContentPane(new JLabel(new ImageIcon(bi)));
@@ -568,14 +581,23 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		create.setTransparency(0.70F);
 		create.setHoverTransparency(1F);
 
-		// Create button
+		// Options button
 		LiteJLabel options = new LiteJLabel("Options", "options");
 		options.setFont(largerMinecraft);
-		options.setBounds(450, 484, 100, 20);
+		options.setBounds(810, 484, 100, 20);
 		options.setForeground(Color.WHITE);
 		options.setOpaque(false);
 		options.setTransparency(0.70F);
 		options.setHoverTransparency(1F);
+		
+		// Skins/Capes button
+		LiteJLabel skins = new LiteJLabel("Skins/Cpaes", "skins");
+		skins.setFont(largerMinecraft);
+		skins.setBounds(450, 484, 150, 20);
+		skins.setForeground(Color.WHITE);
+		skins.setOpaque(false);
+		skins.setTransparency(0.70F);
+		skins.setHoverTransparency(1F);
 
 		exit = new TransparentButton();
 		exit.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage(exitIcon)));
@@ -700,6 +722,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		mapsPane = new MapsPane();
 		tpPane = new TexturepackPane();
 		optionsPane = new OptionsPane(Settings.getSettings());
+		skinPane = new SkinPane();
 
 		String[] str = getRemember();
 		if (str != null) {
@@ -709,11 +732,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			name.requestFocus();
 		}
 
-		createFrames();
-
 		updateLocale();
-
-
 
 		add(name);
 		add(pass);
@@ -724,8 +743,9 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		add(maps);
 		add(create);
 		add(options);
+		add(skins);
 		add(exit);
-		
+
 		add(loginArea);
 		add(bar);
 
@@ -733,6 +753,8 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		addMouseMotionListener(this);
 
 		splash.setVisible(false);
+		
+		createFrames();
 	}
 
 	public void setNewsIcon() {
@@ -907,11 +929,10 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			}
 		}
 	}
-	
+
 	private void backupRunGameUpdater(final LoginResponse response) {
 		final String installPath = Settings.getSettings().getInstallPath();
 		final ModPack pack = ModPack.getSelectedPack();
-
 
 		if (true) {
 			final ProgressMonitor progMonitor = new ProgressMonitor(this, "Downloading minecraft...", "", 0, 100);
@@ -958,7 +979,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 				}
 			});
 			updater.execute();
-		} 
+		}
 	}
 
 	/**
@@ -1324,19 +1345,18 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		}
 	}
 
-	public final Font getMinecraftFont(int size) {
+	public static Font getMinecraftFont(int size) {
 		Font minecraft;
 		try {
 			// minecraft = Font.createFont(Font.TRUETYPE_FONT,
 			// getResourceAsStream("/font/minecraft.ttf")).deriveFont((float)size);
-			minecraft = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(this.getClass().getResource("/font/minecraft.ttf").getPath())).deriveFont((float) size);
+			minecraft = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(frame.getClass().getResource("/font/minecraft.ttf").getPath())).deriveFont((float) size);
 		} catch (Exception e) {
-			e.printStackTrace();
 			// Fallback
 			// minecraft = new Font("Arial", Font.PLAIN, 12);
 			// New Fallback!
 			String baseDynamic = OSUtils.getDynamicStorageLocation();
-			String baseLink = DownloadUtils.getStaticCreeperhostLink("minectaft.ttf");
+			String baseLink = DownloadUtils.getStaticCreeperhostLink("minecraft.ttf");
 			try {
 				org.apache.commons.io.FileUtils.copyURLToFile(new URL(baseLink), new File(baseDynamic + "/minecraft.ttf"));
 				minecraft = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(baseDynamic + "/minecraft.ttf")).deriveFont((float) size);
@@ -1476,6 +1496,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 				String[] str = new String[2];
 				str[0] = usr;
 				str[1] = pass;
+				remember.setSelected(true);
 				return str;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -1512,6 +1533,13 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		optionsFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		optionsFrame.setContentPane(optionsPane);
 		optionsFrame.add(fOpt);
+		
+		skinFrame = new JFrame("Skins/Cpaes");
+		skinFrame.setBounds(100, 100, 842, 480);
+		skinFrame.setResizable(false);
+		skinFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		skinFrame.setContentPane(skinPane);
+		skinFrame.add(fSkin);
 
 		mapInstallLocation.setVisible(true);
 		serverMap.setVisible(true);
@@ -1527,6 +1555,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			textureFrame.setVisible(false);
 			mapsFrame.setVisible(false);
 			optionsFrame.setVisible(false);
+			skinFrame.setVisible(false);
 			currentPane = Panes.MODPACK;
 		}
 		if (id == "textures") {
@@ -1534,6 +1563,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			modsFrame.setVisible(false);
 			mapsFrame.setVisible(false);
 			optionsFrame.setVisible(false);
+			skinFrame.setVisible(false);
 			currentPane = Panes.TEXTURE;
 		}
 		if (id == "maps") {
@@ -1541,6 +1571,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			modsFrame.setVisible(false);
 			textureFrame.setVisible(false);
 			optionsFrame.setVisible(false);
+			skinFrame.setVisible(false);
 			currentPane = Panes.MAPS;
 		}
 		if (id == "options") {
@@ -1548,12 +1579,22 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			textureFrame.setVisible(false);
 			mapsFrame.setVisible(false);
 			optionsFrame.setVisible(true);
+			skinFrame.setVisible(false);
 			currentPane = Panes.OPTIONS;
+		}
+		if(id == "skins") {
+			modsFrame.setVisible(false);
+			textureFrame.setVisible(false);
+			mapsFrame.setVisible(false);
+			optionsFrame.setVisible(false);
+			skinPane.windowOpened();
+			skinFrame.setVisible(true);
 		}
 		if (id == "create") {
 			cmpd = new CreateModPackDialog(LaunchFrame.getInstance());
 			cmpd.setVisible(true);
 		}
+		
 	}
 
 	public void closeFrames() {
@@ -1561,5 +1602,24 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		textureFrame.setVisible(false);
 		mapsFrame.setVisible(false);
 		optionsFrame.setVisible(false);
+		skinFrame.setVisible(false);
 	}
+
+	public String getUsername() {
+		return name.getText().isEmpty() ? getTmpUsername() : name.getText();
+	}
+
+	public String getTmpUsername() {
+		UsernameDialog u = new UsernameDialog(this, true);
+		do {
+			u.setVisible(true);
+		} while (tmpUsername.isEmpty());
+		name.setText(tmpUsername);
+		return tmpUsername;
+	}
+
+	public static LaunchFrame getPhazecraft() {
+		return frame;
+	}
+
 }
