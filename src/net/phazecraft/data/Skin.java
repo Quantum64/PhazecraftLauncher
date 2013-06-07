@@ -8,6 +8,7 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 import net.phazecraft.gui.LaunchFrame;
+import net.phazecraft.log.Logger;
 
 public class Skin {
 	public static Image getSkin() {
@@ -15,6 +16,7 @@ public class Skin {
 		URL url = null;
 		try {
 			url = new URL("http://phazecraft.com/phazecraftlauncher/MinecraftSkins/getSkin.php?s=128&u="+ LaunchFrame.frame.getUsername());
+			Logger.logInfo("Pushed PHP request to server:  http://phazecraft.com/phazecraftlauncher/MinecraftSkins/getSkin.php?s=128&u="+ LaunchFrame.frame.getUsername());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}

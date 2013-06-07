@@ -176,6 +176,8 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	public static JFrame optionsFrame;
 	public static JFrame skinFrame;
 
+	boolean isGoodLogin = false;
+
 	public static boolean isAuth = true;
 	public static boolean isUpdate = true;
 
@@ -354,7 +356,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		fOpt.setBounds(0, 380, 850, 100);
 		fOpt.setLayout(null);
 		fOpt.setBackground(LauncherStyle.getCurrentStyle().footerColor);
-		
+
 		fSkin.setBounds(0, 380, 850, 100);
 		fSkin.setLayout(null);
 		fSkin.setBackground(LauncherStyle.getCurrentStyle().footerColor);
@@ -589,7 +591,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		options.setOpaque(false);
 		options.setTransparency(0.70F);
 		options.setHoverTransparency(1F);
-		
+
 		// Skins/Capes button
 		LiteJLabel skins = new LiteJLabel("Skins/Cpaes", "skins");
 		skins.setFont(largerMinecraft);
@@ -753,7 +755,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		addMouseMotionListener(this);
 
 		splash.setVisible(false);
-		
+
 		createFrames();
 	}
 
@@ -851,6 +853,95 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			runGameUpdater(RESPONSE);
 			RESPONSE = new LoginResponse("1:1:" + username + ":1:");
 		}
+	}
+
+	public boolean doSkinLogin(final String username, String password) {
+		if (password.isEmpty()) {
+			PasswordDialog p = new PasswordDialog(this, true);
+			p.setVisible(true);
+			if (tempPass.isEmpty()) {
+				enableObjects();
+				return false;
+			}
+			pass.setText(tempPass);
+			password = tempPass;
+		}
+
+		if (isAuth) {
+
+			Logger.logInfo("Logging in...");
+
+			launch.setEnabled(false);
+			users.setEnabled(false);
+			edit.setEnabled(false);
+			serverbutton.setEnabled(false);
+			mapInstall.setEnabled(false);
+			mapInstallLocation.setEnabled(false);
+			serverMap.setEnabled(false);
+			tpInstall.setEnabled(false);
+			tpInstallLocation.setEnabled(false);
+
+			if (remember.isSelected())
+				setRemember(name.getText(), pass.getText());
+			else {
+				if (new File(OSUtils.getDynamicStorageLocation() + "/login.dat").exists()) {
+					new File(OSUtils.getDynamicStorageLocation() + "/login.dat").delete();
+				}
+			}
+
+			LoginWorker loginWorker = new LoginWorker(username, password) {
+				@Override
+				public void done() {
+					String responseStr;
+					try {
+						responseStr = get();
+					} catch (InterruptedException err) {
+						Logger.logError(err.getMessage(), err);
+						enableObjects();
+						return;
+					} catch (ExecutionException err) {
+						if (err.getCause() instanceof IOException || err.getCause() instanceof MalformedURLException) {
+							Logger.logError(err.getMessage(), err);
+							PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
+							d.setVisible(true);
+						}
+						enableObjects();
+						return;
+					}
+
+					try {
+						RESPONSE = new LoginResponse(responseStr);
+					} catch (IllegalArgumentException e) {
+						if (responseStr.contains(":")) {
+							Logger.logError("Received invalid response from server.");
+						} else {
+							if (responseStr.equalsIgnoreCase("bad login")) {
+								ErrorUtils.tossError("Invalid username or password.");
+							} else if (responseStr.equalsIgnoreCase("old version")) {
+								ErrorUtils.tossError("Outdated launcher.");
+							} else {
+								ErrorUtils.tossError("Login failed: " + responseStr);
+								PlayOfflineDialog d = new PlayOfflineDialog("mcDown", username);
+								d.setVisible(true);
+							}
+						}
+						enableObjects();
+						return;
+					}
+					Logger.logInfo("Login complete.");
+					setGoodLogin(true);
+					return;
+				}
+			};
+			loginWorker.execute();
+			return isGoodLogin;
+		} else {
+			return true;
+		}
+	}
+
+	public void setGoodLogin(boolean goodLogin) {
+		isGoodLogin = goodLogin;
 	}
 
 	/**
@@ -1533,7 +1624,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		optionsFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		optionsFrame.setContentPane(optionsPane);
 		optionsFrame.add(fOpt);
-		
+
 		skinFrame = new JFrame("Skins/Cpaes");
 		skinFrame.setBounds(100, 100, 842, 480);
 		skinFrame.setResizable(false);
@@ -1582,19 +1673,18 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			skinFrame.setVisible(false);
 			currentPane = Panes.OPTIONS;
 		}
-		if(id == "skins") {
+		if (id == "skins") {
 			modsFrame.setVisible(false);
 			textureFrame.setVisible(false);
 			mapsFrame.setVisible(false);
 			optionsFrame.setVisible(false);
 			skinPane.windowOpened();
-			skinFrame.setVisible(true);
 		}
 		if (id == "create") {
 			cmpd = new CreateModPackDialog(LaunchFrame.getInstance());
 			cmpd.setVisible(true);
 		}
-		
+
 	}
 
 	public void closeFrames() {
@@ -1609,7 +1699,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		return name.getText().isEmpty() ? getTmpUsername() : name.getText();
 	}
 
-	public String getTmpUsername() {
+	private String getTmpUsername() {
 		UsernameDialog u = new UsernameDialog(this, true);
 		do {
 			u.setVisible(true);
@@ -1621,5 +1711,8 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	public static LaunchFrame getPhazecraft() {
 		return frame;
 	}
-
+	
+	public String getPassword() {
+		return pass.getText();
+	}
 }
