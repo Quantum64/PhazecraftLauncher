@@ -108,7 +108,7 @@ import net.phazecraft.workers.LoginWorker;
 @SuppressWarnings("static-access")
 public class LaunchFrame extends JFrame implements ActionListener, KeyListener, MouseWheelListener, MouseListener, MouseMotionListener {
 
-	private static String version = "1.2.9";
+	private static String version = "1.3.0";
 
 	private static final long serialVersionUID = 1L;
 
