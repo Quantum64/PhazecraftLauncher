@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 
 import net.phazecraft.data.events.ModPackListener;
 import net.phazecraft.gui.panes.ModpacksPane;

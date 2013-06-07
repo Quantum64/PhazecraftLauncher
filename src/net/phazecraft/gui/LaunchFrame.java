@@ -855,13 +855,14 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		}
 	}
 
-	public boolean doSkinLogin(final String username, String password) {
+	@SuppressWarnings("deprecation")
+	public void doSkinLogin(final String username, String password) {
 		if (password.isEmpty()) {
 			PasswordDialog p = new PasswordDialog(this, true);
 			p.setVisible(true);
 			if (tempPass.isEmpty()) {
 				enableObjects();
-				return false;
+				return;
 			}
 			pass.setText(tempPass);
 			password = tempPass;
@@ -929,14 +930,13 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 						return;
 					}
 					Logger.logInfo("Login complete.");
-					setGoodLogin(true);
+					skinFrame.setVisible(true);
 					return;
 				}
 			};
 			loginWorker.execute();
-			return isGoodLogin;
 		} else {
-			return true;
+			skinFrame.setVisible(true);
 		}
 	}
 
@@ -1712,6 +1712,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		return frame;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public String getPassword() {
 		return pass.getText();
 	}

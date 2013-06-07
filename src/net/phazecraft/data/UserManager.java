@@ -1,20 +1,11 @@
 
 package net.phazecraft.data;
 
-import java.io.BufferedReader;
-import java.io.EOFException;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-
-import net.phazecraft.log.Logger;
-import net.phazecraft.util.CryptoUtils;
-import net.phazecraft.util.OSUtils;
 
 public class UserManager {
 	public final static ArrayList<User> _users = new ArrayList<User>();

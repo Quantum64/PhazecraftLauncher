@@ -40,6 +40,8 @@ public class UploadFile {
 		if (resEntity != null) {
 			resEntity.consumeContent();
 		}
+		
+		Logger.logInfo("Pushed PHP request to server:  " + scriptPath + "?u=" + fileName + "&f=" + file.getCanonicalPath());
 
 		httpclient.getConnectionManager().shutdown();
 	}
