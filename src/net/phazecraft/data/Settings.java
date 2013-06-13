@@ -1,4 +1,3 @@
-
 package net.phazecraft.data;
 
 import java.awt.Dimension;
@@ -44,7 +43,7 @@ public class Settings extends Properties {
 
 	public Settings(File file) throws IOException {
 		configFile = file;
-		if(file.exists()) {
+		if (file.exists()) {
 			load(new FileInputStream(file));
 		} else {
 			LaunchFrame.noConfig = true;
@@ -67,7 +66,7 @@ public class Settings extends Properties {
 		setProperty("ramMax", max);
 	}
 
-	public String getLastUser()	{
+	public String getLastUser() {
 		return getProperty("lastUser", null);
 	}
 
@@ -160,12 +159,12 @@ public class Settings extends Properties {
 	}
 
 	public void addPrivatePack(String code) {
-		if(code == null || code.isEmpty()) {
+		if (code == null || code.isEmpty()) {
 			return;
 		}
-		if(getProperty("privatePacks") != null) {
-			ArrayList<String> packList = getPrivatePacks();
-			if(!packList.contains(code.toLowerCase())) {
+		if (getProperty("privatePacks") != null) {
+			ArrayList<String> packList = getCustomPacks();
+			if (!packList.contains(code.toLowerCase())) {
 				packList.add(code);
 				setPrivatePacks(packList);
 			}
@@ -175,8 +174,8 @@ public class Settings extends Properties {
 	}
 
 	public void removePrivatePack(String code) {
-		ArrayList<String> codes = getPrivatePacks();
-		if(codes.contains(code)) {
+		ArrayList<String> codes = getCustomPacks();
+		if (codes.contains(code)) {
 			codes.remove(code);
 		}
 		setPrivatePacks(codes);
@@ -185,21 +184,26 @@ public class Settings extends Properties {
 	public void setPrivatePacks(List<String> codes) {
 		String out = "";
 		String sep = "";
-		for(String s : codes) {
+		for (String s : codes) {
 			out += sep + s;
 			sep = ",";
 		}
 		setProperty("privatePacks", out);
 	}
 
-	public ArrayList<String> getPrivatePacks() {
-		String[] temp = getProperty("privatePacks", "").split(",");
-		if(temp.length > 0) {
-			ArrayList<String> packs = new ArrayList<String>();
-			Collections.addAll(packs, temp);
-			return packs;
+	public ArrayList<String> getCustomPacks() {
+		Logger.logInfo("Looking for custom paccks");
+		ArrayList<String> packs = new ArrayList<String>();
+		for (int i = 0; i < new File(OSUtils.getDynamicStorageLocation() + "/ModPacks/").list().length; i++) {
+			if (new File(OSUtils.getDynamicStorageLocation() + "/ModPacks/").list()[i].startsWith("c_")) {
+				Logger.logInfo("Found Pack:  " + new File(OSUtils.getDynamicStorageLocation() + "/ModPacks/").list()[i]);
+				packs.add(new File(OSUtils.getDynamicStorageLocation() + "/ModPacks/").list()[i]);
+			}
 		}
-		return null;
+		if (!packs.isEmpty())
+			return packs;
+		else
+			return null;
 	}
 
 	public void setNewsDate() {
@@ -233,7 +237,7 @@ public class Settings extends Properties {
 	public boolean getSnooper() {
 		return Boolean.parseBoolean(getProperty("snooperDisable", "false"));
 	}
-	
+
 	public void setLoaded(boolean state) {
 		setProperty("loaded", String.valueOf(state));
 	}
@@ -253,10 +257,10 @@ public class Settings extends Properties {
 	public void setLastPosition(Point lastPosition) {
 		int x = lastPosition.x;
 		int y = lastPosition.y;
-		if(x < 0) {
+		if (x < 0) {
 			x = 0;
 		}
-		if(y < 0) {
+		if (y < 0) {
 			y = 0;
 		}
 		Point p = new Point(x, y);
@@ -318,7 +322,7 @@ public class Settings extends Properties {
 				return javax.xml.bind.DatatypeConverter.printBase64Binary(baos.toByteArray());
 			} finally {
 				baos.close();
-				oos.close();			
+				oos.close();
 			}
 		} catch (Exception e) {
 			Logger.logError("Failed to write object to string" + o, e);

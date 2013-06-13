@@ -40,7 +40,6 @@ import net.phazecraft.data.Settings;
 import net.phazecraft.gui.ChooseDir;
 import net.phazecraft.gui.LaunchFrame;
 import net.phazecraft.locale.I18N;
-import net.phazecraft.tools.CreateModManager;
 import net.phazecraft.util.ErrorUtils;
 import net.phazecraft.util.OSUtils;
 import net.phazecraft.workers.ModpackLoader;
@@ -76,67 +75,27 @@ public class CreateModPackDialog extends JDialog {
 	private File modsFolder;
 	private File coreModsFolder;
 	private File jarModsFolder;
-	private File baseDir;
-	private File packDir;
 
-	private String packName;
-	private String userPackName;
 
 	public File folder = modsFolder;
 
 	private Tab currentTab = Tab.MODS;
 
-	private static JComboBox version;
+	private String name;
+	private String by;
+	private String version;
 
 	public enum Tab {
 		MODS, JARMODS, COREMODS, OLD_VERSIONS
 	}
 
 	@SuppressWarnings("unchecked")
-	public CreateModPackDialog(LaunchFrame instance) {
+	public CreateModPackDialog(LaunchFrame instance, String name, String by, String version) {
 		super(instance, true);
-
-		do {
-			versionSelect = JOptionPane.showInputDialog("Please type the Minecraft version you would like to create your modpack for\nThe supported versions are 1.1.0, 1.2.5, 1.4.7, and 1.5.0");
-		} while (!versionSelect.equals("1.1.0") && !versionSelect.equals("1.2.5") && !versionSelect.equals("1.4.7") && !versionSelect.equals("1.5.0"));
-
-		for (int i = 0; i < 100; i++) {
-			if (!(new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt").exists())) {
-				new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i).mkdirs();
-				try {
-					new File(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt").createNewFile();
-					packName = "CustomPack" + i;
-					userPackName = "Custom Pack #" + i;
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-
-				try {
-					PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(OSUtils.getDynamicStorageLocation() + "/modpacks/custom/" + i + "/version.txt", false)));
-					out.println(versionSelect);
-					out.close();
-
-					modsFolder = new File(Settings.getSettings().getInstallPath(), "CustomPack" + i + File.separator + "minecraft" + File.separator + "mods");
-					coreModsFolder = new File(Settings.getSettings().getInstallPath(), "CustomPack" + i + File.separator + "minecraft" + File.separator + "coremods");
-					jarModsFolder = new File(Settings.getSettings().getInstallPath(), "CustomPack" + i + File.separator + "instMods");
-
-					modsFolder.mkdirs();
-					coreModsFolder.mkdirs();
-					jarModsFolder.mkdirs();
-
-					folder = modsFolder;
-
-				} catch (IOException e) {
-					setVisible(false);
-					ErrorUtils.tossError("Couldent write version because of an IO Exception");
-					break;
-				}
-				break;
-			}
-		}
-
-		CreateModManager man = new CreateModManager(new JFrame(), true);
-		man.setVisible(true);
+		
+		this.name = name;
+		this.by = by;
+		this.version = version;
 
 		setupGui();
 
@@ -217,16 +176,8 @@ public class CreateModPackDialog extends JDialog {
 			}
 		});
 
-		addWindowListener(new WindowAdapter() {
-			public void windowClosed(WindowEvent e) {
-				try {
-					ModPack.addPack(new ModPack(userPackName, "You", versionSelect, "phazecraft.png", packName, "phazecraftsplash.png", packName, versionSelect, "", "Custom Mod Pack" + ".  Made by you!", "", "", "", ModpackLoader.counter, false, "", "false"));
-				} catch (NoSuchAlgorithmException e1) {
-					e1.printStackTrace();
-				} catch (IOException e1) {
-				}
-			}
-		});
+		//ModPack.addPack(new ModPack(userPackName, "You", versionSelect, "phazecraft.png", packName, "phazecraftsplash.png", packName, versionSelect, "", "Custom Mod Pack" + ".  Made by you!", "", "", "", ModpackLoader.counter, false, "", "false"));
+
 	}
 
 	private String[] getEnabled() {
@@ -452,14 +403,9 @@ public class CreateModPackDialog extends JDialog {
 		pack();
 		setLocationRelativeTo(getOwner());
 	}
-
-	public String getPackName() {
-		return packName;
-	}
-
-	public String getPackVersion() {
-		return versionSelect.replace(".", "_");
-
+	
+	public void makeIt() {
+		
 	}
 
 }

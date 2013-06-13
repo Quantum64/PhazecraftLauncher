@@ -363,7 +363,7 @@ public class ModpacksPane extends JPanel implements ILauncherPane, ModPackListen
 	public void onModPackAdded(ModPack pack) {
 		model.onModPackAdded(pack);
 
-		if(pack.getNoMods()) {
+		if(pack.getDir().equalsIgnoreCase("Minecraft+")) {
 			packs.setSelectedValue(pack, true);
 		}
 	}

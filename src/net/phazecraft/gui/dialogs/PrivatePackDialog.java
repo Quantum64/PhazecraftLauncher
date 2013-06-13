@@ -67,7 +67,7 @@ public class PrivatePackDialog extends JDialog {
 		remove.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ArrayList<String> codes = Settings.getSettings().getPrivatePacks();
+				ArrayList<String> codes = Settings.getSettings().getCustomPacks();
 				if(codes.contains(modpackName.getText())) {
 					Settings.getSettings().removePrivatePack(modpackName.getText());
 					Settings.getSettings().save();

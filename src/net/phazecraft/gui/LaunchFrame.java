@@ -108,7 +108,7 @@ import net.phazecraft.workers.LoginWorker;
 @SuppressWarnings("static-access")
 public class LaunchFrame extends JFrame implements ActionListener, KeyListener, MouseWheelListener, MouseListener, MouseMotionListener {
 
-	private static String version = "1.3.0";
+	private static String version = "1.3.1";
 
 	private static final long serialVersionUID = 1L;
 
@@ -593,7 +593,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 		options.setHoverTransparency(1F);
 
 		// Skins/Capes button
-		LiteJLabel skins = new LiteJLabel("Skins/Cpaes", "skins");
+		LiteJLabel skins = new LiteJLabel("Skins/Capes", "skins");
 		skins.setFont(largerMinecraft);
 		skins.setBounds(450, 484, 150, 20);
 		skins.setForeground(Color.WHITE);
@@ -1372,23 +1372,12 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 	}
 
 	private static ArrayList<String> getXmls() {
-		ArrayList<String> s = Settings.getSettings().getPrivatePacks();
+		ArrayList<String> s = Settings.getSettings().getCustomPacks();
 		if (s == null) {
 			s = new ArrayList<String>();
 		}
-		for (int i = 0; i < s.size(); i++) {
-			if (s.get(i).isEmpty()) {
-				s.remove(i);
-				i--;
-			} else {
-				String temp = s.get(i);
-				if (!temp.endsWith(".xml")) {
-					s.remove(i);
-					s.add(i, temp + ".xml");
-				}
-			}
-		}
-		s.add(0, "modpacks.xml");
+		s.add("modpacks.xml");
+		
 		return s;
 	}
 
@@ -1681,7 +1670,7 @@ public class LaunchFrame extends JFrame implements ActionListener, KeyListener, 
 			skinPane.windowOpened();
 		}
 		if (id == "create") {
-			cmpd = new CreateModPackDialog(LaunchFrame.getInstance());
+			cmpd = new CreateModPackDialog(LaunchFrame.getInstance(),"","","");
 			cmpd.setVisible(true);
 		}
 
