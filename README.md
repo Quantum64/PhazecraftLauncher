@@ -1,6 +1,6 @@
 Phazecraft-Launcher
 
-ITS ALMOST HERE!!  The release date is coming up! (Never mind, now we're adding HD Skins and Capes)
+This project has become inactive, if you would like to work on it, PM me and I can give you merge rights to the repository.
 
 A slick new Minecraft launcher with the Metro looks of Spoutcraft and a revolutionary new Mod loading system, complete with a Map and Texture Pack loader.  Adds the ability to create custom Modpacks, or play on any version of Minecraft (Alpha and Beta included)
 
